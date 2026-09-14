@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>זה זמן בשביל!!</title>
+<meta name="theme-color" content="#0d1411">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="זה זמן בשביל!!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Rubik:ital,wght@0,500;1,500;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0d1411; --surface:#141d18; --surface2:#1a2620; --line:#26362d; --line2:#31453a;
+  --text:#eef3ef; --text2:#9db3a7; --text3:#68806f;
+  --court:#3dbd8b; --court-dim:#2a8f68; --court-deep:#173a2b;
+  --accent:#3dbd8b; --accent-soft:rgba(61,189,139,.14);
+  --gold:#e5b45a; --loss:#e07a6a; --win:#3dbd8b;
+  --r:18px; --r-sm:12px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--text);
+  font-family:'Heebo',system-ui,-apple-system,sans-serif;min-height:100%;}
+body{overscroll-behavior-y:none}
+#root{min-height:100vh;display:flex;flex-direction:column}
+.app{width:100%;max-width:560px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
+@media(min-width:900px){.app{max-width:640px}}
+button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer;padding:0}
+input,select,textarea{font-family:inherit;color:var(--text);background:var(--surface2);
+  border:1px solid var(--line2);border-radius:var(--r-sm);padding:12px 14px;font-size:16px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--court)}
+::placeholder{color:var(--text3)}
+h1,h2,h3{margin:0}
+.screen{flex:1;padding:18px 18px calc(96px + var(--safe-b));animation:fadein .22s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- brand ---------- */
+.brandTitle{font-weight:900;font-size:30px;letter-spacing:-.5px;line-height:1.05;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brandTitle .shuttle{transform:rotate(-20deg)}
+.brandSub{color:var(--text2);font-size:13px;margin-top:6px;letter-spacing:.06em}
+.courtHero{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);
+  background:linear-gradient(160deg,#152019,#101a14)}
+.courtHero svg.bg{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+.courtHero .inner{position:relative;padding:22px 20px}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:center;pointer-events:none}
+.nav .bar{pointer-events:auto;display:flex;gap:2px;background:rgba(18,26,21,.92);backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:22px;margin:0 12px calc(12px + var(--safe-b));padding:6px;
+  width:100%;max-width:520px;box-shadow:var(--shadow)}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:16px;
+  color:var(--text3);font-size:10.5px;font-weight:700;transition:color .15s, background .15s}
+.nav button.on{color:var(--court);background:var(--accent-soft)}
+.nav svg{width:22px;height:22px}
+
+/* ---------- cards / general ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.card+.card,.stack>*+*{margin-top:12px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--text3)}
+.eyebrow.green{color:var(--court)}
+.rowBetween{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:16px;
+  border-radius:16px;padding:15px 18px;transition:transform .1s, filter .15s;user-select:none}
+.btn:active{transform:scale(.975)}
+.btn.primary{background:var(--court);color:#08120d}
+.btn.ghost{background:var(--surface2);border:1px solid var(--line2);color:var(--text)}
+.btn.danger{background:rgba(224,122,106,.12);border:1px solid rgba(224,122,106,.4);color:var(--loss)}
+.btn.small{padding:9px 14px;font-size:13.5px;border-radius:12px}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.chipRow{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 14px;border-radius:999px;background:var(--surface2);border:1px solid var(--line2);
+  font-weight:700;font-size:13.5px;color:var(--text2)}
+.chip.on{background:var(--accent-soft);border-color:var(--court);color:var(--court)}
+.statBig{font-weight:900;font-size:26px;font-variant-numeric:tabular-nums}
+.statLbl{font-size:11.5px;color:var(--text2);font-weight:600;margin-top:2px}
+.divider{height:1px;background:var(--line);margin:14px 0}
+.muted{color:var(--text2)}.tiny{font-size:12px}
+.sectionTitle{font-size:17px;font-weight:900;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+.linkAll{color:var(--court);font-weight:700;font-size:13px}
+
+/* ---------- avatars / names ---------- */
+.avatar{border-radius:50%;object-fit:cover;background:var(--surface2);border:2px solid var(--line2);
+  display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--court);flex:none;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.pname{font-weight:800;line-height:1.15}
+.nick{font-family:'Rubik',sans-serif;font-style:italic;font-weight:500;color:var(--text2);font-size:.82em;letter-spacing:.01em}
+.nick::before{content:"״"}.nick::after{content:"״"}
+.formDots{display:flex;gap:4px;font-size:11px;font-weight:900;direction:ltr}
+.formDots span{width:20px;height:20px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.formDots .w{background:var(--accent-soft);color:var(--win);border:1px solid rgba(61,189,139,.35)}
+.formDots .l{background:rgba(224,122,106,.1);color:var(--loss);border:1px solid rgba(224,122,106,.3)}
+
+/* ---------- match card ---------- */
+.matchCard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.matchScoreRow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.teamCol{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.teamCol .names{font-weight:800;font-size:14px;text-align:center;line-height:1.25}
+.bigScore{font-size:34px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.bigScore.winS{color:var(--win)}.bigScore.loseS{color:var(--text3)}
+.vsMini{font-size:11px;font-weight:900;color:var(--text3);letter-spacing:.1em}
+.matchMeta{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;color:var(--text2);background:var(--surface2);border:1px solid var(--line);
+  border-radius:999px;padding:3px 10px}
+.tag.green{color:var(--court);background:var(--accent-soft);border-color:rgba(61,189,139,.3)}
+
+/* ---------- court ---------- */
+.courtWrap{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line2);
+  background:linear-gradient(180deg,#14231b,#101b15)}
+.courtSvg{display:block;width:100%;height:auto}
+.slotBtn{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:5px;width:96px}
+.slotPlus{width:62px;height:62px;border-radius:50%;border:2px dashed var(--court-dim);color:var(--court);
+  display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:400;
+  background:rgba(13,20,17,.55);backdrop-filter:blur(3px);transition:transform .12s}
+.slotBtn:active .slotPlus{transform:scale(.94)}
+.slotName{font-size:12px;font-weight:800;text-shadow:0 1px 4px rgba(0,0,0,.7);max-width:100px;text-align:center;line-height:1.15}
+.slotNick{font-size:10px}
+.slotAvatar{box-shadow:0 4px 14px rgba(0,0,0,.5);border-color:var(--court)!important;animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ---------- sheets & dialogs ---------- */
+.sheetBack{position:fixed;inset:0;background:rgba(5,9,7,.66);z-index:60;display:flex;align-items:flex-end;justify-content:center;
+  animation:fadein .15s ease}
+.sheet{background:var(--surface);border:1px solid var(--line);border-bottom:none;border-radius:22px 22px 0 0;
+  width:100%;max-width:560px;max-height:86vh;display:flex;flex-direction:column;animation:up .22s ease;
+  padding-bottom:var(--safe-b)}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.sheetHead{padding:14px 18px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.sheetBody{overflow-y:auto;padding:14px 18px 24px}
+.dialogBack{position:fixed;inset:0;background:rgba(5,9,7,.7);z-index:70;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadein .15s ease}
+.dialog{background:var(--surface);border:1px solid var(--line2);border-radius:var(--r);padding:20px;max-width:360px;width:100%;box-shadow:var(--shadow)}
+
+/* ---------- pick list ---------- */
+.pickRow{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;width:100%;text-align:start;transition:background .12s}
+.pickRow:active{background:var(--surface2)}
+.pickRow .info{flex:1;min-width:0}
+.pickRow.disabled{opacity:.35;pointer-events:none}
+
+/* ---------- score entry ---------- */
+.scorePad{display:flex;align-items:center;justify-content:center;gap:14px}
+.scoreBtn{width:52px;height:52px;border-radius:50%;background:var(--surface2);border:1px solid var(--line2);
+  font-size:24px;font-weight:800;color:var(--text);display:flex;align-items:center;justify-content:center}
+.scoreBtn:active{background:var(--line)}
+.scoreVal{width:86px;text-align:center;font-size:52px;font-weight:900;background:none;border:none;
+  color:var(--text);font-variant-numeric:tabular-nums;padding:0}
+.scoreVal:focus{outline:none;color:var(--court)}
+
+/* ---------- history ---------- */
+.monthHead{font-size:13px;font-weight:900;letter-spacing:.1em;color:var(--text3);margin:20px 0 8px}
+.histRow{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:var(--surface);
+  border:1px solid var(--line);border-radius:14px;padding:12px 14px;transition:background .12s}
+.histRow:active{background:var(--surface2)}
+.histScore{font-weight:900;font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap;direction:ltr}
+.histNames{flex:1;min-width:0;font-size:13.5px;font-weight:700;line-height:1.3}
+.histDate{font-size:11px;color:var(--text3);white-space:nowrap}
+
+/* ---------- H2H ---------- */
+.h2hBar{height:10px;border-radius:999px;background:rgba(224,122,106,.35);overflow:hidden;display:flex}
+.h2hBar i{display:block;background:var(--court);height:100%;border-radius:0 999px 999px 0}
+.recordRow{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.recordRow:last-child{border-bottom:none}
+.recordIcon{font-size:22px;width:34px;text-align:center}
+.badge{background:var(--surface2);border:1px solid var(--line2);border-radius:14px;padding:12px;display:flex;gap:10px;align-items:flex-start}
+.badge.locked{opacity:.38;filter:grayscale(.6)}
+.badge .ic{font-size:22px}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;bottom:calc(100px + var(--safe-b));left:50%;transform:translateX(-50%);z-index:90;
+  background:var(--surface2);border:1px solid var(--court);color:var(--text);font-weight:700;font-size:14px;
+  padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);animation:up .2s ease;white-space:nowrap}
+.confirmSave{ text-align:center }
+.trophyRow{display:flex;align-items:baseline;gap:10px}
+.hofVal{font-weight:900;color:var(--court);font-variant-numeric:tabular-nums}
+/* scope tabs (הכל / יחידות / זוגות) */
+.segTabs{display:flex;background:var(--surface2);border:1px solid var(--line2);border-radius:14px;padding:4px;gap:4px}
+.segTabs button{flex:1;padding:9px 6px;border-radius:10px;font-weight:800;font-size:13.5px;color:var(--text2);transition:background .15s,color .15s}
+.segTabs button.on{background:var(--surface);color:var(--court);box-shadow:0 2px 8px rgba(0,0,0,.35)}
+/* shuffle */
+.plChip{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--surface);border:1px solid var(--line2);width:100%;text-align:start;transition:border-color .12s,background .12s}
+.plChip.on{border-color:var(--court);background:var(--accent-soft)}
+.plChip .chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#08120d;flex:none}
+.plChip.on .chk{background:var(--court);border-color:var(--court)}
+.rollWrap{display:flex;justify-content:center;gap:14px;margin:26px 0 12px}
+.rollAv{animation:roll .16s linear infinite alternate}
+@keyframes roll{from{transform:translateY(-6px) scale(.92);opacity:.55}to{transform:translateY(6px) scale(1.05);opacity:1}}
+.rollText{letter-spacing:.3em;font-weight:900;color:var(--court);animation:blink .5s ease infinite alternate}
+@keyframes blink{from{opacity:.35}to{opacity:1}}
+.reveal{animation:reveal .5s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes reveal{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+.vsBig{font-size:34px;font-weight:900;letter-spacing:.2em;color:var(--text3);margin:10px 0;animation:fadein .6s ease .25s both}
+.insight{display:flex;flex-direction:column;gap:2px;padding:12px 0;border-bottom:1px solid var(--line)}
+.insight:last-child{border-bottom:none}
+.insight .v{font-weight:900;font-size:16px}
+.searchBox{position:relative;margin-bottom:12px}
+.netDivider{height:2px;background:repeating-linear-gradient(90deg,var(--line2) 0 8px,transparent 8px 14px);margin:14px 0;position:relative}
+.headerBar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.backBtn{width:38px;height:38px;border-radius:12px;background:var(--surface2);border:1px solid var(--line2);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.screenTitle{font-size:21px;font-weight:900;flex:1}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script type="text/babel" data-presets="env,react">
+const {useState,useEffect,useMemo,useRef,useCallback} = React;
+
+/* ================= DATABASE (Supabase — משותף לכל הקבוצה) ================= */
+const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* עוטף טבלת Supabase בממשק פשוט (toArray/add/put/update/delete/bulkAdd/clear) */
+function sbTable(name, idField='id'){
+  const unwrap=({data,error})=>{ if(error) throw error; return data; };
+  return {
+    toArray: async()=> (await unwrap(await sb.from(name).select('*'))) || [],
+    add: async(obj)=>{ unwrap(await sb.from(name).insert(obj)); return obj[idField]; },
+    bulkAdd: async(arr)=>{ if(!arr||!arr.length) return; unwrap(await sb.from(name).insert(arr)); },
+    put: async(obj)=> unwrap(await sb.from(name).upsert(obj,{onConflict:idField})),
+    update: async(key,changes)=> unwrap(await sb.from(name).update(changes).eq(idField,key)),
+    delete: async(key)=> unwrap(await sb.from(name).delete().eq(idField,key)),
+    clear: async()=> unwrap(await sb.from(name).delete().not(idField,'is',null)),
+  };
+}
+const db = {
+  verno: 2, // v2: matchTime + generatedByShuffle (ר' normalizeMatch)
+  players: sbTable('players'),
+  matches: sbTable('matches'),
+  nights: sbTable('nights'),
+  settings: sbTable('settings','key'),
+  transaction: async(mode, ...args)=> args[args.length-1](), // Supabase אין תמיכת JS-side; שימוש רציף מספיק כאן
+};
+/* ברירות מחדל בטוחות לרשומות ישנות/מגיבויים ישנים */
+function normalizeMatch(m){
+  return {...m,
+    matchTime: (typeof m.matchTime==='string' && /^\d{2}:\d{2}$/.test(m.matchTime))? m.matchTime : null,
+    generatedByShuffle: m.generatedByShuffle===true,
+    seq: m.seq||0};
+}
+const uid = ()=> (crypto.randomUUID ? crypto.randomUUID() : 'id-'+Date.now()+'-'+Math.random().toString(36).slice(2));
+const nowISO = ()=> new Date().toISOString();
+
+/* ================= CONFIG THRESHOLDS ================= */
+const CFG = {
+  MIN_H2H_FOR_NEMESIS: 5,      // מפגשים מינימליים לנמסיס/יריב אהוב
+  MIN_DUO_MATCHES: 3,          // מינימום משחקי צמד לליגת הצמדים
+  MIN_MATCHES_WINRATE: 5,      // מינימום משחקים לטבלת אחוזי ניצחון
+  MIN_PERFECT_NIGHT: 3,        // מינימום משחקים לערב מושלם
+  MARATHON_OVER_TARGET: 4,     // כמה מעל היעד נחשב "מרתון" (11 -> 15+)
+  BACKUP_REMINDER_DAYS: 30,
+  BACKUP_VERSION: 2,          // v2: matchTime + generatedByShuffle
+  SHUFFLE_ATTEMPTS: 30         // כמה ניסיונות להימנע מריצת חוזרת מיידית לפני שמוותרים
+};
+const APP_NAME = 'זה זמן בשביל!!';
+
+/* ================= HELPERS ================= */
+const fmtDate = iso => { const d=new Date(iso); return d.toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'}); };
+const fmtDateShort = iso => new Date(iso).toLocaleDateString('he-IL',{day:'numeric',month:'short'});
+const monthKey = iso => { const d=new Date(iso); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); };
+const monthLabel = key => { const [y,m]=key.split('-'); return new Date(y,m-1,1).toLocaleDateString('he-IL',{month:'long',year:'numeric'}); };
+const pct = (w,t)=> t? Math.round(w/t*1000)/10 : 0;
+const fmtTime = t => t||'';                                   // matchTime נשמר כ-"HH:MM"
+const fmtDateTimeShort = m => fmtDateShort(m.matchDate)+(m.matchTime?' · '+m.matchTime:'');
+const nowTime = ()=>{ const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); };
+const dayInput = iso => { const d=new Date(iso); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+
+/* חוק הניקוד: יעד + פער winBy. מעבר ליעד — חייבים לסגור בדיוק בפער winBy (דיוס), אלא אם יש תקרה. */
+function validateScore(a,b,target,winBy,maxScore){
+  a=+a; b=+b; target=+target; winBy=+winBy||2;
+  if(!Number.isInteger(a)||!Number.isInteger(b)||a<0||b<0) return {ok:false,msg:'נקודות חייבות להיות מספרים שלמים וחיוביים'};
+  const hi=Math.max(a,b), lo=Math.min(a,b);
+  if(a===b) return {ok:false,msg:'אין תיקו בבדמינטון — מישהו חייב לנצח'};
+  if(maxScore && hi===maxScore && hi>lo) return {ok:true};
+  if(maxScore && hi>maxScore) return {ok:false,msg:'התוצאה עוברת את תקרת הניקוד ('+maxScore+')'};
+  if(hi<target) return {ok:false,msg:'המנצח חייב להגיע לפחות ל־'+target+' נקודות'};
+  if(hi===target){
+    if(hi-lo<winBy) return {ok:false,msg:'המנצח חייב להוביל בלפחות '+winBy+' נקודות'};
+    return {ok:true};
+  }
+  if(hi-lo!==winBy) return {ok:false,msg:'אחרי '+(target-1)+'–'+(target-1)+' המשחק נסגר בדיוק בפער של '+winBy+' (למשל '+(lo+winBy)+'–'+lo+')'};
+  return {ok:true};
+}
+
+/* מיון כרונולוגי דטרמיניסטי: תאריך משחק -> סדר בערב -> נוצר */
+/* תאריך משחק -> שעת משחק (רק כששתיהן ידועות) -> סדר בערב -> נוצר. createdAt לעולם לא מחליף שעת משחק. */
+function sortMatches(ms){
+  return [...ms].sort((x,y)=>{
+    const d = new Date(x.matchDate)-new Date(y.matchDate); if(d) return d;
+    if(x.matchTime&&y.matchTime&&x.matchTime!==y.matchTime) return x.matchTime<y.matchTime?-1:1;
+    const s = (x.seq||0)-(y.seq||0); if(s) return s;
+    return new Date(x.createdAt)-new Date(y.createdAt);
+  });
+}
+/* ---- SCOPES: overall / singles / doubles ---- */
+const SCOPES=[{id:'overall',label:'הכל'},{id:'singles',label:'יחידות'},{id:'doubles',label:'זוגות'}];
+const filterMatchesByMode=(ms,scope)=> (!scope||scope==='overall')? ms : ms.filter(m=>m.mode===scope);
+const getPlayerStats=(pid,ms,scope)=> playerStats(pid,filterMatchesByMode(ms,scope));
+const winnersOf = m => m.winner==='teamA'? m.teamAPlayerIds : m.teamBPlayerIds;
+const losersOf  = m => m.winner==='teamA'? m.teamBPlayerIds : m.teamAPlayerIds;
+const inMatch = (m,pid)=> m.teamAPlayerIds.includes(pid)||m.teamBPlayerIds.includes(pid);
+const sideOf = (m,pid)=> m.teamAPlayerIds.includes(pid)?'teamA':(m.teamBPlayerIds.includes(pid)?'teamB':null);
+const wonBy = (m,pid)=> winnersOf(m).includes(pid);
+const scoreFor = (m,pid)=> sideOf(m,pid)==='teamA'? m.teamAScore : m.teamBScore;
+const scoreAgainst = (m,pid)=> sideOf(m,pid)==='teamA'? m.teamBScore : m.teamAScore;
+
+/* ================= STATS ENGINE (הכל נגזר מההיסטוריה) ================= */
+function playerStats(pid, matches, mode){
+  let ms = matches.filter(m=>inMatch(m,pid));
+  if(mode) ms = ms.filter(m=>m.mode===mode);
+  ms = sortMatches(ms);
+  let wins=0,losses=0,pf=0,pa=0;
+  const results=[];
+  for(const m of ms){
+    const w=wonBy(m,pid); if(w)wins++; else losses++;
+    pf+=scoreFor(m,pid); pa+=scoreAgainst(m,pid);
+    results.push(w?'W':'L');
+  }
+  let cur=0; for(let i=results.length-1;i>=0;i--){ if(results[i]==='W')cur++; else break; }
+  let best=0,run=0; for(const r of results){ run = r==='W'? run+1:0; if(run>best)best=run; }
+  return {played:ms.length,wins,losses,winRate:pct(wins,ms.length),pf,pa,diff:pf-pa,
+    curStreak:cur,bestStreak:best,last5:results.slice(-5),last10:results.slice(-10),matches:ms};
+}
+function headToHead(a,b,matches){
+  const ms = sortMatches(matches.filter(m=>m.mode==='singles' && inMatch(m,a)&&inMatch(m,b)));
+  let aW=0,bW=0,aP=0,bP=0;
+  const seqA=[];
+  for(const m of ms){
+    if(wonBy(m,a)){aW++; seqA.push('W');} else {bW++; seqA.push('L');}
+    aP+=scoreFor(m,a); bP+=scoreFor(m,b);
+  }
+  const streak=(who)=>{let best=0,run=0;for(const r of seqA){const w = who==='a'? r==='W':r==='L'; run=w?run+1:0; if(run>best)best=run;}return best;};
+  return {matches:ms,total:ms.length,aWins:aW,bWins:bW,aPts:aP,bPts:bP,
+    aBestStreak:streak('a'),bBestStreak:streak('b'),last5:seqA.slice(-5),latest:ms[ms.length-1]||null};
+}
+function duoKey(p1,p2){ return [p1,p2].sort().join('|'); }
+function allDuos(matches){
+  const map={};
+  for(const m of matches.filter(m=>m.mode==='doubles')){
+    for(const side of ['teamAPlayerIds','teamBPlayerIds']){
+      const ids=m[side]; if(ids.length!==2)continue;
+      const k=duoKey(ids[0],ids[1]);
+      map[k]=map[k]||{ids:[...ids].sort(),played:0,wins:0,losses:0,pf:0,pa:0};
+      const d=map[k]; d.played++;
+      const won = (m.winner==='teamA')===(side==='teamAPlayerIds');
+      if(won)d.wins++; else d.losses++;
+      const my = side==='teamAPlayerIds'? m.teamAScore : m.teamBScore;
+      const op = side==='teamAPlayerIds'? m.teamBScore : m.teamAScore;
+      d.pf+=my; d.pa+=op;
+    }
+  }
+  return Object.values(map).map(d=>({...d,winRate:pct(d.wins,d.played)}));
+}
+function opponentRecords(pid,matches){ // singles vs each opponent
+  const map={};
+  for(const m of matches.filter(m=>m.mode==='singles'&&inMatch(m,pid))){
+    const opp = (m.teamAPlayerIds.includes(pid)? m.teamBPlayerIds:m.teamAPlayerIds)[0];
+    map[opp]=map[opp]||{opp,played:0,wins:0,losses:0};
+    map[opp].played++; if(wonBy(m,pid))map[opp].wins++; else map[opp].losses++;
+  }
+  return Object.values(map);
+}
+function biggestVictory(matches){
+  let best=null;
+  for(const m of matches){
+    const margin=Math.abs(m.teamAScore-m.teamBScore);
+    if(!best||margin>best.margin) best={m,margin};
+  }
+  return best;
+}
+function closestRivalry(players,matches){
+  let best=null;
+  for(let i=0;i<players.length;i++)for(let j=i+1;j<players.length;j++){
+    const h=headToHead(players[i].id,players[j].id,matches);
+    if(h.total<CFG.MIN_H2H_FOR_NEMESIS) continue;
+    const gap=Math.abs(h.aWins-h.bWins);
+    if(!best || gap<best.gap || (gap===best.gap&&h.total>best.h.total)) best={a:players[i],b:players[j],h,gap};
+  }
+  return best;
+}
+function mostPlayedRivalry(players,matches){
+  let best=null;
+  for(let i=0;i<players.length;i++)for(let j=i+1;j<players.length;j++){
+    const h=headToHead(players[i].id,players[j].id,matches);
+    if(h.total===0)continue;
+    if(!best||h.total>best.h.total) best={a:players[i],b:players[j],h};
+  }
+  return best;
+}
+function nightRecap(night,matches,players){
+  const ms=sortMatches(matches.filter(m=>m.matchNightId===night.id));
+  const pids=[...new Set(ms.flatMap(m=>[...m.teamAPlayerIds,...m.teamBPlayerIds]))];
+  const perPlayer=pids.map(pid=>{
+    let w=0,l=0,pf=0,pa=0; const seq=[];
+    for(const m of ms){ if(!inMatch(m,pid))continue;
+      const won=wonBy(m,pid); won?w++:l++; seq.push(won?'W':'L');
+      pf+=scoreFor(m,pid); pa+=scoreAgainst(m,pid); }
+    let best=0,run=0;for(const r of seq){run=r==='W'?run+1:0;if(run>best)best=run;}
+    return {pid,wins:w,losses:l,pf,pa,diff:pf-pa,streak:best,played:w+l};
+  });
+  const potn=[...perPlayer].sort((a,b)=> b.wins-a.wins || pct(b.wins,b.played)-pct(a.wins,a.played) || b.diff-a.diff)[0]||null;
+  const streakLeader=[...perPlayer].sort((a,b)=>b.streak-a.streak)[0]||null;
+  const topScorer=[...perPlayer].sort((a,b)=>b.pf-a.pf)[0]||null;
+  let closest=null,biggest=null;
+  for(const m of ms){ const mg=Math.abs(m.teamAScore-m.teamBScore), tot=m.teamAScore+m.teamBScore;
+    if(!closest||mg<closest.mg||(mg===closest.mg&&tot>closest.tot))closest={m,mg,tot};
+    if(!biggest||mg>biggest.mg)biggest={m,mg};
+  }
+  const duos={};
+  for(const m of ms.filter(m=>m.mode==='doubles')){
+    for(const side of['teamAPlayerIds','teamBPlayerIds']){
+      const k=duoKey(...m[side]); duos[k]=duos[k]||{ids:[...m[side]].sort(),w:0,l:0};
+      ((m.winner==='teamA')===(side==='teamAPlayerIds'))?duos[k].w++:duos[k].l++;
+    }
+  }
+  const bestDuo=Object.values(duos).sort((a,b)=> b.w-a.w || a.l-b.l)[0]||null;
+  return {matches:ms,players:pids,perPlayer,potn,streakLeader,topScorer,closest,biggest,bestDuo};
+}
+
+
+/* ================= SHUFFLE MATCH (אקראי אמיתי, בלי דירוגים) ================= */
+const sameSet=(a,b)=> a.length===b.length && [...a].sort().join('|')===[...b].sort().join('|');
+/* אותו מפגש? יחידות: אותם 2 שחקנים. זוגות: אותם שני צמדים (בלי קשר לצד A/B). */
+function sameMatchup(x,y){
+  if(!x||!y||x.mode!==y.mode) return false;
+  if(x.mode==='singles') return sameSet([...x.teamAPlayerIds,...x.teamBPlayerIds],[...y.teamAPlayerIds,...y.teamBPlayerIds]);
+  const kx=[duoKey(...x.teamAPlayerIds),duoKey(...x.teamBPlayerIds)].sort().join('#');
+  const ky=[duoKey(...y.teamAPlayerIds),duoKey(...y.teamBPlayerIds)].sort().join('#');
+  return kx===ky;
+}
+function pickRandom(pool,n,rng=Math.random){
+  const arr=[...pool]; const out=[];
+  while(out.length<n&&arr.length){ const i=Math.floor(rng()*arr.length); out.push(arr.splice(i,1)[0]); }
+  return out;
+}
+/* בוחר סוג משחק בפועל עבור "הכל" לפי גודל המאגר. מחזיר null אם אין מספיק שחקנים. */
+function resolveShuffleMode(type,poolSize,rng=Math.random){
+  if(type==='singles') return poolSize>=2? 'singles':null;
+  if(type==='doubles') return poolSize>=4? 'doubles':null;
+  if(poolSize<2) return null;
+  if(poolSize<4) return 'singles';
+  return rng()<0.5? 'singles':'doubles';
+}
+function drawMatchup(mode,pool,rng=Math.random){
+  if(mode==='singles'){ const [a,b]=pickRandom(pool,2,rng); return {mode,teamAPlayerIds:[a],teamBPlayerIds:[b]}; }
+  const [a,b,c,d]=pickRandom(pool,4,rng); return {mode,teamAPlayerIds:[a,b],teamBPlayerIds:[c,d]};
+}
+/* "להימנע כשאפשר, לא לאסור": מנסה כמה פעמים לא לחזור על המפגש הקודם; אם אין אלטרנטיבה — מחזיר בכל זאת. */
+function avoidImmediateRematch(mode,pool,avoid,rng=Math.random){
+  let cand=null;
+  for(let i=0;i<CFG.SHUFFLE_ATTEMPTS;i++){
+    cand=drawMatchup(mode,pool,rng);
+    if(!avoid.some(m=>sameMatchup(m,cand))) return {...cand,repeated:false};
+  }
+  return {...cand,repeated:true};
+}
+/* type: 'any' | 'singles' | 'doubles'. pool: מזהי שחקנים שנבחרו (פעילים בלבד). avoid: משחקים/הצעות להימנע מהם. */
+function generateShuffleMatch({type,pool,avoid=[],rng=Math.random}){
+  const uniq=[...new Set(pool)];
+  const mode=resolveShuffleMode(type,uniq.length,rng);
+  if(!mode) return {error: type==='doubles'?'זוגות דורש לפחות 4 שחקנים זמינים.':'צריך לפחות 2 שחקנים כדי לערבב.'};
+  return avoidImmediateRematch(mode,uniq,avoid.filter(m=>m&&m.mode===mode),rng);
+}
+/* המשחק האחרון מאותו סוג — זה מה שמנסים לא לחזור עליו */
+const lastMatchOfMode=(matches,mode)=>{ for(let i=matches.length-1;i>=0;i--) if(matches[i].mode===mode) return matches[i]; return null; };
+
+/* ================= MATCHUP INSIGHTS (רק מנתונים אמיתיים) ================= */
+/* מחזיר עד 3 עובדות: [{k,label,value,sub}] — מדורגות לפי עניין, בלי כפילויות (k ייחודי). */
+function getSinglesMatchupInsights(a,b,matches,players,rng=Math.random){
+  const A=byId(players,a),B=byId(players,b);
+  const h=headToHead(a,b,matches);
+  if(h.total===0) return {first:true,items:[]};
+  const c=[];
+  c.push({k:'meetings',pr:100,label:'מפגשים קודמים',value:h.total===1?'מפגש אחד':h.total+' מפגשים'});
+  if(h.aWins!==h.bWins){ const lead=h.aWins>h.bWins? A:B; c.push({k:'h2h',pr:95,label:'מאזן ראש בראש',value:lead.name+' מוביל '+Math.max(h.aWins,h.bWins)+'–'+Math.min(h.aWins,h.bWins)}); }
+  else c.push({k:'h2h',pr:95,label:'מאזן ראש בראש',value:'תיקו '+h.aWins+'–'+h.bWins});
+  c.push({k:'pts',pr:70,label:'נקודות ביריבות',value:A.name+' '+h.aPts+' · '+B.name+' '+h.bPts});
+  const L=h.latest; if(L){ const w=byId(players,winnersOf(L)[0]); c.push({k:'last',pr:80,label:'המפגש האחרון',value:w.name+' ניצח '+Math.max(L.teamAScore,L.teamBScore)+'–'+Math.min(L.teamAScore,L.teamBScore),sub:fmtDateShort(L.matchDate)}); }
+  // רצף נוכחי ביריבות
+  let run=0,who=null; for(let i=h.matches.length-1;i>=0;i--){ const w=wonBy(h.matches[i],a)?a:b; if(who===null)who=w; if(w===who)run++; else break; }
+  if(run>=2) c.push({k:'streak',pr:85,label:'רצף נוכחי ביריבות',value:byId(players,who).name+' — '+run+' ניצחונות ברצף'});
+  const bestS=Math.max(h.aBestStreak,h.bBestStreak); if(bestS>=3&&bestS!==run) c.push({k:'beststreak',pr:60,label:'הרצף הארוך ביריבות',value:(h.aBestStreak>=h.bBestStreak?A:B).name+' — '+bestS+' ברצף'});
+  if(h.total>=2){
+    let cl=null,bg=null; for(const m of h.matches){ const mg=Math.abs(m.teamAScore-m.teamBScore); if(!cl||mg<cl.mg)cl={m,mg}; if(!bg||mg>bg.mg)bg={m,mg}; }
+    if(cl) c.push({k:'closest',pr:65,label:'המשחק הצמוד ביניהם',value:Math.max(cl.m.teamAScore,cl.m.teamBScore)+'–'+Math.min(cl.m.teamAScore,cl.m.teamBScore),sub:fmtDateShort(cl.m.matchDate)});
+    if(bg&&bg.mg>=5) c.push({k:'biggest',pr:55,label:'הניצחון הגדול ביריבות',value:byId(players,winnersOf(bg.m)[0]).name+' '+Math.max(bg.m.teamAScore,bg.m.teamBScore)+'–'+Math.min(bg.m.teamAScore,bg.m.teamBScore)});
+    const dpts=h.aPts-h.bPts; if(dpts!==0) c.push({k:'ptsdiff',pr:40,label:'הפרש נקודות מצטבר',value:(dpts>0?A:B).name+' +'+Math.abs(dpts)});
+  }
+  return {first:false,items:pickInsights(c,rng)};
+}
+function getDoublesMatchupInsights(tA,tB,matches,players,rng=Math.random){
+  const duos=allDuos(matches);
+  const dA=duos.find(d=>d.ids.join('|')===duoKey(...tA))||null;
+  const dB=duos.find(d=>d.ids.join('|')===duoKey(...tB))||null;
+  const nm=ids=>ids.map(id=>byId(players,id).name).join(' + ');
+  const exact=sortMatches(matches.filter(m=>m.mode==='doubles'&&sameMatchup(m,{mode:'doubles',teamAPlayerIds:tA,teamBPlayerIds:tB})));
+  const c=[];
+  const duoLine=(d,ids,k,pr)=>{ if(!d) return; c.push({k,pr,label:nm(ids),value:d.played+(d.played===1?' משחק יחד':' משחקים יחד')+' · '+Math.round(d.winRate)+'%',sub:d.wins+'–'+d.losses}); };
+  duoLine(dA,tA,'duoA',100); duoLine(dB,tB,'duoB',98);
+  if(exact.length){
+    let aw=0,bw=0,ap=0,bp=0; for(const m of exact){ const aSide=sameSet(m.teamAPlayerIds,tA); const aWon=(m.winner==='teamA')===aSide; aWon?aw++:bw++; ap+=aSide?m.teamAScore:m.teamBScore; bp+=aSide?m.teamBScore:m.teamAScore; }
+    c.push({k:'exact',pr:96,label:'מפגש בין הצמדים האלה',value: exact.length===1?'פעם אחת עד היום':exact.length+' פעמים · '+(aw===bw?'תיקו '+aw+'–'+bw:(aw>bw?nm(tA):nm(tB))+' מוביל '+Math.max(aw,bw)+'–'+Math.min(aw,bw))});
+    const L=exact[exact.length-1]; const wIds=winnersOf(L);
+    c.push({k:'lastexact',pr:80,label:'המפגש האחרון ביניהם',value:nm(wIds)+' ניצחו '+Math.max(L.teamAScore,L.teamBScore)+'–'+Math.min(L.teamAScore,L.teamBScore),sub:fmtDateShort(L.matchDate)});
+    if(exact.length>=2) c.push({k:'exactpts',pr:50,label:'נקודות במפגשים האלה',value:nm(tA)+' '+ap+' · '+nm(tB)+' '+bp});
+  } else if(dA||dB){ c.push({k:'exact',pr:90,label:'מפגש בין הצמדים האלה',value:'פעם ראשונה שהצמדים האלה נפגשים'}); }
+  // רצף שותפות נוכחי
+  const partnerStreak=(ids)=>{ const ms=sortMatches(matches.filter(m=>m.mode==='doubles'&&(sameSet(m.teamAPlayerIds,ids)||sameSet(m.teamBPlayerIds,ids)))); let run=0; for(let i=ms.length-1;i>=0;i--){ const won=(ms[i].winner==='teamA')===sameSet(ms[i].teamAPlayerIds,ids); if(won)run++; else break; } return run; };
+  const sA=partnerStreak(tA), sB=partnerStreak(tB);
+  if(sA>=2) c.push({k:'streakA',pr:75,label:'רצף שותפות',value:nm(tA)+' — '+sA+' ניצחונות ברצף יחד'});
+  if(sB>=2&&sB>=sA) c.push({k:'streakB',pr:74,label:'רצף שותפות',value:nm(tB)+' — '+sB+' ניצחונות ברצף יחד'});
+  if(dA&&dB&&dA.winRate!==dB.winRate&&dA.played>=2&&dB.played>=2) c.push({k:'better',pr:60,label:'הצמד עם אחוז הניצחון הגבוה',value:(dA.winRate>dB.winRate?nm(tA):nm(tB))+' · '+Math.round(Math.max(dA.winRate,dB.winRate))+'%'});
+  return {first:c.length===0,items:pickInsights(c,rng)};
+}
+/* עובדות "ליבה" (pr>=90) תמיד מוצגות; את המקומות שנותרו ממלאים אקראית מהשאר — כדי שהמסך לא יחזור על עצמו */
+function pickInsights(c,rng=Math.random){
+  const seen=new Set(); const uniq=c.filter(x=>{ if(seen.has(x.k))return false; seen.add(x.k); return true; }).sort((a,b)=>b.pr-a.pr);
+  if(uniq.length<=3) return uniq;
+  const core=uniq.filter(x=>x.pr>=90).slice(0,3); const rest=uniq.filter(x=>!core.includes(x));
+  const out=[...core];
+  while(out.length<3&&rest.length) out.push(rest.splice(Math.floor(rng()*rest.length),1)[0]);
+  return out.sort((a,b)=>b.pr-a.pr);
+}
+function getMatchupInsights(matchup,matches,players,rng=Math.random){
+  return matchup.mode==='singles'
+    ? getSinglesMatchupInsights(matchup.teamAPlayerIds[0],matchup.teamBPlayerIds[0],matches,players,rng)
+    : getDoublesMatchupInsights(matchup.teamAPlayerIds,matchup.teamBPlayerIds,matches,players,rng);
+}
+/* משתתפי ערב פעיל = מי ששיחק בו; אם עוד לא שיחקו — כל הפעילים */
+function shuffleDefaultPool(players,matches,settings){
+  const act=players.filter(p=>p.active).map(p=>p.id);
+  if(settings.activeNightId){
+    const ids=new Set(matches.filter(m=>m.matchNightId===settings.activeNightId).flatMap(m=>[...m.teamAPlayerIds,...m.teamBPlayerIds]));
+    const pool=act.filter(id=>ids.has(id));
+    if(pool.length>=2) return pool;
+  }
+  return act;
+}
+
+/* ================= ACHIEVEMENTS ================= */
+const ACH_DEFS=[
+  {id:'on_fire',icon:'🔥',name:'על אש',desc:'5 ניצחונות ברצף'},
+  {id:'king_court',icon:'👑',name:'מלך המגרש',desc:'5 ניצחונות בערב אחד'},
+  {id:'no_mercy',icon:'💀',name:'בלי רחמים',desc:'ניצחון עד 11 עם 2 נקודות ספיגה לכל היותר'},
+  {id:'dynamic_duo',icon:'🤝',name:'צמד חמד',desc:'10 ניצחונות עם אותו פרטנר'},
+  {id:'nemesis',icon:'⚔️',name:'נמסיס',desc:'10 ניצחונות מול אותו יריב'},
+  {id:'veteran',icon:'🏅',name:'ותיק',desc:'100 משחקים'},
+  {id:'century',icon:'💯',name:'מועדון האלף',desc:'1,000 נקודות קריירה'},
+  {id:'marathon',icon:'🕰️',name:'משחק מרתון',desc:'משחק שנמשך הרבה מעבר ליעד (למשל 18–16 עד 11)'},
+  {id:'perfect_night',icon:'✨',name:'ערב מושלם',desc:'ניצחון בכל משחקי הערב (לפחות '+CFG.MIN_PERFECT_NIGHT+')'},
+];
+function playerAchievements(pid,matches,nights){
+  const ms=sortMatches(matches.filter(m=>inMatch(m,pid)));
+  const earned={};
+  const mark=(id,m)=>{ if(!earned[id]) earned[id]={date: m? m.matchDate : nowISO()}; };
+  let run=0,pf=0,partnerWins={},oppWins={};
+  ms.forEach((m,i)=>{
+    const won=wonBy(m,pid);
+    run=won?run+1:0; if(run>=5)mark('on_fire',m);
+    pf+=scoreFor(m,pid); if(pf>=1000)mark('century',m);
+    if(i+1>=100)mark('veteran',m);
+    if(won&&m.mode==='singles'&&m.targetScore===11&&scoreAgainst(m,pid)<=2)mark('no_mercy',m);
+    if(Math.max(m.teamAScore,m.teamBScore)>=m.targetScore+CFG.MARATHON_OVER_TARGET)mark('marathon',m);
+    if(won&&m.mode==='doubles'){
+      const partner=sideOf(m,pid)==='teamA'? m.teamAPlayerIds.find(x=>x!==pid):m.teamBPlayerIds.find(x=>x!==pid);
+      partnerWins[partner]=(partnerWins[partner]||0)+1;
+      if(partnerWins[partner]>=10)mark('dynamic_duo',m);
+    }
+    if(won&&m.mode==='singles'){
+      const opp=losersOf(m)[0]; oppWins[opp]=(oppWins[opp]||0)+1;
+      if(oppWins[opp]>=10)mark('nemesis',m);
+    }
+  });
+  for(const n of nights){
+    const nm=ms.filter(m=>m.matchNightId===n.id);
+    if(!nm.length)continue;
+    const w=nm.filter(m=>wonBy(m,pid)).length;
+    if(w>=5)mark('king_court',nm[nm.length-1]);
+    if(w===nm.length&&nm.length>=CFG.MIN_PERFECT_NIGHT)mark('perfect_night',nm[nm.length-1]);
+  }
+  return ACH_DEFS.map(d=>({...d,earned:!!earned[d.id],date:earned[d.id]?.date}));
+}
+
+/* ================= IMAGE RESIZE ================= */
+function processImage(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>{ const img=new Image();
+      img.onload=()=>{ const S=320, c=document.createElement('canvas');
+        const side=Math.min(img.width,img.height);
+        c.width=S;c.height=S;
+        c.getContext('2d').drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,S,S);
+        res(c.toDataURL('image/jpeg',.82)); };
+      img.onerror=()=>rej(new Error('bad image')); img.src=r.result; };
+    r.onerror=()=>rej(new Error('read fail')); r.readAsDataURL(file);
+  });
+}
+
+/* ================= DATA HOOK ================= */
+function useData(){
+  const [players,setPlayers]=useState([]);
+  const [matches,setMatches]=useState([]);
+  const [nights,setNights]=useState([]);
+  const [settings,setSettings]=useState({defaultTarget:11,defaultWinBy:2,maxScore:null,activeNightId:null,lastBackup:null});
+  const [ready,setReady]=useState(false);
+  const reload=useCallback(async()=>{
+    const [p,m,n,s]=await Promise.all([db.players.toArray(),db.matches.toArray(),db.nights.toArray(),db.settings.toArray()]);
+    setPlayers(p); setMatches(sortMatches(m.map(normalizeMatch))); setNights(n.sort((a,b)=>new Date(b.date)-new Date(a.date)));
+    const st={defaultTarget:11,defaultWinBy:2,maxScore:null,activeNightId:null,lastBackup:null};
+    s.forEach(x=>st[x.key]=x.value); setSettings(st); setReady(true);
+  },[]);
+  useEffect(()=>{
+    reload();
+    /* עדכון חי בכל המכשירים כשמישהו בקבוצה שומר/מוחק נתונים */
+    const channel = sb.channel('zzb-sync')
+      .on('postgres_changes',{event:'*',schema:'public',table:'players'},reload)
+      .on('postgres_changes',{event:'*',schema:'public',table:'matches'},reload)
+      .on('postgres_changes',{event:'*',schema:'public',table:'nights'},reload)
+      .on('postgres_changes',{event:'*',schema:'public',table:'settings'},reload)
+      .subscribe();
+    return ()=>{ sb.removeChannel(channel); };
+  },[]);
+  const setSetting=async(key,value)=>{ await db.settings.put({key,value}); reload(); };
+  return {players,matches,nights,settings,ready,reload,setSetting};
+}
+const byId=(players,id)=>players.find(p=>p.id===id)||{id,name:'שחקן שנמחק',nickname:'',active:false};
+
+/* ================= ICONS ================= */
+const Shuttle=({size=26,color='var(--court)'})=>(
+  <svg className="shuttle" width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <circle cx="7.2" cy="16.8" r="3.4" fill={color}/>
+    <path d="M9.5 14.5 L15 4 L17.5 6.5 L20 9 L9.7 14.7Z" fill="none" stroke={color} strokeWidth="1.6" strokeLinejoin="round"/>
+    <path d="M11 13.2 L16.2 5.2 M12.8 13.9 L18.8 7.8" stroke={color} strokeWidth="1.2"/>
+  </svg>);
+const Icon={
+  home:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>,
+  plus:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><path d="M12 5v14M5 12h14"/></svg>,
+  users:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 20c.6-3.4 3.2-5.2 6.2-5.2s5.6 1.8 6.2 5.2M16 5.2a3.4 3.4 0 0 1 0 5.9M17.6 15.1c2 .7 3.3 2.3 3.6 4.9"/></svg>,
+  stats:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>,
+  hist:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>,
+  moon:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>,
+  gear:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.15-1.4l2.1-1.6-2-3.4-2.4 1a7 7 0 0 0-2.4-1.4L13.7 2h-4l-.45 2.6a7 7 0 0 0-2.4 1.4l-2.4-1-2 3.4 2.1 1.6A7 7 0 0 0 4.4 12c0 .5.05.9.15 1.4l-2.1 1.6 2 3.4 2.4-1a7 7 0 0 0 2.4 1.4l.45 2.6h4l.45-2.6a7 7 0 0 0 2.4-1.4l2.4 1 2-3.4-2.1-1.6c.1-.5.15-.9.15-1.4z"/></svg>,
+};
+
+/* ================= SHARED COMPONENTS ================= */
+function Avatar({p,size=44,style}){
+  const initials=(p?.name||'?').trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('');
+  return <div className="avatar" style={{width:size,height:size,fontSize:size*.36,...style}}>
+    {p?.profileImage? <img src={p.profileImage} alt={p.name}/> : initials}
+  </div>;
+}
+function NameBlock({p,center,size=15}){
+  return <div style={{textAlign:center?'center':'start',minWidth:0}}>
+    <div className="pname" style={{fontSize:size,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{p.name}</div>
+    {p.nickname? <div className="nick">{p.nickname}</div>:null}
+  </div>;
+}
+function FormDots({seq,size=20}){
+  return <div className="formDots">{seq.map((r,i)=>
+    <span key={i} className={r==='W'?'w':'l'} style={{width:size,height:size}}>{r==='W'?'W':'L'}</span>)}</div>;
+}
+function Sheet({title,onClose,children}){
+  return <div className="sheetBack" onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+    <div className="sheet">
+      <div className="sheetHead">
+        <div style={{fontWeight:900,fontSize:17}}>{title}</div>
+        <button className="backBtn" onClick={onClose}>✕</button>
+      </div>
+      <div className="sheetBody">{children}</div>
+    </div>
+  </div>;
+}
+function ConfirmDialog({title,body,confirmLabel='אישור',danger,onConfirm,onCancel}){
+  return <div className="dialogBack" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+    <div className="dialog">
+      <div style={{fontWeight:900,fontSize:17,marginBottom:8}}>{title}</div>
+      <div className="muted" style={{fontSize:14,lineHeight:1.5,whiteSpace:'pre-line'}}>{body}</div>
+      <div style={{display:'flex',gap:10,marginTop:18}}>
+        <button className="btn ghost" style={{flex:1}} onClick={onCancel}>ביטול</button>
+        <button className={'btn '+(danger?'danger':'primary')} style={{flex:1}} onClick={onConfirm}>{confirmLabel}</button>
+      </div>
+    </div>
+  </div>;
+}
+function Toast({msg}){ return msg? <div className="toast">{msg}</div>:null; }
+function EmptyState({icon,title,sub,action,onAction}){
+  return <div className="card" style={{textAlign:'center',padding:'34px 20px'}}>
+    <div style={{fontSize:34,marginBottom:8}}>{icon}</div>
+    <div style={{fontWeight:900,fontSize:17}}>{title}</div>
+    {sub&&<div className="muted tiny" style={{marginTop:6}}>{sub}</div>}
+    {action&&<button className="btn primary" style={{marginTop:16,display:'inline-flex'}} onClick={onAction}>{action}</button>}
+  </div>;
+}
+function ScopeTabs({scope,onChange,hide=[]}){
+  return <div className="segTabs">{SCOPES.filter(s=>!hide.includes(s.id)).map(s=>
+    <button key={s.id} className={scope===s.id?'on':''} onClick={()=>onChange(s.id)}>{s.label}</button>)}</div>;
+}
+function TeamNames({ids,players}){ return ids.map(id=>byId(players,id).name).join(' + '); }
+
+function MatchCard({m,players,onClick}){
+  const A=m.teamAPlayerIds.map(id=>byId(players,id)), B=m.teamBPlayerIds.map(id=>byId(players,id));
+  const aWin=m.winner==='teamA';
+  return <div className="matchCard" onClick={onClick} style={onClick?{cursor:'pointer'}:null}>
+    <div className="matchScoreRow">
+      <div className="teamCol">
+        <div style={{display:'flex'}}>{A.map((p,i)=><Avatar key={p.id} p={p} size={A.length>1?40:52} style={i>0?{marginInlineStart:-10}:null}/>)}</div>
+        <div className="names">{A.map(p=>p.name).join(' + ')}</div>
+        <div className={'bigScore '+(aWin?'winS':'loseS')}>{m.teamAScore}</div>
+      </div>
+      <div className="vsMini">VS</div>
+      <div className="teamCol">
+        <div style={{display:'flex'}}>{B.map((p,i)=><Avatar key={p.id} p={p} size={B.length>1?40:52} style={i>0?{marginInlineStart:-10}:null}/>)}</div>
+        <div className="names">{B.map(p=>p.name).join(' + ')}</div>
+        <div className={'bigScore '+(!aWin?'winS':'loseS')}>{m.teamBScore}</div>
+      </div>
+    </div>
+    <div className="matchMeta">
+      <span className="tag">{fmtDateTimeShort(m)}</span>
+      <span className="tag">{m.mode==='singles'?'1 על 1':'2 על 2'}</span>
+      <span className="tag green">עד {m.targetScore}</span>
+    </div>
+  </div>;
+}
+
+/* רקע מגרש עדין לכותרות */
+const CourtLines=()=>(
+  <svg className="bg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+    <g stroke="#2a4034" strokeWidth="2" fill="none">
+      <rect x="40" y="14" width="320" height="172"/>
+      <line x1="40" y1="100" x2="360" y2="100" stroke="#3dbd8b" strokeWidth="3" strokeDasharray="7 6"/>
+      <line x1="40" y1="52" x2="360" y2="52"/><line x1="40" y1="148" x2="360" y2="148"/>
+      <line x1="200" y1="14" x2="200" y2="52"/><line x1="200" y1="148" x2="200" y2="186"/>
+      <rect x="58" y="14" width="284" height="172"/>
+    </g>
+  </svg>);
+
+/* ================= PLAYER FORM ================= */
+function PlayerForm({initial,onSave,onClose,data}){
+  const [name,setName]=useState(initial?.name||'');
+  const [nickname,setNickname]=useState(initial?.nickname||'');
+  const [img,setImg]=useState(initial?.profileImage||null);
+  const [err,setErr]=useState('');
+  const fileRef=useRef();
+  const pick=async e=>{ const f=e.target.files[0]; if(!f)return;
+    try{ setImg(await processImage(f)); }catch{ setErr('לא הצלחנו לטעון את התמונה — נסו תמונה אחרת'); } };
+  const save=async()=>{
+    if(!name.trim()){setErr('לשחקן חייב להיות שם');return;}
+    if(initial){ await db.players.update(initial.id,{name:name.trim(),nickname:nickname.trim(),profileImage:img}); }
+    else { await db.players.add({id:uid(),name:name.trim(),nickname:nickname.trim(),profileImage:img,active:1,createdAt:nowISO()}); }
+    await data.reload(); onClose();
+  };
+  return <Sheet title={initial?'עריכת שחקן':'שחקן חדש'} onClose={onClose}>
+    <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:8,marginBottom:16}}>
+      <button onClick={()=>fileRef.current.click()}>
+        <Avatar p={{name:name||'?',profileImage:img}} size={96}/>
+      </button>
+      <button className="linkAll" onClick={()=>fileRef.current.click()}>{img?'החלפת תמונה':'הוספת תמונת פרופיל'}</button>
+      {img&&<button className="tiny" style={{color:'var(--loss)'}} onClick={()=>setImg(null)}>הסרת תמונה</button>}
+      <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={pick}/>
+    </div>
+    <div className="stack">
+      <div><div className="eyebrow" style={{marginBottom:6}}>שם</div>
+        <input value={name} onChange={e=>setName(e.target.value)} placeholder="אורי מלכה"/></div>
+      <div><div className="eyebrow" style={{marginBottom:6}}>כינוי (הפרסונה על המגרש)</div>
+        <input value={nickname} onChange={e=>setNickname(e.target.value)} placeholder="אלחנן האיום"/></div>
+      {err&&<div className="tiny" style={{color:'var(--loss)'}}>{err}</div>}
+      <button className="btn primary" onClick={save}>{initial?'שמירת שינויים':'הוספת שחקן'}</button>
+    </div>
+  </Sheet>;
+}
+
+/* ================= PLAYER PICKER ================= */
+function PlayerPicker({data,exclude=[],onPick,onClose}){
+  const [q,setQ]=useState('');
+  const [adding,setAdding]=useState(false);
+  const list=data.players.filter(p=>p.active)
+    .filter(p=>!q||p.name.includes(q)||(p.nickname||'').includes(q))
+    .sort((a,b)=>a.name.localeCompare(b.name,'he'));
+  return <Sheet title="בחירת שחקן" onClose={onClose}>
+    {data.players.filter(p=>p.active).length>6&&
+      <div className="searchBox"><input placeholder="חיפוש שחקן…" value={q} onChange={e=>setQ(e.target.value)}/></div>}
+    {list.length===0&&!q&&<EmptyState icon="🏸" title="עוד אין שחקנים" sub="הוסיפו את החברים ותתחילו לשחק" action="+ שחקן חדש" onAction={()=>setAdding(true)}/>}
+    {list.map(p=>{
+      const st=playerStats(p.id,data.matches);
+      const dis=exclude.includes(p.id);
+      return <button key={p.id} className={'pickRow'+(dis?' disabled':'')} onClick={()=>!dis&&onPick(p)}>
+        <Avatar p={p} size={48}/>
+        <div className="info"><NameBlock p={p}/></div>
+        {st.played>0? <FormDots seq={st.last5} size={18}/> : <span className="tiny muted">חדש</span>}
+      </button>;
+    })}
+    {list.length>0&&<button className="btn ghost" style={{marginTop:12,width:'100%'}} onClick={()=>setAdding(true)}>+ שחקן חדש</button>}
+    {adding&&<PlayerForm data={data} onClose={()=>setAdding(false)}/>}
+  </Sheet>;
+}
+
+/* ================= HOME ================= */
+function Home({data,go}){
+  const {players,matches,nights,settings}=data;
+  const activeNight = settings.activeNightId? nights.find(n=>n.id===settings.activeNightId&&!n.endedAt):null;
+  const latest=matches[matches.length-1];
+  const lastNight = nights.find(n=>n.endedAt) || nights[0];
+  // חם עכשיו: הכי הרבה ניצחונות ב-5 האחרונים (מינימום 3 משחקים)
+  const hot=useMemo(()=>{
+    let best=null;
+    for(const p of players.filter(p=>p.active)){
+      const st=playerStats(p.id,matches);
+      if(st.played<3)continue;
+      const w=st.last5.filter(r=>r==='W').length;
+      if(!best||w>best.w||(w===best.w&&st.curStreak>best.st.curStreak)) best={p,st,w};
+    }
+    return best&&best.w>=3? best:null;
+  },[players,matches]);
+  const rivalry=useMemo(()=>mostPlayedRivalry(players,matches),[players,matches]);
+  const backupOld = settings.lastBackup? (Date.now()-new Date(settings.lastBackup))/864e5>CFG.BACKUP_REMINDER_DAYS : matches.length>20;
+
+  return <div className="screen">
+    <div className="courtHero">
+      <CourtLines/>
+      <div className="inner">
+        <div className="rowBetween" style={{alignItems:'flex-start'}}>
+          <div>
+            <h1 className="brandTitle">{APP_NAME} <Shuttle size={30}/></h1>
+            <div className="brandSub">{matches.length>0? matches.length+' משחקים בהיסטוריה · '+players.filter(p=>p.active).length+' שחקנים' : 'הליגה הפרטית שלכם מתחילה כאן'}</div>
+          </div>
+          <button className="backBtn" onClick={()=>go({s:'settings'})}>{Icon.gear}</button>
+        </div>
+        {activeNight&&<div className="tag green" style={{display:'inline-block',marginTop:12}}>🟢 ערב פעיל: {activeNight.title||fmtDate(activeNight.date)}</div>}
+        <button className="btn primary" style={{marginTop:18,width:'100%',fontSize:18}} onClick={()=>go({s:'new'})}>+ משחק חדש</button>
+      </div>
+    </div>
+
+    {matches.length===0&&<div style={{marginTop:14}}>
+      <EmptyState icon="🏸" title="המגרש מחכה" sub="הזינו את המשחק הראשון — משם ההיסטוריה כבר תיכתב לבד"
+        action={players.length<2?'הוספת שחקנים':'המשחק הראשון'} onAction={()=>go(players.length<2?{s:'players'}:{s:'new'})}/>
+    </div>}
+
+    {hot&&<div className="card" style={{marginTop:14}}>
+      <div className="eyebrow green">🔥 חם עכשיו</div>
+      <button className="pickRow" style={{padding:'10px 0 0'}} onClick={()=>go({s:'player',id:hot.p.id})}>
+        <Avatar p={hot.p} size={52}/>
+        <div className="info"><NameBlock p={hot.p} size={17}/>
+          <div className="tiny muted" style={{marginTop:3}}>{hot.w} ניצחונות ב־{hot.st.last5.length} האחרונים</div></div>
+        <FormDots seq={hot.st.last5}/>
+      </button>
+    </div>}
+
+    {latest&&<>
+      <div className="sectionTitle rowBetween"><span>המשחק האחרון</span>
+        <button className="linkAll" onClick={()=>go({s:'history'})}>כל ההיסטוריה</button></div>
+      <MatchCard m={latest} players={players} onClick={()=>go({s:'match',id:latest.id})}/>
+    </>}
+
+    {lastNight&&(()=>{ const r=nightRecap(lastNight,matches,players);
+      if(!r.matches.length)return null;
+      return <>
+        <div className="sectionTitle rowBetween"><span>הערב האחרון</span>
+          <button className="linkAll" onClick={()=>go({s:'nights'})}>ארכיון ערבים</button></div>
+        <button className="card" style={{width:'100%',textAlign:'start'}} onClick={()=>go({s:'night',id:lastNight.id})}>
+          <div className="rowBetween">
+            <div>
+              <div style={{fontWeight:900,fontSize:16}}>{lastNight.title||'ערב בדמינטון'}</div>
+              <div className="tiny muted" style={{marginTop:3}}>{fmtDate(lastNight.date)} · {r.matches.length} משחקים · {r.players.length} שחקנים</div>
+              {r.potn&&<div className="tiny" style={{marginTop:6,color:'var(--gold)'}}>👑 {byId(players,r.potn.pid).name} — {r.potn.wins} ניצחונות</div>}
+            </div>
+            <div style={{fontSize:24}}>🌙</div>
+          </div>
+        </button>
+      </>; })()}
+
+    {rivalry&&rivalry.h.total>=3&&<div className="card" style={{marginTop:14}}>
+      <div className="eyebrow">⚔️ היריבות הפעילה ביותר</div>
+      <button className="rowBetween" style={{width:'100%',marginTop:10}} onClick={()=>go({s:'h2h',a:rivalry.a.id,b:rivalry.b.id})}>
+        <div style={{display:'flex',alignItems:'center',gap:8}}>
+          <Avatar p={rivalry.a} size={40}/><Avatar p={rivalry.b} size={40} style={{marginInlineStart:-12}}/>
+          <div style={{fontWeight:800,fontSize:14}}>{rivalry.a.name} נגד {rivalry.b.name}</div>
+        </div>
+        <div className="tiny muted">{rivalry.h.total} מפגשים</div>
+      </button>
+    </div>}
+
+    {backupOld&&matches.length>0&&<button className="card rowBetween" style={{width:'100%',marginTop:14,textAlign:'start'}} onClick={()=>go({s:'settings'})}>
+      <div className="tiny muted">💾 {settings.lastBackup? 'הגיבוי האחרון היה לפני יותר מ־'+CFG.BACKUP_REMINDER_DAYS+' יום':'עוד לא יצא גיבוי — שווה לייצא אחד'}</div>
+      <span className="linkAll">למרכז הגיבוי</span>
+    </button>}
+  </div>;
+}
+
+/* ================= COURT ================= */
+function Court({mode,slots,onSlot,players}){
+  // מגרש לרוחב: קבוצה A למעלה, רשת באמצע, קבוצה B למטה
+  const pos = mode==='singles'
+    ? [{team:'A',i:0,x:50,y:26},{team:'B',i:0,x:50,y:74}]
+    : [{team:'A',i:0,x:30,y:26},{team:'A',i:1,x:70,y:26},{team:'B',i:0,x:30,y:74},{team:'B',i:1,x:70,y:74}];
+  return <div className="courtWrap">
+    <svg className="courtSvg" viewBox="0 0 400 460">
+      <rect x="34" y="20" width="332" height="420" rx="6" fill="#16241c" stroke="#33503f" strokeWidth="3"/>
+      <rect x="58" y="20" width="284" height="420" fill="none" stroke="#2a4034" strokeWidth="2"/>
+      <line x1="34" y1="86" x2="366" y2="86" stroke="#2a4034" strokeWidth="2"/>
+      <line x1="34" y1="374" x2="366" y2="374" stroke="#2a4034" strokeWidth="2"/>
+      <line x1="34" y1="164" x2="366" y2="164" stroke="#2a4034" strokeWidth="2"/>
+      <line x1="34" y1="296" x2="366" y2="296" stroke="#2a4034" strokeWidth="2"/>
+      <line x1="200" y1="20" x2="200" y2="164" stroke="#2a4034" strokeWidth="2"/>
+      <line x1="200" y1="296" x2="200" y2="440" stroke="#2a4034" strokeWidth="2"/>
+      <line x1="20" y1="230" x2="380" y2="230" stroke="#3dbd8b" strokeWidth="4" strokeDasharray="9 7" opacity=".9"/>
+      <rect x="16" y="222" width="8" height="16" rx="2" fill="#3dbd8b"/>
+      <rect x="376" y="222" width="8" height="16" rx="2" fill="#3dbd8b"/>
+    </svg>
+    {pos.map(sl=>{
+      const pid=slots[sl.team][sl.i];
+      const p=pid? byId(players,pid):null;
+      return <button key={sl.team+sl.i} className="slotBtn" style={{left:sl.x+'%',top:sl.y+'%'}}
+        onClick={()=>onSlot(sl.team,sl.i)}>
+        {p? <>
+          <Avatar p={p} size={62} style={{borderColor:'var(--court)',boxShadow:'0 4px 14px rgba(0,0,0,.5)'}}/>
+          <div className="slotName">{p.name}{p.nickname&&<div className="nick slotNick">{p.nickname}</div>}</div>
+        </> : <div className="slotPlus">+</div>}
+      </button>;
+    })}
+  </div>;
+}
+
+/* ================= MATCH WIZARD (חדש / עריכה / משחק עבר) ================= */
+function MatchWizard({data,go,editMatch,past,prefill}){
+  const {settings,players}=data;
+  // prefill מגיע מ-SHUFFLE MATCH: שחקנים + סוג כבר נבחרו, ממשיכים ישר להגדרות ניקוד
+  const [step,setStep]=useState(editMatch?'score':(prefill?'config':'mode'));
+  const [mode,setMode]=useState(editMatch?.mode||prefill?.mode||'singles');
+  const [slots,setSlots]=useState(editMatch
+    ? {A:[...editMatch.teamAPlayerIds],B:[...editMatch.teamBPlayerIds]}
+    : prefill? {A:[...prefill.teamAPlayerIds,null,null].slice(0,2),B:[...prefill.teamBPlayerIds,null,null].slice(0,2)}
+    : {A:[null,null],B:[null,null]});
+  const [fromShuffle]=useState(!!prefill?.generatedByShuffle);
+  const [target,setTarget]=useState(editMatch?.targetScore??settings.defaultTarget??11);
+  const [customT,setCustomT]=useState('');
+  const [winBy,setWinBy]=useState(editMatch?.winBy??settings.defaultWinBy??2);
+  const [scoreA,setScoreA]=useState(editMatch?.teamAScore??0);
+  const [scoreB,setScoreB]=useState(editMatch?.teamBScore??0);
+  const [date,setDate]=useState(editMatch? dayInput(editMatch.matchDate) : dayInput(nowISO()));
+  // שעת המשחק: במשחק עבר אופציונלית (ריק = לא ידוע), בעריכה ניתנת לשינוי, במשחק חי נקבעת בשמירה
+  const [time,setTime]=useState(editMatch? (editMatch.matchTime||'') : '');
+  const [nightId,setNightId]=useState(editMatch? (editMatch.matchNightId||''): (past?'':(settings.activeNightId||'')));
+  const [picker,setPicker]=useState(null);
+  const [err,setErr]=useState('');
+  const [saved,setSaved]=useState(null);
+
+  const need = mode==='singles'?1:2;
+  const chosen=[...slots.A.slice(0,need),...slots.B.slice(0,need)].filter(Boolean);
+  const complete=chosen.length===need*2 && new Set(chosen).size===need*2;
+  const effTarget = target==='custom'? parseInt(customT)||0 : target;
+
+  const onSlot=(team,i)=>setPicker({team,i});
+  const doPick=p=>{ setSlots(s=>{ const n={A:[...s.A],B:[...s.B]}; n[picker.team][picker.i]=p.id; return n;}); setPicker(null); };
+  const clearSlot=(team,i)=>setSlots(s=>{const n={A:[...s.A],B:[...s.B]}; n[team][i]=null; return n;});
+
+  const save=async()=>{
+    const v=validateScore(scoreA,scoreB,effTarget,winBy,settings.maxScore);
+    if(!v.ok){setErr(v.msg);return;}
+    if(!complete){setErr('חסרים שחקנים במגרש');return;}
+    if(!date){setErr('חסר תאריך למשחק');return;}
+    const rec={
+      id:editMatch?.id||uid(),
+      matchNightId:nightId||null,
+      matchDate:new Date(date+'T12:00:00').toISOString(),
+      matchTime: (editMatch||past)? (time||null) : nowTime(),
+      generatedByShuffle: editMatch? !!editMatch.generatedByShuffle : fromShuffle,
+      mode, targetScore:effTarget, winBy, maxScore:settings.maxScore||null,
+      teamAPlayerIds:slots.A.slice(0,need), teamBPlayerIds:slots.B.slice(0,need),
+      teamAScore:+scoreA, teamBScore:+scoreB,
+      winner:+scoreA>+scoreB?'teamA':'teamB',
+      playerIds:[...slots.A.slice(0,need),...slots.B.slice(0,need)],
+      seq: editMatch?.seq ?? (nightId? (data.matches.filter(m=>m.matchNightId===nightId).length+1):0),
+      createdAt:editMatch?.createdAt||nowISO(), updatedAt:nowISO()
+    };
+    await db.matches.put(rec);
+    await db.settings.put({key:'defaultTarget',value:effTarget});
+    await db.settings.put({key:'defaultWinBy',value:winBy});
+    await data.reload();
+    if(editMatch){ go({s:'match',id:rec.id}); return; }
+    setSaved(rec);
+  };
+
+  if(saved){
+    const A=saved.teamAPlayerIds.map(id=>byId(players,id)), B=saved.teamBPlayerIds.map(id=>byId(players,id));
+    const wA=saved.winner==='teamA';
+    return <div className="screen" style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
+      <div className="card confirmSave" style={{padding:'34px 20px'}}>
+        <div className="eyebrow green">עוד אחד לספרי ההיסטוריה</div>
+        <div style={{fontSize:20,fontWeight:900,margin:'10px 0 20px'}}>המשחק נשמר 🏸</div>
+        <div className="matchScoreRow">
+          <div className="teamCol">
+            <div style={{display:'flex'}}>{A.map((p,i)=><Avatar key={p.id} p={p} size={56} style={i>0?{marginInlineStart:-12}:null}/>)}</div>
+            <div className="names">{A.map(p=>p.name).join(' + ')}</div>
+            <div className={'bigScore '+(wA?'winS':'loseS')}>{saved.teamAScore}</div>
+          </div>
+          <div className="vsMini">—</div>
+          <div className="teamCol">
+            <div style={{display:'flex'}}>{B.map((p,i)=><Avatar key={p.id} p={p} size={56} style={i>0?{marginInlineStart:-12}:null}/>)}</div>
+            <div className="names">{B.map(p=>p.name).join(' + ')}</div>
+            <div className={'bigScore '+(!wA?'winS':'loseS')}>{saved.teamBScore}</div>
+          </div>
+        </div>
+        <div className="stack" style={{marginTop:26}}>
+          <button className="btn primary" onClick={()=>{setSaved(null);setScoreA(0);setScoreB(0);setStep('court');setSlots({A:[null,null],B:[null,null]});setErr('');}}>משחק נוסף</button>
+          <button className="btn ghost" onClick={()=>go({s:'home'})}>חזרה הביתה</button>
+        </div>
+      </div>
+    </div>;
+  }
+
+  const title = editMatch? 'עריכת משחק' : past? 'הוספת משחק עבר' : 'משחק חדש';
+  return <div className="screen">
+    <div className="headerBar">
+      <button className="backBtn" onClick={()=>editMatch?go({s:'match',id:editMatch.id}):go({s:prefill?'shuffle':'home'})}>→</button>
+      <div className="screenTitle">{title}{fromShuffle&&<span className="tag green" style={{marginInlineStart:8,verticalAlign:'middle'}}>🎲 שאפל</span>}</div>
+    </div>
+
+    {step==='mode'&&<div className="stack">
+      <div className="eyebrow">סוג משחק</div>
+      <button className={'card rowBetween'} style={{width:'100%'}} onClick={()=>{setMode('singles');setStep('court');}}>
+        <div><div style={{fontWeight:900,fontSize:19}}>1 על 1</div><div className="tiny muted">יחידות — יריבות אישית</div></div>
+        <div style={{fontSize:26}}>🤺</div>
+      </button>
+      <button className={'card rowBetween'} style={{width:'100%'}} onClick={()=>{setMode('doubles');setStep('court');}}>
+        <div><div style={{fontWeight:900,fontSize:19}}>2 על 2</div><div className="tiny muted">זוגות — כימיה של צמדים</div></div>
+        <div style={{fontSize:26}}>🤝</div>
+      </button>
+      {!past&&<>
+        <div className="eyebrow" style={{marginTop:10}}>או</div>
+        <button className="courtHero" style={{width:'100%',textAlign:'start'}} onClick={()=>go({s:'shuffle'})}>
+          <CourtLines/>
+          <div className="inner rowBetween">
+            <div><div className="eyebrow green">SHUFFLE MATCH</div>
+              <div style={{fontWeight:900,fontSize:19,marginTop:4}}>תנו לגורל לבחור 🎲</div>
+              <div className="tiny muted" style={{marginTop:2}}>הגרלה אקראית · יחידות, זוגות או מה שיוצא</div></div>
+            <Shuttle size={34}/>
+          </div>
+        </button>
+      </>}
+    </div>}
+
+    {step==='court'&&<>
+      <div className="eyebrow" style={{marginBottom:10}}>מי על המגרש? לחצו על ה־+ במיקום</div>
+      <Court mode={mode} slots={slots} players={players} onSlot={(t,i)=> slots[t][i]? clearSlot(t,i):onSlot(t,i)}/>
+      <div className="rowBetween" style={{marginTop:14}}>
+        <button className="btn ghost small" onClick={()=>setStep('mode')}>{mode==='singles'?'מעבר ל־2 על 2':'מעבר ל־1 על 1'}</button>
+        <button className="btn primary" disabled={!complete} onClick={()=>setStep('config')}>המשך ←</button>
+      </div>
+    </>}
+
+    {step==='config'&&<div className="stack">
+      <div className="card">
+        <div className="eyebrow" style={{marginBottom:10}}>משחקים עד</div>
+        <div className="chipRow">
+          {[11,21].map(t=><button key={t} className={'chip'+(target===t?' on':'')} onClick={()=>setTarget(t)}>{t}</button>)}
+          <button className={'chip'+(target==='custom'?' on':'')} onClick={()=>setTarget('custom')}>אחר</button>
+        </div>
+        {target==='custom'&&<input type="number" inputMode="numeric" style={{marginTop:10}} placeholder="יעד נקודות" value={customT} onChange={e=>setCustomT(e.target.value)}/>}
+        <div className="divider"/>
+        <div className="eyebrow" style={{marginBottom:10}}>ניצחון בפער של</div>
+        <div className="chipRow">{[1,2,3].map(w=><button key={w} className={'chip'+(winBy===w?' on':'')} onClick={()=>setWinBy(w)}>{w}</button>)}</div>
+      </div>
+      {(past||editMatch)&&<div className="card">
+        <div className="grid2">
+          <div><div className="eyebrow" style={{marginBottom:8}}>תאריך המשחק</div>
+            <input type="date" value={date} onChange={e=>setDate(e.target.value)}/></div>
+          <div><div className="eyebrow" style={{marginBottom:8}}>שעה <span style={{fontWeight:600}}>(לא חובה)</span></div>
+            <input type="time" value={time} onChange={e=>setTime(e.target.value)}/></div>
+        </div>
+        {data.nights.length>0&&<>
+          <div className="eyebrow" style={{margin:'12px 0 8px'}}>שיוך לערב (לא חובה)</div>
+          <select value={nightId} onChange={e=>setNightId(e.target.value)}>
+            <option value="">ללא ערב</option>
+            {data.nights.map(n=><option key={n.id} value={n.id}>{(n.title||'ערב')+' · '+fmtDateShort(n.date)}</option>)}
+          </select>
+        </>}
+      </div>}
+      <button className="btn primary" disabled={target==='custom'&&!(parseInt(customT)>0)} onClick={()=>setStep('ready')}>המשך ←</button>
+    </div>}
+
+    {step==='ready'&&(()=>{ const A=slots.A.slice(0,need).map(id=>byId(players,id)), B=slots.B.slice(0,need).map(id=>byId(players,id));
+      return <div className="stack">
+      <div className="courtHero"><CourtLines/><div className="inner" style={{textAlign:'center'}}>
+        <div className="eyebrow green">המגרש מוכן</div>
+        <div style={{display:'flex',justifyContent:'center',gap:6,margin:'16px 0 6px'}}>
+          {A.map((p,i)=><Avatar key={p.id} p={p} size={64} style={i>0?{marginInlineStart:-14}:null}/>)}
+        </div>
+        {A.map(p=><div key={p.id}><span className="pname" style={{fontSize:17}}>{p.name}</span> {p.nickname&&<span className="nick">{p.nickname}</span>}</div>)}
+        <div style={{fontWeight:900,color:'var(--text3)',letterSpacing:'.2em',margin:'12px 0'}}>VS</div>
+        <div style={{display:'flex',justifyContent:'center',gap:6,marginBottom:6}}>
+          {B.map((p,i)=><Avatar key={p.id} p={p} size={64} style={i>0?{marginInlineStart:-14}:null}/>)}
+        </div>
+        {B.map(p=><div key={p.id}><span className="pname" style={{fontSize:17}}>{p.name}</span> {p.nickname&&<span className="nick">{p.nickname}</span>}</div>)}
+        <div className="tag green" style={{display:'inline-block',marginTop:14}}>עד {effTarget} · פער {winBy}</div>
+      </div></div>
+      <button className="btn primary" onClick={()=>setStep('score')}>הזנת תוצאה ←</button>
+    </div>; })()}
+
+    {step==='score'&&(()=>{ const A=slots.A.slice(0,need).map(id=>byId(players,id)), B=slots.B.slice(0,need).map(id=>byId(players,id));
+      const Pad=({val,setVal,team})=>(
+        <div style={{textAlign:'center'}}>
+          <div style={{display:'flex',justifyContent:'center',marginBottom:6}}>
+            {team.map((p,i)=><Avatar key={p.id} p={p} size={46} style={i>0?{marginInlineStart:-10}:null}/>)}
+          </div>
+          <div style={{fontWeight:800,fontSize:14,marginBottom:8}}>{team.map(p=>p.name).join(' + ')}</div>
+          <div className="scorePad">
+            <button className="scoreBtn" onClick={()=>setVal(v=>Math.max(0,+v-1))}>−</button>
+            <input className="scoreVal" type="number" inputMode="numeric" value={val}
+              onFocus={e=>e.target.select()} onChange={e=>setVal(e.target.value===''?'':Math.max(0,parseInt(e.target.value)||0))}/>
+            <button className="scoreBtn" onClick={()=>setVal(v=>+v+1)}>+</button>
+          </div>
+        </div>);
+      return <div className="stack">
+        {editMatch&&<>
+          <div className="eyebrow">שחקנים — לחיצה על מיקום מחליפה שחקן</div>
+          <Court mode={mode} slots={slots} players={players} onSlot={(t,i)=>onSlot(t,i)}/>
+          <div className="card">
+            <div className="grid2">
+              <div><div className="eyebrow" style={{marginBottom:6}}>תאריך</div><input type="date" value={date} onChange={e=>setDate(e.target.value)}/></div>
+              <div><div className="eyebrow" style={{marginBottom:6}}>שעה (לא חובה)</div><input type="time" value={time} onChange={e=>setTime(e.target.value)}/></div>
+            </div>
+            <div className="grid2" style={{marginTop:10}}>
+              <div><div className="eyebrow" style={{marginBottom:6}}>עד</div><input type="number" value={effTarget} onChange={e=>{setTarget('custom');setCustomT(e.target.value);}}/></div>
+            </div>
+            <div style={{marginTop:10}}><div className="eyebrow" style={{marginBottom:6}}>סוג</div>
+              <div className="chipRow">
+                <button className={'chip'+(mode==='singles'?' on':'')} onClick={()=>setMode('singles')}>1 על 1</button>
+                <button className={'chip'+(mode==='doubles'?' on':'')} onClick={()=>setMode('doubles')}>2 על 2</button>
+              </div></div>
+            {data.nights.length>0&&<div style={{marginTop:10}}><div className="eyebrow" style={{marginBottom:6}}>ערב</div>
+              <select value={nightId} onChange={e=>setNightId(e.target.value)}>
+                <option value="">ללא ערב</option>
+                {data.nights.map(n=><option key={n.id} value={n.id}>{(n.title||'ערב')+' · '+fmtDateShort(n.date)}</option>)}
+              </select></div>}
+          </div>
+        </>}
+        <div className="card" style={{padding:'22px 14px'}}>
+          <div className="eyebrow green" style={{textAlign:'center',marginBottom:16}}>התוצאה הסופית</div>
+          <Pad val={scoreA} setVal={setScoreA} team={A}/>
+          <div className="netDivider"/>
+          <Pad val={scoreB} setVal={setScoreB} team={B}/>
+        </div>
+        {err&&<div className="card" style={{borderColor:'rgba(224,122,106,.5)',color:'var(--loss)',fontWeight:700,fontSize:14}}>{err}</div>}
+        <button className="btn primary" onClick={save}>{editMatch?'שמירת שינויים':'שמירת המשחק'}</button>
+      </div>; })()}
+
+    {picker&&<PlayerPicker data={data} exclude={chosen} onPick={doPick} onClose={()=>setPicker(null)}/>}
+  </div>;
+}
+
+
+/* ================= SHUFFLE MATCH SCREEN ================= */
+function Shuffle({data,go}){
+  const {players,matches,settings}=data;
+  const active=players.filter(p=>p.active);
+  const [type,setType]=useState('any');
+  const [pool,setPool]=useState(()=>shuffleDefaultPool(players,matches,settings));
+  const [phase,setPhase]=useState('setup'); // setup | rolling | found
+  const [result,setResult]=useState(null);
+  const [insights,setInsights]=useState(null);
+  const [err,setErr]=useState('');
+  const [tick,setTick]=useState(0);
+  const timer=useRef();
+  useEffect(()=>()=>clearTimeout(timer.current),[]);
+  useEffect(()=>{ if(phase!=='rolling')return; const iv=setInterval(()=>setTick(t=>t+1),110); return ()=>clearInterval(iv); },[phase]);
+
+  const toggle=id=>setPool(p=> p.includes(id)? p.filter(x=>x!==id):[...p,id]);
+  const minNeeded= type==='doubles'?4:2;
+
+  const roll=()=>{
+    setErr('');
+    const avoid=[lastMatchOfMode(matches,'singles'),lastMatchOfMode(matches,'doubles'),result].filter(Boolean);
+    const r=generateShuffleMatch({type,pool,avoid});
+    if(r.error){ setErr(r.error); return; }
+    setPhase('rolling'); setResult(null);
+    timer.current=setTimeout(()=>{ setResult(r); setInsights(getMatchupInsights(r,matches,players)); setPhase('found'); },900);
+  };
+  const play=()=>go({s:'new',prefill:{mode:result.mode,teamAPlayerIds:result.teamAPlayerIds,teamBPlayerIds:result.teamBPlayerIds,generatedByShuffle:true}});
+
+  const Team=({ids,label})=>{ const ps=ids.map(id=>byId(players,id));
+    return <div style={{textAlign:'center'}}>
+      {label&&<div className="eyebrow" style={{marginBottom:8}}>{label}</div>}
+      <div style={{display:'flex',justifyContent:'center',gap:6}}>
+        {ps.map((p,i)=><Avatar key={p.id} p={p} size={ps.length>1?70:92} style={i>0?{marginInlineStart:-16}:null}/>)}
+      </div>
+      {ps.map(p=><div key={p.id} style={{marginTop:6}}><div className="pname" style={{fontSize:ps.length>1?16:20}}>{p.name}</div>{p.nickname&&<div className="nick">{p.nickname}</div>}</div>)}
+    </div>; };
+
+  return <div className="screen">
+    <div className="headerBar">
+      <button className="backBtn" onClick={()=>phase==='found'?setPhase('setup'):go({s:'new'})}>→</button>
+      <div className="screenTitle">SHUFFLE MATCH 🎲</div>
+    </div>
+
+    {phase==='setup'&&<div className="stack">
+      {active.length<2&&<EmptyState icon="🎲" title="צריך לפחות 2 שחקנים פעילים" action="לשחקנים" onAction={()=>go({s:'players'})}/>}
+      {active.length>=2&&<>
+        <div className="card">
+          <div className="eyebrow" style={{marginBottom:10}}>סוג ההגרלה</div>
+          <div className="segTabs">
+            {[['any','הכל'],['singles','1 על 1'],['doubles','2 על 2']].map(([id,l])=>
+              <button key={id} className={type===id?'on':''} onClick={()=>{setType(id);setErr('');}}>{l}</button>)}
+          </div>
+          <div className="tiny muted" style={{marginTop:8}}>
+            {type==='any'? (pool.length>=4?'עם 4 שחקנים ומעלה — ההגרלה יכולה לבחור יחידות או זוגות':'עם פחות מ־4 שחקנים ההגרלה תהיה יחידות בלבד')
+             : type==='singles'?'שני שחקנים אקראיים':'ארבעה שחקנים אקראיים, מחולקים לשני צמדים'}
+          </div>
+        </div>
+        <div className="card">
+          <div className="rowBetween" style={{marginBottom:10}}>
+            <div className="eyebrow">מי משתתף ({pool.length})</div>
+            <div style={{display:'flex',gap:6}}>
+              <button className="chip" style={{padding:'5px 10px',fontSize:12}} onClick={()=>setPool(active.map(p=>p.id))}>כולם</button>
+              <button className="chip" style={{padding:'5px 10px',fontSize:12}} onClick={()=>setPool([])}>נקה</button>
+            </div>
+          </div>
+          {settings.activeNightId&&<div className="tiny" style={{color:'var(--court)',marginBottom:8}}>🟢 ערב פעיל — הרשימה התחילה ממי שכבר שיחק הערב</div>}
+          <div className="stack" style={{gap:8,display:'grid',gridTemplateColumns:'1fr 1fr'}}>
+            {active.map(p=>{ const on=pool.includes(p.id);
+              return <button key={p.id} className={'plChip'+(on?' on':'')} style={{marginTop:0}} onClick={()=>toggle(p.id)}>
+                <div className="chk">{on?'✓':''}</div>
+                <Avatar p={p} size={34}/>
+                <div style={{minWidth:0,flex:1}}><div className="pname" style={{fontSize:14,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{p.name}</div></div>
+              </button>; })}
+          </div>
+        </div>
+        {err&&<div className="card" style={{borderColor:'rgba(224,122,106,.5)',color:'var(--loss)',fontWeight:700,fontSize:14}}>{err}</div>}
+        {pool.length<minNeeded&&!err&&<div className="tiny muted" style={{textAlign:'center'}}>{type==='doubles'?'בחרו לפחות 4 שחקנים לזוגות':'בחרו לפחות 2 שחקנים'}</div>}
+        <button className="btn primary" style={{fontSize:18}} disabled={pool.length<minNeeded} onClick={roll}>SHUFFLE 🎲</button>
+      </>}
+    </div>}
+
+    {phase==='rolling'&&(()=>{ const ps=pool.map(id=>byId(players,id)); const n=Math.min(4,ps.length);
+      const show=Array.from({length:n},(_,i)=>ps[(tick*7+i*3)%ps.length]);
+      return <div className="courtHero" style={{marginTop:6}}><CourtLines/><div className="inner" style={{textAlign:'center',padding:'40px 20px'}}>
+        <div className="rollWrap">{show.map((p,i)=><div key={i} className="rollAv" style={{animationDelay:(i*.05)+'s'}}><Avatar p={p} size={64}/></div>)}</div>
+        <div className="rollText">SHUFFLING…</div>
+      </div></div>; })()}
+
+    {phase==='found'&&result&&<div className="stack">
+      <div className="courtHero reveal"><CourtLines/><div className="inner" style={{textAlign:'center',padding:'26px 18px'}}>
+        <div className="eyebrow green" style={{letterSpacing:'.28em'}}>MATCHUP FOUND</div>
+        <div className="tiny muted" style={{marginTop:4}}>{result.mode==='singles'?'1 על 1':'2 על 2'}{result.repeated?' · אין קומבינציה אחרת, אז שוב הם':''}</div>
+        <div style={{marginTop:18}}><Team ids={result.teamAPlayerIds} label={result.mode==='doubles'?'TEAM A':null}/></div>
+        <div className="vsBig">VS</div>
+        <Team ids={result.teamBPlayerIds} label={result.mode==='doubles'?'TEAM B':null}/>
+      </div></div>
+
+      <div className="card reveal" style={{animationDelay:'.15s'}}>
+        {insights.first
+          ? <div style={{textAlign:'center',padding:'6px 0'}}>
+              <div className="eyebrow green">FIRST MEETING</div>
+              <div style={{fontWeight:900,fontSize:17,marginTop:8}}>{result.mode==='singles'?'מפגש ראשון':'פעם ראשונה של הצמדים האלה'}</div>
+              <div className="tiny muted" style={{marginTop:4}}>יריבות חדשה נולדת הלילה</div>
+            </div>
+          : <>
+              <div className="eyebrow" style={{marginBottom:4}}>מהספרים</div>
+              {insights.items.map(it=><div key={it.k} className="insight">
+                <div className="tiny muted">{it.label}</div>
+                <div className="v">{it.value}</div>
+                {it.sub&&<div className="tiny muted">{it.sub}</div>}
+              </div>)}
+            </>}
+      </div>
+
+      <button className="btn primary" style={{fontSize:18}} onClick={play}>PLAY THIS MATCH 🏸</button>
+      <button className="btn ghost" onClick={roll}>SHUFFLE AGAIN 🎲</button>
+    </div>}
+  </div>;
+}
+
+/* ================= PLAYERS LIST ================= */
+function Players({data,go}){
+  const [adding,setAdding]=useState(false);
+  const [showInactive,setShowInactive]=useState(false);
+  const list=data.players.filter(p=>showInactive||p.active).sort((a,b)=>a.name.localeCompare(b.name,'he'));
+  return <div className="screen">
+    <div className="headerBar"><div className="screenTitle">שחקנים</div>
+      <button className="btn primary small" onClick={()=>setAdding(true)}>+ שחקן</button></div>
+    {list.length===0&&<EmptyState icon="👥" title="עוד אין שחקנים" sub="כל אחד מקבל פרופיל, כינוי והיסטוריה משלו" action="+ שחקן ראשון" onAction={()=>setAdding(true)}/>}
+    <div className="stack">
+      {list.map(p=>{ const st=playerStats(p.id,data.matches);
+        return <button key={p.id} className="histRow" onClick={()=>go({s:'player',id:p.id})}>
+          <Avatar p={p} size={50}/>
+          <div className="info" style={{flex:1,minWidth:0,textAlign:'start'}}>
+            <NameBlock p={p}/>
+            <div className="tiny muted" style={{marginTop:2}}>
+              {st.played? st.wins+'–'+st.losses+' · '+st.winRate+'%' : 'עוד לא שיחק'}
+              {!p.active&&' · לא פעיל'}
+            </div>
+          </div>
+          {st.played>0&&<FormDots seq={st.last5} size={17}/>}
+        </button>; })}
+    </div>
+    {data.players.some(p=>!p.active)&&
+      <button className="linkAll" style={{display:'block',margin:'16px auto 0'}} onClick={()=>setShowInactive(v=>!v)}>
+        {showInactive?'הסתרת שחקנים לא פעילים':'הצגת שחקנים לא פעילים'}</button>}
+    {adding&&<PlayerForm data={data} onClose={()=>setAdding(false)}/>}
+  </div>;
+}
+
+/* ================= MINI CHARTS ================= */
+function MonthlyBars({pid,matches}){
+  const byM={};
+  for(const m of matches.filter(m=>inMatch(m,pid))){
+    const k=monthKey(m.matchDate); byM[k]=byM[k]||{w:0,l:0};
+    wonBy(m,pid)?byM[k].w++:byM[k].l++;
+  }
+  const keys=Object.keys(byM).sort().slice(-6);
+  if(keys.length<2)return null;
+  const max=Math.max(...keys.map(k=>byM[k].w+byM[k].l));
+  return <div className="card">
+    <div className="eyebrow" style={{marginBottom:12}}>ניצחונות / הפסדים לפי חודש</div>
+    <div style={{display:'flex',gap:10,alignItems:'flex-end',height:110}}>
+      {keys.map(k=>{ const d=byM[k];
+        return <div key={k} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:4,height:'100%',justifyContent:'flex-end'}}>
+          <div style={{width:'70%',display:'flex',flexDirection:'column',justifyContent:'flex-end',gap:2,height:'100%'}}>
+            <div style={{background:'var(--win)',borderRadius:4,height:(d.w/max*100)+'%',minHeight:d.w?4:0}}/>
+            <div style={{background:'rgba(224,122,106,.6)',borderRadius:4,height:(d.l/max*100)+'%',minHeight:d.l?4:0}}/>
+          </div>
+          <div className="tiny muted" style={{fontSize:10}}>{k.slice(5)}/{k.slice(2,4)}</div>
+        </div>; })}
+    </div>
+    <div className="tiny muted" style={{marginTop:8,display:'flex',gap:12}}>
+      <span><span style={{color:'var(--win)'}}>■</span> ניצחונות</span>
+      <span><span style={{color:'var(--loss)'}}>■</span> הפסדים</span>
+    </div>
+  </div>;
+}
+function WinRateOverTime({pid,matches}){
+  const ms=sortMatches(matches.filter(m=>inMatch(m,pid)));
+  if(ms.length<5)return null;
+  let w=0; const pts=ms.map((m,i)=>{ if(wonBy(m,pid))w++; return w/(i+1)*100; });
+  const W=300,H=90;
+  const path=pts.map((p,i)=>(i?'L':'M')+(i/(pts.length-1)*W).toFixed(1)+' '+(H-p/100*H).toFixed(1)).join(' ');
+  return <div className="card">
+    <div className="eyebrow" style={{marginBottom:10}}>אחוז ניצחון לאורך זמן</div>
+    <svg viewBox={'0 0 '+W+' '+H} style={{width:'100%',height:'auto',direction:'ltr'}}>
+      <line x1="0" y1={H/2} x2={W} y2={H/2} stroke="var(--line2)" strokeDasharray="4 4"/>
+      <path d={path} fill="none" stroke="var(--court)" strokeWidth="2.5" strokeLinejoin="round"/>
+    </svg>
+    <div className="tiny muted" style={{marginTop:6}}>כרגע: {pts[pts.length-1].toFixed(1)}% · הקו המקווקו הוא 50%</div>
+  </div>;
+}
+
+/* ================= PLAYER PROFILE ================= */
+function StatBox({v,l}){ return <div className="card" style={{textAlign:'center',padding:'14px 8px'}}>
+  <div className="statBig">{v}</div><div className="statLbl">{l}</div></div>; }
+
+function PlayerProfile({data,go,id}){
+  const p=byId(data.players,id);
+  const [editing,setEditing]=useState(false);
+  const [confirm,setConfirm]=useState(null);
+  const [scope,setScope]=useState('overall');
+  const all=playerStats(id,data.matches);                 // תמיד כללי — לכותרת, להישגים ולהחלטת מחיקה
+  const scoped=filterMatchesByMode(data.matches,scope);   // המשחקים בתחום הנבחר
+  const st=getPlayerStats(id,data.matches,scope);
+  const sg=playerStats(id,data.matches,'singles');
+  const dbl=playerStats(id,data.matches,'doubles');
+  const ach=playerAchievements(id,data.matches,data.nights);
+  const oppRecs=opponentRecords(id,data.matches).filter(o=>o.played>=CFG.MIN_H2H_FOR_NEMESIS);
+  const nemesis=[...oppRecs].sort((a,b)=>pct(a.wins,a.played)-pct(b.wins,b.played))[0];
+  const fav=[...oppRecs].sort((a,b)=>pct(b.wins,b.played)-pct(a.wins,a.played))[0];
+  const duos=allDuos(data.matches).filter(d=>d.ids.includes(id)&&d.played>=CFG.MIN_DUO_MATCHES).sort((a,b)=>b.winRate-a.winRate);
+  const rivals=opponentRecords(id,data.matches).sort((a,b)=>b.played-a.played).slice(0,4);
+  const earnedAch=ach.filter(a=>a.earned);
+
+  const deactivate=async()=>{ await db.players.update(id,{active: p.active?0:1}); await data.reload(); setConfirm(null); };
+  const del=async()=>{ await db.players.delete(id); await data.reload(); go({s:'players'}); };
+  const hasHistory=all.played>0;
+
+  return <div className="screen">
+    <div className="headerBar"><button className="backBtn" onClick={()=>go({s:'players'})}>→</button>
+      <div className="screenTitle"></div>
+      <button className="btn ghost small" onClick={()=>setEditing(true)}>עריכה</button></div>
+
+    <div className="courtHero"><CourtLines/><div className="inner" style={{textAlign:'center',padding:'26px 20px'}}>
+      <div style={{display:'flex',justifyContent:'center'}}><Avatar p={p} size={110}/></div>
+      <div className="pname" style={{fontSize:24,marginTop:12}}>{p.name}</div>
+      {p.nickname&&<div className="nick" style={{fontSize:16,marginTop:2}}>{p.nickname}</div>}
+      {!p.active&&<div className="tag" style={{display:'inline-block',marginTop:8}}>לא פעיל</div>}
+      {all.played>0&&<div style={{marginTop:12,display:'flex',justifyContent:'center'}}><FormDots seq={all.last5}/></div>}
+    </div></div>
+
+    {!hasHistory&&<div style={{marginTop:12}}><EmptyState icon="🏸" title="עוד אין משחקים" sub="ברגע שישחק — הכל יתמלא כאן לבד"/></div>}
+
+    {hasHistory&&<>
+      <div style={{marginTop:14}}><ScopeTabs scope={scope} onChange={setScope}/></div>
+      {st.played===0&&<div style={{marginTop:12}}><EmptyState icon={scope==='singles'?'🤺':'🤝'} title={scope==='singles'?'עוד לא שיחק יחידות':'עוד לא שיחק זוגות'}/></div>}
+      {st.played>0&&<>
+      <div className="grid3" style={{marginTop:12}}>
+        <StatBox v={st.played} l="משחקים"/>
+        <StatBox v={st.wins+'–'+st.losses} l="מאזן"/>
+        <StatBox v={st.winRate+'%'} l="אחוז ניצחון"/>
+      </div>
+      <div className="grid3" style={{marginTop:10}}>
+        <StatBox v={st.curStreak} l="רצף נוכחי"/>
+        <StatBox v={st.bestStreak} l="רצף שיא"/>
+        <StatBox v={(st.diff>0?'+':'')+st.diff} l="הפרש נקודות"/>
+      </div>
+      <div className="grid2" style={{marginTop:10}}>
+        <StatBox v={st.pf} l="נקודות זכות"/>
+        <StatBox v={st.pa} l="נקודות ספיגה"/>
+      </div>
+
+      {scope==='overall'&&(sg.played>0||dbl.played>0)&&<div className="grid2" style={{marginTop:10}}>
+        <div className="card" style={{textAlign:'center'}}>
+          <div className="eyebrow" style={{marginBottom:8}}>יחידות</div>
+          {sg.played? <><div className="statBig">{sg.winRate}%</div>
+            <div className="statLbl">{sg.wins}–{sg.losses} · {sg.played} משחקים</div></> : <div className="tiny muted">—</div>}
+        </div>
+        <div className="card" style={{textAlign:'center'}}>
+          <div className="eyebrow" style={{marginBottom:8}}>זוגות</div>
+          {dbl.played? <><div className="statBig">{dbl.winRate}%</div>
+            <div className="statLbl">{dbl.wins}–{dbl.losses} · {dbl.played} משחקים</div></> : <div className="tiny muted">—</div>}
+        </div>
+      </div>}
+
+      {st.last10.length>=3&&<div className="card" style={{marginTop:10}}>
+        <div className="eyebrow" style={{marginBottom:10}}>10 האחרונים</div>
+        <FormDots seq={st.last10}/>
+        <div className="tiny muted" style={{marginTop:8}}>
+          5 אחרונים: {pct(st.last5.filter(r=>r==='W').length,st.last5.length)}% · 10 אחרונים: {pct(st.last10.filter(r=>r==='W').length,st.last10.length)}%
+        </div>
+      </div>}
+
+      </>}
+
+      {scope!=='doubles'&&(nemesis||fav)&&<div className="grid2" style={{marginTop:10}}>
+        {nemesis&&pct(nemesis.wins,nemesis.played)<50&&<button className="card" style={{textAlign:'center'}} onClick={()=>go({s:'h2h',a:id,b:nemesis.opp})}>
+          <div className="eyebrow">💀 נמסיס</div>
+          <div style={{fontWeight:900,marginTop:8}}>{byId(data.players,nemesis.opp).name}</div>
+          <div className="tiny muted">{nemesis.wins}–{nemesis.losses}</div>
+        </button>}
+        {fav&&pct(fav.wins,fav.played)>50&&<button className="card" style={{textAlign:'center'}} onClick={()=>go({s:'h2h',a:id,b:fav.opp})}>
+          <div className="eyebrow">😈 היריב האהוב</div>
+          <div style={{fontWeight:900,marginTop:8}}>{byId(data.players,fav.opp).name}</div>
+          <div className="tiny muted">{fav.wins}–{fav.losses}</div>
+        </button>}
+      </div>}
+
+      {st.played>0&&<div style={{marginTop:10}} className="stack">
+        <MonthlyBars pid={id} matches={scoped}/>
+        <WinRateOverTime pid={id} matches={scoped}/>
+      </div>}
+
+      {scope!=='doubles'&&rivals.length>0&&<><div className="sectionTitle">ראש בראש</div>
+        <div className="stack">{rivals.map(r=>{ const o=byId(data.players,r.opp);
+          return <button key={r.opp} className="histRow" onClick={()=>go({s:'h2h',a:id,b:r.opp})}>
+            <Avatar p={o} size={42}/>
+            <div className="histNames">{o.name}</div>
+            <div className="histScore" style={{color:r.wins>=r.losses?'var(--win)':'var(--loss)'}}>{r.wins}–{r.losses}</div>
+          </button>; })}</div></>}
+
+      {scope!=='singles'&&duos.length>0&&<><div className="sectionTitle">שותפויות</div>
+        <div className="stack">{duos.map(d=>{ const mate=byId(data.players,d.ids.find(x=>x!==id));
+          return <div key={d.ids.join()} className="histRow">
+            <Avatar p={mate} size={42}/>
+            <div className="histNames">עם {mate.name}<div className="tiny muted">{d.played} משחקים יחד</div></div>
+            <div className="histScore">{d.wins}–{d.losses} · {Math.round(d.winRate)}%</div>
+          </div>; })}</div></>}
+
+      <div className="sectionTitle">הישגים <span className="tiny muted" style={{fontWeight:600}}>({earnedAch.length}/{ach.length})</span></div>
+      <div className="stack">
+        {ach.filter(a=>a.earned).map(a=><div key={a.id} className="badge">
+          <div className="ic">{a.icon}</div>
+          <div><div style={{fontWeight:800,fontSize:14}}>{a.name}</div>
+            <div className="tiny muted">{a.desc}</div>
+            <div className="tiny" style={{color:'var(--court)',marginTop:2}}>הושג · {fmtDateShort(a.date)}</div></div>
+        </div>)}
+        {ach.filter(a=>!a.earned).map(a=><div key={a.id} className="badge locked">
+          <div className="ic">{a.icon}</div>
+          <div><div style={{fontWeight:800,fontSize:14}}>{a.name}</div><div className="tiny muted">{a.desc}</div></div>
+        </div>)}
+      </div>
+    </>}
+
+    <div className="stack" style={{marginTop:22}}>
+      {hasHistory
+        ? <button className="btn ghost" onClick={()=>setConfirm('toggle')}>{p.active?'העברה ללא פעיל':'החזרה לפעילות'}</button>
+        : <button className="btn danger" onClick={()=>setConfirm('delete')}>מחיקת שחקן</button>}
+    </div>
+
+    {editing&&<PlayerForm initial={p} data={data} onClose={()=>setEditing(false)} />}
+    {confirm==='toggle'&&<ConfirmDialog title={p.active?'להעביר ללא פעיל?':'להחזיר לפעילות?'}
+      body={p.active?'שחקן לא פעיל נשאר בהיסטוריה ובסטטיסטיקות, אבל לא יופיע בבחירת שחקנים למשחק חדש.':'השחקן יחזור להופיע בבחירת שחקנים.'}
+      onConfirm={deactivate} onCancel={()=>setConfirm(null)}/>}
+    {confirm==='delete'&&<ConfirmDialog danger title="למחוק את השחקן?" confirmLabel="מחיקה"
+      body={'ל'+p.name+' אין משחקים בהיסטוריה, אז אפשר למחוק אותו לגמרי.'}
+      onConfirm={del} onCancel={()=>setConfirm(null)}/>}
+  </div>;
+}
+
+/* ================= HEAD TO HEAD ================= */
+function H2H({data,go,a,b}){
+  const A=byId(data.players,a),B=byId(data.players,b);
+  const h=headToHead(a,b,data.matches);
+  const [showAll,setShowAll]=useState(false);
+  return <div className="screen">
+    <div className="headerBar"><button className="backBtn" onClick={()=>go({s:'stats'})}>→</button>
+      <div className="screenTitle">היריבות נמשכת</div></div>
+    <div className="courtHero"><CourtLines/><div className="inner">
+      <div className="matchScoreRow">
+        <div className="teamCol"><Avatar p={A} size={72}/><NameBlock p={A} center/>
+          <div className="bigScore" style={{color:h.aWins>=h.bWins?'var(--win)':'var(--text2)'}}>{h.aWins}</div></div>
+        <div className="vsMini">נגד</div>
+        <div className="teamCol"><Avatar p={B} size={72}/><NameBlock p={B} center/>
+          <div className="bigScore" style={{color:h.bWins>=h.aWins?'var(--win)':'var(--text2)'}}>{h.bWins}</div></div>
+      </div>
+      <div style={{marginTop:14}}>
+        <div className="h2hBar"><i style={{width:(h.total?h.aWins/h.total*100:50)+'%'}}/></div>
+        <div className="tiny muted" style={{textAlign:'center',marginTop:8}}>{h.total} מפגשי יחידות</div>
+      </div>
+    </div></div>
+
+    {h.total===0&&<div style={{marginTop:12}}><EmptyState icon="⚔️" title="עוד לא נפגשו" sub="שחקו כמה משחקי 1 על 1 והיריבות תתחיל להיכתב"/></div>}
+
+    {h.total>0&&<>
+      <div className="grid2" style={{marginTop:12}}>
+        <StatBox v={h.aPts+' · '+h.bPts} l={'נקודות · '+A.name+' / '+B.name}/>
+        <StatBox v={Math.max(h.aBestStreak,h.bBestStreak)+' ל'+(h.aBestStreak>=h.bBestStreak?A.name:B.name)} l="רצף הניצחונות הארוך"/>
+      </div>
+      <div className="card" style={{marginTop:10}}>
+        <div className="eyebrow" style={{marginBottom:8}}>5 המפגשים האחרונים ({A.name})</div>
+        <FormDots seq={h.last5}/>
+      </div>
+      {h.latest&&<><div className="sectionTitle">המפגש האחרון</div>
+        <MatchCard m={h.latest} players={data.players} onClick={()=>go({s:'match',id:h.latest.id})}/></>}
+      <button className="btn ghost" style={{marginTop:14,width:'100%'}} onClick={()=>setShowAll(v=>!v)}>
+        {showAll?'הסתרת המשחקים':'כל '+h.total+' המשחקים'}</button>
+      {showAll&&<div className="stack" style={{marginTop:12}}>
+        {[...h.matches].reverse().map(m=><HistRow key={m.id} m={m} players={data.players} onClick={()=>go({s:'match',id:m.id})}/>)}
+      </div>}
+    </>}
+  </div>;
+}
+
+/* ================= HISTORY ================= */
+function HistRow({m,players,onClick}){
+  return <button className="histRow" onClick={onClick}>
+    <div className="histNames">
+      <span style={{color:m.winner==='teamA'?'var(--win)':'inherit'}}><TeamNames ids={m.teamAPlayerIds} players={players}/></span>
+      <span className="muted"> — </span>
+      <span style={{color:m.winner==='teamB'?'var(--win)':'inherit'}}><TeamNames ids={m.teamBPlayerIds} players={players}/></span>
+      <div className="tiny muted" style={{marginTop:2}}>{m.mode==='singles'?'1 על 1':'2 על 2'} · עד {m.targetScore}</div>
+    </div>
+    <div style={{textAlign:'center'}}>
+      <div className="histScore">{m.teamAScore}–{m.teamBScore}</div>
+      <div className="histDate">{fmtDateShort(m.matchDate)}{m.matchTime&&<span> · {m.matchTime}</span>}</div>
+    </div>
+  </button>;
+}
+function History({data,go}){
+  const [fPlayer,setFPlayer]=useState('');
+  const [fMode,setFMode]=useState('');
+  const [fNight,setFNight]=useState('');
+  const [q,setQ]=useState('');
+  const [showF,setShowF]=useState(false);
+  let ms=[...data.matches].reverse();
+  if(fPlayer)ms=ms.filter(m=>inMatch(m,fPlayer));
+  if(fMode)ms=ms.filter(m=>m.mode===fMode);
+  if(fNight)ms=ms.filter(m=>m.matchNightId===fNight);
+  if(q)ms=ms.filter(m=>[...m.teamAPlayerIds,...m.teamBPlayerIds].some(id=>byId(data.players,id).name.includes(q)));
+  const groups={};
+  ms.forEach(m=>{ const k=monthKey(m.matchDate); (groups[k]=groups[k]||[]).push(m); });
+  const keys=Object.keys(groups).sort().reverse();
+  const filtered=fPlayer||fMode||fNight||q;
+  return <div className="screen">
+    <div className="headerBar"><div className="screenTitle">היסטוריה</div>
+      <button className="btn ghost small" onClick={()=>go({s:'past'})}>+ משחק עבר</button></div>
+    {data.matches.length===0
+      ? <EmptyState icon="📖" title="ההיסטוריה עוד ריקה" sub="כל משחק שתזינו יהפוך כאן לעוד פרק" action="משחק ראשון" onAction={()=>go({s:'new'})}/>
+      : <>
+      <div className="searchBox"><input placeholder="חיפוש לפי שם שחקן…" value={q} onChange={e=>setQ(e.target.value)}/></div>
+      <div className="chipRow" style={{marginBottom:6}}>
+        <button className={'chip'+(showF?' on':'')} onClick={()=>setShowF(v=>!v)}>סינון {filtered?'●':''}</button>
+        {fPlayer&&<button className="chip on" onClick={()=>setFPlayer('')}>{byId(data.players,fPlayer).name} ✕</button>}
+        {fMode&&<button className="chip on" onClick={()=>setFMode('')}>{fMode==='singles'?'1 על 1':'2 על 2'} ✕</button>}
+        {fNight&&<button className="chip on" onClick={()=>setFNight('')}>ערב ✕</button>}
+      </div>
+      {showF&&<div className="card" style={{marginBottom:8}}>
+        <div className="eyebrow" style={{marginBottom:6}}>שחקן</div>
+        <select value={fPlayer} onChange={e=>setFPlayer(e.target.value)}><option value="">הכל</option>
+          {data.players.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select>
+        <div className="eyebrow" style={{margin:'10px 0 6px'}}>סוג</div>
+        <div className="chipRow">
+          <button className={'chip'+(fMode===''?' on':'')} onClick={()=>setFMode('')}>הכל</button>
+          <button className={'chip'+(fMode==='singles'?' on':'')} onClick={()=>setFMode('singles')}>1 על 1</button>
+          <button className={'chip'+(fMode==='doubles'?' on':'')} onClick={()=>setFMode('doubles')}>2 על 2</button>
+        </div>
+        {data.nights.length>0&&<><div className="eyebrow" style={{margin:'10px 0 6px'}}>ערב</div>
+          <select value={fNight} onChange={e=>setFNight(e.target.value)}><option value="">הכל</option>
+            {data.nights.map(n=><option key={n.id} value={n.id}>{(n.title||'ערב')+' · '+fmtDateShort(n.date)}</option>)}</select></>}
+      </div>}
+      <div className="tiny muted" style={{margin:'4px 2px'}}>{ms.length} משחקים</div>
+      {keys.map(k=><div key={k}>
+        <div className="monthHead">{monthLabel(k).toUpperCase()}</div>
+        <div className="stack">{groups[k].map(m=><HistRow key={m.id} m={m} players={data.players} onClick={()=>go({s:'match',id:m.id})}/>)}</div>
+      </div>)}
+    </>}
+  </div>;
+}
+
+/* ================= MATCH DETAIL ================= */
+function MatchDetail({data,go,id}){
+  const m=data.matches.find(x=>x.id===id);
+  const [del,setDel]=useState(false);
+  if(!m)return <div className="screen"><EmptyState icon="❔" title="המשחק לא נמצא"/></div>;
+  const night=m.matchNightId? data.nights.find(n=>n.id===m.matchNightId):null;
+  let ctx=null;
+  if(m.mode==='singles'){
+    const [pa]=m.teamAPlayerIds,[pb]=m.teamBPlayerIds;
+    // "המפגש ה-N": לפי הסדר הכרונולוגי המלא (תאריך -> שעה -> סדר), לא לפי createdAt
+    const allH=headToHead(pa,pb,data.matches).matches; const idx=allH.findIndex(x=>x.id===m.id);
+    const h=headToHead(pa,pb,allH.slice(0,idx+1));
+    ctx={n:h.total,a:byId(data.players,pa),b:byId(data.players,pb),aW:h.aWins,bW:h.bWins};
+  }
+  const doDelete=async()=>{ await db.matches.delete(id); await data.reload(); go({s:'history'}); };
+  return <div className="screen">
+    <div className="headerBar"><button className="backBtn" onClick={()=>go({s:'history'})}>→</button>
+      <div className="screenTitle">כרטיס משחק</div></div>
+    <MatchCard m={m} players={data.players}/>
+    <div className="card" style={{marginTop:12}}>
+      <div className="tiny muted stack" style={{lineHeight:1.7}}>
+        <div>📅 {fmtDate(m.matchDate)}{m.matchTime&&<span> · 🕐 {m.matchTime}</span>}</div>
+        <div>🎯 עד {m.targetScore} · ניצחון בפער {m.winBy}{m.maxScore?' · תקרה '+m.maxScore:''}</div>
+        {night&&<button className="linkAll" style={{textAlign:'start',padding:0}} onClick={()=>go({s:'night',id:night.id})}>🌙 {night.title||'ערב בדמינטון'} · {fmtDateShort(night.date)}</button>}
+        {ctx&&ctx.n>1&&<div>⚔️ המפגש ה־{ctx.n} של {ctx.a.name} ו{ctx.b.name} ביחידות · מאזן אחרי המשחק: {ctx.aW}–{ctx.bW}</div>}
+      </div>
+    </div>
+    {m.mode==='singles'&&<button className="btn ghost" style={{marginTop:12,width:'100%'}}
+      onClick={()=>go({s:'h2h',a:m.teamAPlayerIds[0],b:m.teamBPlayerIds[0]})}>לעמוד היריבות המלא ⚔️</button>}
+    <div className="grid2" style={{marginTop:12}}>
+      <button className="btn ghost" onClick={()=>go({s:'edit',id})}>עריכת משחק</button>
+      <button className="btn danger" onClick={()=>setDel(true)}>מחיקה</button>
+    </div>
+    {del&&<ConfirmDialog danger title="למחוק את המשחק?" confirmLabel="מחיקה"
+      body={byId(data.players,m.teamAPlayerIds[0]).name+' '+m.teamAScore+'–'+m.teamBScore+' '+byId(data.players,m.teamBPlayerIds[0]).name+'\n'+fmtDate(m.matchDate)+'\n\nכל הסטטיסטיקות הקשורות יתעדכנו אוטומטית.'}
+      onConfirm={doDelete} onCancel={()=>setDel(false)}/>}
+  </div>;
+}
+
+/* ================= STATS & HALL OF FAME ================= */
+function LeaderList({rows,fmt}){
+  return <div className="stack">{rows.map((r,i)=>
+    <div key={r.p.id} className="histRow" style={{padding:'10px 12px'}}>
+      <div style={{fontWeight:900,color:i===0?'var(--gold)':'var(--text3)',width:22,textAlign:'center'}}>{i+1}</div>
+      <Avatar p={r.p} size={38}/>
+      <div className="histNames">{r.p.name}</div>
+      <div className="histScore" style={{color:'var(--court)'}}>{fmt(r)}</div>
+    </div>)}</div>;
+}
+function Stats({data,go}){
+  const {players,matches}=data;
+  const [scope,setScope]=useState('overall');
+  const sm=filterMatchesByMode(matches,scope);
+  const stats=players.map(p=>({p,st:playerStats(p.id,sm)})).filter(x=>x.st.played>0);
+  const duos=scope==='singles'?[]:allDuos(matches).filter(d=>d.played>=CFG.MIN_DUO_MATCHES).sort((a,b)=>b.winRate-a.winRate||b.wins-a.wins);
+  const mostRiv=scope==='doubles'?null:mostPlayedRivalry(players,matches);
+  const closeRiv=scope==='doubles'?null:closestRivalry(players,matches);
+  const totalPts=matches.reduce((s,m)=>s+m.teamAScore+m.teamBScore,0);
+  if(matches.length===0)return <div className="screen">
+    <div className="screenTitle" style={{marginBottom:16}}>סטטיסטיקות</div>
+    <EmptyState icon="📊" title="עוד אין נתונים" sub="שחקו כמה משחקים והמספרים יתחילו לספר סיפור" action="משחק ראשון" onAction={()=>go({s:'new'})}/></div>;
+  return <div className="screen">
+    <div className="screenTitle" style={{marginBottom:16}}>סטטיסטיקות</div>
+    <div className="grid3">
+      <StatBox v={matches.length} l="משחקים"/>
+      <StatBox v={matches.filter(m=>m.mode==='singles').length+' / '+matches.filter(m=>m.mode==='doubles').length} l="יחידות / זוגות"/>
+      <StatBox v={totalPts} l="נקודות שוחקו"/>
+    </div>
+    <button className="btn ghost" style={{width:'100%',marginTop:12}} onClick={()=>go({s:'hof',scope})}>🏆 היכל התהילה</button>
+
+    <div style={{marginTop:16}}><ScopeTabs scope={scope} onChange={setScope}/></div>
+    {stats.length===0&&<div style={{marginTop:12}}><EmptyState icon={scope==='singles'?'🤺':'🤝'} title={scope==='singles'?'עוד אין משחקי יחידות':'עוד אין משחקי זוגות'}/></div>}
+    {stats.length>0&&<>
+    <div className="sectionTitle">הכי הרבה ניצחונות</div>
+    <LeaderList rows={[...stats].sort((a,b)=>b.st.wins-a.st.wins).slice(0,5)} fmt={r=>r.st.wins}/>
+    <div className="sectionTitle">אחוז ניצחון <span className="tiny muted" style={{fontWeight:600}}>(מינ׳ {CFG.MIN_MATCHES_WINRATE} משחקים)</span></div>
+    {stats.filter(x=>x.st.played>=CFG.MIN_MATCHES_WINRATE).length===0
+      ? <div className="tiny muted">צריך לפחות {CFG.MIN_MATCHES_WINRATE} משחקים לשחקן כדי להופיע כאן</div>
+      : <LeaderList rows={stats.filter(x=>x.st.played>=CFG.MIN_MATCHES_WINRATE).sort((a,b)=>b.st.winRate-a.st.winRate).slice(0,5)} fmt={r=>r.st.winRate+'%'}/>}
+    <div className="sectionTitle">הכי פעילים</div>
+    <LeaderList rows={[...stats].sort((a,b)=>b.st.played-a.st.played).slice(0,5)} fmt={r=>r.st.played}/>
+    <div className="sectionTitle">רצף הניצחונות הארוך</div>
+    <LeaderList rows={[...stats].sort((a,b)=>b.st.bestStreak-a.st.bestStreak).slice(0,5)} fmt={r=>r.st.bestStreak}/>
+    <div className="sectionTitle">הכי הרבה נקודות</div>
+    <LeaderList rows={[...stats].sort((a,b)=>b.st.pf-a.st.pf).slice(0,5)} fmt={r=>r.st.pf}/>
+    </>}
+
+    {duos.length>0&&<><div className="sectionTitle">הצמדים הטובים <span className="tiny muted" style={{fontWeight:600}}>(מינ׳ {CFG.MIN_DUO_MATCHES} משחקים)</span></div>
+      <div className="stack">{duos.slice(0,5).map((d,i)=>{ const [x,y]=d.ids.map(id=>byId(players,id));
+        return <div key={d.ids.join()} className="histRow">
+          <div style={{fontWeight:900,color:i===0?'var(--gold)':'var(--text3)',width:22,textAlign:'center'}}>{i+1}</div>
+          <div style={{display:'flex'}}><Avatar p={x} size={36}/><Avatar p={y} size={36} style={{marginInlineStart:-10}}/></div>
+          <div className="histNames">{x.name} + {y.name}
+            {i===0&&<div className="tiny" style={{color:'var(--court)'}}>הכימיה הכי טובה 🤝</div>}</div>
+          <div className="histScore">{d.wins}–{d.losses} · {Math.round(d.winRate)}%</div>
+        </div>; })}</div></>}
+
+    {(mostRiv||closeRiv)&&<><div className="sectionTitle">יריבויות</div><div className="stack">
+      {mostRiv&&<button className="card rowBetween" style={{width:'100%'}} onClick={()=>go({s:'h2h',a:mostRiv.a.id,b:mostRiv.b.id})}>
+        <div><div className="eyebrow">היריבות הכי משוחקת</div>
+          <div style={{fontWeight:800,marginTop:6}}>{mostRiv.a.name} נגד {mostRiv.b.name}</div></div>
+        <div className="hofVal">{mostRiv.h.total} מפגשים</div></button>}
+      {closeRiv&&<button className="card rowBetween" style={{width:'100%'}} onClick={()=>go({s:'h2h',a:closeRiv.a.id,b:closeRiv.b.id})}>
+        <div><div className="eyebrow">היריבות הכי צמודה</div>
+          <div style={{fontWeight:800,marginTop:6}}>{closeRiv.a.name} נגד {closeRiv.b.name}</div></div>
+        <div className="hofVal">{closeRiv.h.aWins}–{closeRiv.h.bWins}</div></button>}
+    </div></>}
+  </div>;
+}
+
+function HallOfFame({data,go,initialScope}){
+  const {players}=data;
+  const [scope,setScope]=useState(initialScope||'overall');
+  const matches=filterMatchesByMode(data.matches,scope);
+  const stats=players.map(p=>({p,st:playerStats(p.id,matches)})).filter(x=>x.st.played>0);
+  const top=(sorter)=> [...stats].sort(sorter)[0];
+  const wins=top((a,b)=>b.st.wins-a.st.wins);
+  const wr=[...stats].filter(x=>x.st.played>=CFG.MIN_MATCHES_WINRATE).sort((a,b)=>b.st.winRate-a.st.winRate)[0];
+  const played=top((a,b)=>b.st.played-a.st.played);
+  const pts=top((a,b)=>b.st.pf-a.st.pf);
+  const streak=top((a,b)=>b.st.bestStreak-a.st.bestStreak);
+  const losses=top((a,b)=>b.st.losses-a.st.losses);
+  const duo=scope==='singles'?null:allDuos(matches).filter(d=>d.played>=CFG.MIN_DUO_MATCHES).sort((a,b)=>b.winRate-a.winRate)[0];
+  const big=biggestVictory(matches);
+  const close=scope==='doubles'?null:closestRivalry(players,matches);
+  const longRiv=scope==='doubles'?null:mostPlayedRivalry(players,matches);
+  const Row=({icon,label,children,onClick})=>(
+    <button className="recordRow" style={{width:'100%',textAlign:'start'}} onClick={onClick}>
+      <div className="recordIcon">{icon}</div>
+      <div style={{flex:1}}><div className="eyebrow">{label}</div><div style={{marginTop:4}}>{children}</div></div>
+    </button>);
+  return <div className="screen">
+    <div className="headerBar"><button className="backBtn" onClick={()=>go({s:'stats'})}>→</button>
+      <div className="screenTitle">🏆 היכל התהילה</div></div>
+    <div style={{marginBottom:12}}><ScopeTabs scope={scope} onChange={setScope}/></div>
+    {stats.length===0? <EmptyState icon="🏆" title="ההיכל עוד ריק" sub={scope==='overall'?'שיאים נולדים מתוך משחקים':'עוד אין משחקים בקטגוריה הזו'}/> :
+    <div className="card">
+      {wins&&<Row icon="🏆" label="הכי הרבה ניצחונות בקריירה" onClick={()=>go({s:'player',id:wins.p.id})}>
+        <b>{wins.p.name}</b> · <span className="hofVal">{wins.st.wins}</span></Row>}
+      {wr&&<Row icon="👑" label={'אחוז הניצחון הגבוה (מינ׳ '+CFG.MIN_MATCHES_WINRATE+')'} onClick={()=>go({s:'player',id:wr.p.id})}>
+        <b>{wr.p.name}</b> · <span className="hofVal">{wr.st.winRate}%</span></Row>}
+      {played&&<Row icon="⚔️" label="הכי הרבה משחקים" onClick={()=>go({s:'player',id:played.p.id})}>
+        <b>{played.p.name}</b> · <span className="hofVal">{played.st.played}</span></Row>}
+      {pts&&<Row icon="🎯" label="הכי הרבה נקודות" onClick={()=>go({s:'player',id:pts.p.id})}>
+        <b>{pts.p.name}</b> · <span className="hofVal">{pts.st.pf}</span></Row>}
+      {streak&&streak.st.bestStreak>1&&<Row icon="🔥" label="רצף הניצחונות הארוך" onClick={()=>go({s:'player',id:streak.p.id})}>
+        <b>{streak.p.name}</b> · <span className="hofVal">{streak.st.bestStreak} ברצף</span></Row>}
+      {losses&&losses.st.losses>0&&<Row icon="🪦" label="הכי הרבה הפסדים" onClick={()=>go({s:'player',id:losses.p.id})}>
+        <b>{losses.p.name}</b> · <span className="hofVal" style={{color:'var(--loss)'}}>{losses.st.losses}</span></Row>}
+      {duo&&(()=>{const [x,y]=duo.ids.map(id=>byId(players,id));
+        return <Row icon="🤝" label="צמד הזוגות הטוב">
+          <b>{x.name} + {y.name}</b> · <span className="hofVal">{duo.wins}–{duo.losses}</span></Row>;})()}
+      {big&&<Row icon="💀" label="הניצחון הגדול" onClick={()=>go({s:'match',id:big.m.id})}>
+        <b><TeamNames ids={winnersOf(big.m)} players={players}/></b> {Math.max(big.m.teamAScore,big.m.teamBScore)}–{Math.min(big.m.teamAScore,big.m.teamBScore)}
+        <span className="hofVal"> · פער +{big.margin}</span>
+        <div className="tiny muted">{fmtDateTimeShort(big.m)}</div></Row>}
+      {close&&<Row icon="❤️" label="היריבות הכי צמודה" onClick={()=>go({s:'h2h',a:close.a.id,b:close.b.id})}>
+        <b>{close.a.name} נגד {close.b.name}</b> · <span className="hofVal">{close.h.aWins}–{close.h.bWins}</span></Row>}
+      {longRiv&&<Row icon="🕰️" label="היריבות הכי ותיקה" onClick={()=>go({s:'h2h',a:longRiv.a.id,b:longRiv.b.id})}>
+        <b>{longRiv.a.name} נגד {longRiv.b.name}</b> · <span className="hofVal">{longRiv.h.total} מפגשים</span></Row>}
+    </div>}
+  </div>;
+}
+
+/* ================= NIGHTS ================= */
+function Nights({data,go}){
+  const [starting,setStarting]=useState(false);
+  const [title,setTitle]=useState('');
+  const active=data.settings.activeNightId? data.nights.find(n=>n.id===data.settings.activeNightId&&!n.endedAt):null;
+  const start=async()=>{
+    const n={id:uid(),date:nowISO(),title:title.trim()||null,createdAt:nowISO(),updatedAt:nowISO(),endedAt:null};
+    await db.nights.add(n); await data.reload(); await data.setSetting('activeNightId',n.id); setStarting(false); setTitle('');
+  };
+  const groups={};
+  data.nights.forEach(n=>{ const k=monthKey(n.date); (groups[k]=groups[k]||[]).push(n); });
+  const keys=Object.keys(groups).sort().reverse();
+  return <div className="screen">
+    <div className="headerBar"><div className="screenTitle">ערבי בדמינטון</div></div>
+    {active
+      ? <div className="courtHero"><CourtLines/><div className="inner">
+          <div className="eyebrow green">🟢 ערב פעיל</div>
+          <div style={{fontWeight:900,fontSize:20,marginTop:6}}>{active.title||'ערב בדמינטון'}</div>
+          <div className="tiny muted">{fmtDate(active.date)} · {data.matches.filter(m=>m.matchNightId===active.id).length} משחקים עד עכשיו</div>
+          <div className="grid2" style={{marginTop:14}}>
+            <button className="btn primary" onClick={()=>go({s:'new'})}>+ משחק לערב</button>
+            <button className="btn ghost" onClick={async()=>{ await db.nights.update(active.id,{endedAt:nowISO(),updatedAt:nowISO()});
+              await data.setSetting('activeNightId',null); await data.reload(); go({s:'night',id:active.id}); }}>סיום הערב 🌙</button>
+          </div>
+        </div></div>
+      : <button className="btn primary" style={{width:'100%'}} onClick={()=>setStarting(true)}>🏸 פתיחת ערב בדמינטון</button>}
+    {data.nights.length===0&&!active&&<div style={{marginTop:14}}>
+      <EmptyState icon="🌙" title="עוד לא היו ערבים" sub="פתחו ערב, וכל משחק שתזינו יצטרף אליו אוטומטית — בסוף מחכה סיכום"/></div>}
+    {keys.map(k=><div key={k}>
+      <div className="monthHead">{monthLabel(k).toUpperCase()}</div>
+      <div className="stack">{groups[k].map(n=>{ const r=nightRecap(n,data.matches,data.players);
+        return <button key={n.id} className="histRow" onClick={()=>go({s:'night',id:n.id})}>
+          <div style={{fontSize:22}}>{n.endedAt?'🌙':'🟢'}</div>
+          <div className="histNames">{n.title||'ערב בדמינטון'}
+            <div className="tiny muted">{r.matches.length} משחקים{r.potn?' · 👑 '+byId(data.players,r.potn.pid).name+' — '+r.potn.wins+' ניצחונות':''}</div></div>
+          <div className="histDate">{fmtDateShort(n.date)}</div>
+        </button>; })}</div>
+    </div>)}
+    {starting&&<Sheet title="פתיחת ערב" onClose={()=>setStarting(false)}>
+      <div className="stack">
+        <div><div className="eyebrow" style={{marginBottom:6}}>שם הערב (לא חובה)</div>
+          <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="שישי בדמינטון"/></div>
+        <div className="tiny muted">מרגע הפתיחה, כל משחק חדש ישויך לערב הזה עד שתסיימו אותו.</div>
+        <button className="btn primary" onClick={start}>זה זמן בשביל!! 🏸</button>
+      </div>
+    </Sheet>}
+  </div>;
+}
+
+function NightRecapScreen({data,go,id}){
+  const n=data.nights.find(x=>x.id===id);
+  const [editTitle,setEditTitle]=useState(false);
+  const [t,setT]=useState(n?.title||'');
+  if(!n)return <div className="screen"><EmptyState icon="❔" title="הערב לא נמצא"/></div>;
+  const r=nightRecap(n,data.matches,data.players);
+  const P=pid=>byId(data.players,pid);
+  const Row=({icon,label,children})=>(
+    <div className="recordRow"><div className="recordIcon">{icon}</div>
+      <div style={{flex:1}}><div className="eyebrow">{label}</div><div style={{marginTop:4}}>{children}</div></div></div>);
+  return <div className="screen">
+    <div className="headerBar"><button className="backBtn" onClick={()=>go({s:'nights'})}>→</button>
+      <div className="screenTitle">סיכום הערב</div>
+      <button className="btn ghost small" onClick={()=>setEditTitle(true)}>עריכה</button></div>
+    <div className="courtHero"><CourtLines/><div className="inner" style={{textAlign:'center'}}>
+      <div className="eyebrow green">{n.endedAt?'ערב שנחתם בהיסטוריה':'הערב עדיין פתוח'}</div>
+      <div style={{fontWeight:900,fontSize:22,marginTop:6}}>{n.title||'ערב בדמינטון'}</div>
+      <div className="tiny muted" style={{marginTop:4}}>{fmtDate(n.date)}</div>
+      <div className="grid2" style={{marginTop:14}}>
+        <StatBox v={r.matches.length} l="משחקים"/><StatBox v={r.players.length} l="שחקנים"/>
+      </div>
+    </div></div>
+    {r.matches.length===0? <div style={{marginTop:12}}><EmptyState icon="🏸" title="עוד אין משחקים בערב הזה" action="+ משחק" onAction={()=>go({s:'new'})}/></div> : <>
+    <div className="card" style={{marginTop:12}}>
+      {r.potn&&<Row icon="👑" label="שחקן הערב"><b>{P(r.potn.pid).name}</b> · <span className="hofVal">{r.potn.wins}–{r.potn.losses}</span></Row>}
+      {r.streakLeader&&r.streakLeader.streak>1&&<Row icon="🔥" label="הרצף הארוך של הערב"><b>{P(r.streakLeader.pid).name}</b> · <span className="hofVal">{r.streakLeader.streak} ברצף</span></Row>}
+      {r.bestDuo&&<Row icon="🤝" label="הצמד של הערב"><b>{P(r.bestDuo.ids[0]).name} + {P(r.bestDuo.ids[1]).name}</b> · <span className="hofVal">{r.bestDuo.w}–{r.bestDuo.l}</span></Row>}
+      {r.closest&&<Row icon="⚔️" label="המשחק הצמוד"><b><TeamNames ids={r.closest.m.teamAPlayerIds} players={data.players}/></b> {r.closest.m.teamAScore}–{r.closest.m.teamBScore} <b><TeamNames ids={r.closest.m.teamBPlayerIds} players={data.players}/></b></Row>}
+      {r.biggest&&r.biggest.mg>2&&<Row icon="💀" label="הניצחון הגדול"><b><TeamNames ids={winnersOf(r.biggest.m)} players={data.players}/></b> · <span className="hofVal">פער +{r.biggest.mg}</span></Row>}
+      {r.topScorer&&<Row icon="🎯" label="מלך הנקודות"><b>{P(r.topScorer.pid).name}</b> · <span className="hofVal">{r.topScorer.pf} נקודות</span></Row>}
+    </div>
+    <div className="sectionTitle">לוח תוצאות הערב</div>
+    <div className="stack">{[...r.perPlayer].sort((a,b)=>b.wins-a.wins||b.diff-a.diff).map(pp=>
+      <div key={pp.pid} className="histRow">
+        <Avatar p={P(pp.pid)} size={38}/>
+        <div className="histNames">{P(pp.pid).name}</div>
+        <div className="histScore">{pp.wins}–{pp.losses} <span className="tiny muted">({pp.diff>0?'+':''}{pp.diff})</span></div>
+      </div>)}</div>
+    <div className="sectionTitle">כל משחקי הערב</div>
+    <div className="stack">{r.matches.map(m=><HistRow key={m.id} m={m} players={data.players} onClick={()=>go({s:'match',id:m.id})}/>)}</div>
+    </>}
+    {!n.endedAt&&r.matches.length>0&&<button className="btn primary" style={{width:'100%',marginTop:16}}
+      onClick={async()=>{ await db.nights.update(n.id,{endedAt:nowISO(),updatedAt:nowISO()});
+        if(data.settings.activeNightId===n.id) await data.setSetting('activeNightId',null); await data.reload(); }}>סיום הערב 🌙</button>}
+    {editTitle&&<Sheet title="עריכת הערב" onClose={()=>setEditTitle(false)}>
+      <div className="stack">
+        <input value={t} onChange={e=>setT(e.target.value)} placeholder="שם הערב"/>
+        <input type="date" value={dayInput(n.date)} onChange={async e=>{ if(!e.target.value)return;
+          await db.nights.update(n.id,{date:new Date(e.target.value+'T19:00:00').toISOString()}); await data.reload(); }}/>
+        <button className="btn primary" onClick={async()=>{ await db.nights.update(n.id,{title:t.trim()||null}); await data.reload(); setEditTitle(false); }}>שמירה</button>
+        {r.matches.length===0&&<button className="btn danger" onClick={async()=>{ await db.nights.delete(n.id);
+          if(data.settings.activeNightId===n.id)await data.setSetting('activeNightId',null); await data.reload(); go({s:'nights'}); }}>מחיקת הערב</button>}
+      </div>
+    </Sheet>}
+  </div>;
+}
+
+/* ================= BACKUP ================= */
+async function buildBackup(settings){
+  const [players,matches,nights,settingsRows]=await Promise.all([db.players.toArray(),db.matches.toArray(),db.nights.toArray(),db.settings.toArray()]);
+  return {app:APP_NAME,backupVersion:CFG.BACKUP_VERSION,schemaVersion:db.verno,exportedAt:nowISO(),
+    players,matches,nights,settings:settingsRows};
+}
+function downloadJSON(obj,name){
+  const blob=new Blob([JSON.stringify(obj,null,1)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function Settings({data,go}){
+  const {settings,matches,players,nights}=data;
+  const fileRef=useRef();
+  const [pending,setPending]=useState(null); // parsed backup awaiting confirm
+  const [err,setErr]=useState('');
+  const [toast,setToast]=useState('');
+  const say=t=>{setToast(t);setTimeout(()=>setToast(''),2200);};
+
+  const exportBackup=async()=>{
+    const b=await buildBackup();
+    downloadJSON(b,'zeh-zman-backup-'+dayInput(nowISO())+'.json');
+    await data.setSetting('lastBackup',nowISO()); say('הגיבוי ירד למכשיר 💾');
+  };
+  const exportCSV=()=>{
+    const esc=s=>'"'+String(s).replace(/"/g,'""')+'"';
+    const rows=[['Date','Time','Type','Team A','Team B','Score A','Score B','Winner','Target','Night'].join(',')];
+    for(const m of data.matches){
+      const night=m.matchNightId? (data.nights.find(n=>n.id===m.matchNightId)?.title||'ערב'):'';
+      rows.push([dayInput(m.matchDate),m.matchTime||'',m.mode,
+        esc(m.teamAPlayerIds.map(id=>byId(players,id).name).join(' + ')),
+        esc(m.teamBPlayerIds.map(id=>byId(players,id).name).join(' + ')),
+        m.teamAScore,m.teamBScore,
+        esc(winnersOf(m).map(id=>byId(players,id).name).join(' + ')),
+        m.targetScore,esc(night)].join(','));
+    }
+    const blob=new Blob(['\ufeff'+rows.join('\n')],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='zeh-zman-matches.csv'; a.click();
+    say('קובץ ה־CSV ירד 📄');
+  };
+  const pickImport=async e=>{
+    setErr(''); const f=e.target.files[0]; e.target.value=''; if(!f)return;
+    try{
+      const b=JSON.parse(await f.text());
+      if(!b||!Array.isArray(b.players)||!Array.isArray(b.matches)||!Array.isArray(b.nights))throw 0;
+      for(const m of b.matches){ if(!m.id||!m.matchDate||!Array.isArray(m.teamAPlayerIds)||!Array.isArray(m.teamBPlayerIds))throw 0; }
+      // גיבויים ישנים (v1) בלי matchTime/generatedByShuffle מקבלים ברירות מחדל בטוחות
+      b.matches=b.matches.map(normalizeMatch);
+      setPending(b);
+    }catch{ setErr('הקובץ לא נראה כמו גיבוי תקין של האפליקציה. ודאו שבחרתם קובץ שיוצא מ"ייצוא גיבוי מלא".'); }
+  };
+  const doImport=async()=>{
+    const b=pending; setPending(null);
+    try{
+      await db.transaction('rw',db.players,db.matches,db.nights,db.settings,async()=>{
+        await Promise.all([db.players.clear(),db.matches.clear(),db.nights.clear(),db.settings.clear()]);
+        await db.players.bulkAdd(b.players); await db.matches.bulkAdd(b.matches); await db.nights.bulkAdd(b.nights);
+        if(b.settings)await db.settings.bulkAdd(b.settings.filter(s=>s.key!=='activeNightId'));
+      });
+      await data.reload(); say('הגיבוי שוחזר בהצלחה ✅');
+    }catch{ setErr('השחזור נכשל — הנתונים הקיימים לא נמחקו.'); }
+  };
+  return <div className="screen">
+    <div className="headerBar"><button className="backBtn" onClick={()=>go({s:'home'})}>→</button>
+      <div className="screenTitle">הגדרות</div></div>
+
+    <div className="card">
+      <div className="eyebrow" style={{marginBottom:10}}>ברירת מחדל למשחק</div>
+      <div className="tiny muted" style={{marginBottom:8}}>משחקים עד</div>
+      <div className="chipRow">
+        {[11,21].map(t=><button key={t} className={'chip'+(settings.defaultTarget===t?' on':'')} onClick={()=>data.setSetting('defaultTarget',t)}>{t}</button>)}
+      </div>
+      <div className="tiny muted" style={{margin:'12px 0 8px'}}>ניצחון בפער של</div>
+      <div className="chipRow">
+        {[1,2,3].map(w=><button key={w} className={'chip'+(settings.defaultWinBy===w?' on':'')} onClick={()=>data.setSetting('defaultWinBy',w)}>{w}</button>)}
+      </div>
+      <div className="tiny muted" style={{margin:'12px 0 8px'}}>תקרת ניקוד (ריק = בלי תקרה)</div>
+      <input type="number" inputMode="numeric" placeholder="ללא תקרה" value={settings.maxScore||''}
+        onChange={e=>data.setSetting('maxScore',parseInt(e.target.value)||null)}/>
+    </div>
+
+    <div className="card" style={{marginTop:12}}>
+      <div className="eyebrow green" style={{marginBottom:6}}>💾 מרכז הגיבוי</div>
+      <div className="tiny muted" style={{lineHeight:1.6}}>
+        {matches.length} משחקים · {players.length} שחקנים · {nights.length} ערבים<br/>
+        גיבוי אחרון: {settings.lastBackup? fmtDate(settings.lastBackup):'עוד לא יוצא'}
+      </div>
+      <div className="stack" style={{marginTop:12}}>
+        <button className="btn primary" onClick={exportBackup}>ייצוא גיבוי מלא</button>
+        <button className="btn ghost" onClick={()=>fileRef.current.click()}>שחזור מגיבוי…</button>
+        <button className="btn ghost" onClick={exportCSV}>ייצוא היסטוריית משחקים ל־CSV</button>
+      </div>
+      <input ref={fileRef} type="file" accept="application/json,.json" style={{display:'none'}} onChange={pickImport}/>
+      {err&&<div className="tiny" style={{color:'var(--loss)',marginTop:10}}>{err}</div>}
+      <div className="tiny muted" style={{marginTop:10}}>הנתונים משותפים לכל הקבוצה בענן (Supabase) ומתעדכנים בכל המכשירים בזמן אמת. גיבוי מלא הוא עדיין הדרך הבטוחה ביותר להתאושש ממחיקה בטעות.</div>
+    </div>
+
+    {matches.length===0&&players.length===0&&<div className="card" style={{marginTop:12}}>
+      <div className="eyebrow" style={{marginBottom:6}}>נתוני דוגמה</div>
+      <div className="tiny muted">רוצים לראות איך האפליקציה מרגישה אחרי חודשיים של משחקים? אפשר לטעון נתוני דוגמה ולמחוק אותם אחר כך דרך שחזור גיבוי ריק או מחיקת משחקים.</div>
+      <button className="btn ghost" style={{marginTop:10,width:'100%'}} onClick={async()=>{await seedDemo();await data.reload();say('נתוני הדוגמה נטענו 🏸');}}>טעינת נתוני דוגמה</button>
+    </div>}
+
+    <div className="card" style={{marginTop:12}}>
+      <div className="eyebrow" style={{marginBottom:6}}>על האפליקציה</div>
+      <div className="tiny muted" style={{lineHeight:1.7}}>
+        {APP_NAME} 🏸<br/>הליגה הפרטית שלכם. כל סטטיסטיקה נגזרת ישירות מהמשחקים ההיסטוריים — עריכה או מחיקה של משחק מעדכנת הכל אוטומטית.
+      </div>
+    </div>
+
+    {pending&&<ConfirmDialog title="לשחזר את הגיבוי?"
+      body={'הגיבוי מכיל:\n\n'+pending.players.length+' שחקנים\n'+pending.matches.length+' משחקים\n'+pending.nights.length+' ערבים\n\nנוצר: '+(pending.exportedAt?fmtDate(pending.exportedAt):'לא ידוע')+'\nגרסת גיבוי: '+(pending.backupVersion||1)+'\n\nהשחזור יחליף את כל הנתונים המשותפים של כל הקבוצה (בכל המכשירים), לא רק במכשיר הזה.'}
+      confirmLabel="שחזור" danger onConfirm={doImport} onCancel={()=>setPending(null)}/>}
+    <Toast msg={toast}/>
+  </div>;
+}
+
+
+async function seedDemo(){
+  const mkP=(name,nick)=>({id:uid(),name,nickname:nick,profileImage:null,active:1,createdAt:nowISO()});
+  const ori=mkP('אורי מלכה','אלחנן האיום'),yos=mkP('יוסי','הקיר'),naor=mkP('נאור','הפטיש'),david=mkP('דוד','הצל');
+  await db.players.bulkAdd([ori,yos,naor,david]);
+  const night={id:uid(),date:'2026-08-07T19:00:00.000Z',title:'שישי בדמינטון',createdAt:nowISO(),updatedAt:nowISO(),endedAt:nowISO()};
+  await db.nights.add(night);
+  const M=(d,A,B,sa,sb,mode,t,seq,ni)=>({id:uid(),matchNightId:ni||null,matchDate:d+'T12:00:00.000Z',
+    matchTime: ni? ['20:05','20:31','20:58','21:26'][(seq||1)-1]||null : null, generatedByShuffle:false,
+    mode,targetScore:t,winBy:2,maxScore:null,teamAPlayerIds:A,teamBPlayerIds:B,teamAScore:sa,teamBScore:sb,
+    winner:sa>sb?'teamA':'teamB',playerIds:[...A,...B],seq:seq||0,createdAt:nowISO(),updatedAt:nowISO()});
+  await db.matches.bulkAdd([
+    M('2026-06-12',[ori.id],[yos.id],11,7,'singles',11),
+    M('2026-06-12',[naor.id],[david.id],12,10,'singles',11,1),
+    M('2026-06-19',[ori.id],[naor.id],9,11,'singles',11),
+    M('2026-06-26',[ori.id,yos.id],[naor.id,david.id],21,17,'doubles',21),
+    M('2026-07-03',[yos.id],[ori.id],11,9,'singles',11),
+    M('2026-07-10',[ori.id],[yos.id],14,12,'singles',11),
+    M('2026-07-17',[ori.id,naor.id],[yos.id,david.id],18,21,'doubles',21),
+    M('2026-07-24',[ori.id],[david.id],11,2,'singles',11),
+    M('2026-08-07',[ori.id],[yos.id],11,8,'singles',11,1,night.id),
+    M('2026-08-07',[naor.id],[ori.id],10,12,'singles',11,2,night.id),
+    M('2026-08-07',[ori.id,yos.id],[naor.id,david.id],21,19,'doubles',21,3,night.id),
+    M('2026-08-07',[yos.id],[david.id],11,6,'singles',11,4,night.id),
+  ]);
+}
+
+/* ================= APP SHELL ================= */
+function App(){
+  const data=useData();
+  const [route,setRoute]=useState({s:'home'});
+  const go=r=>{ setRoute(r); window.scrollTo(0,0); };
+  if(!data.ready)return <div className="app" style={{alignItems:'center',justifyContent:'center'}}>
+    <div style={{textAlign:'center'}}><Shuttle size={44}/><div className="muted tiny" style={{marginTop:10}}>טוען את המגרש…</div></div></div>;
+  const s=route.s;
+  const tab = ['home'].includes(s)?'home' : ['new','past','edit','shuffle'].includes(s)?'new'
+    : ['players','player'].includes(s)?'players' : ['stats','hof','h2h'].includes(s)?'stats'
+    : ['history','match'].includes(s)?'history' : ['nights','night'].includes(s)?'nights' : '';
+  return <div className="app">
+    {s==='home'&&<Home data={data} go={go}/>}
+    {s==='new'&&<MatchWizard key={route.prefill?'pre':'new'} data={data} go={go} prefill={route.prefill}/>}
+    {s==='shuffle'&&<Shuffle data={data} go={go}/>}
+    {s==='past'&&<MatchWizard data={data} go={go} past/>}
+    {s==='edit'&&<MatchWizard data={data} go={go} editMatch={data.matches.find(m=>m.id===route.id)}/>}
+    {s==='players'&&<Players data={data} go={go}/>}
+    {s==='player'&&<PlayerProfile data={data} go={go} id={route.id}/>}
+    {s==='h2h'&&<H2H data={data} go={go} a={route.a} b={route.b}/>}
+    {s==='stats'&&<Stats data={data} go={go}/>}
+    {s==='hof'&&<HallOfFame data={data} go={go} initialScope={route.scope}/>}
+    {s==='history'&&<History data={data} go={go}/>}
+    {s==='match'&&<MatchDetail data={data} go={go} id={route.id}/>}
+    {s==='nights'&&<Nights data={data} go={go}/>}
+    {s==='night'&&<NightRecapScreen data={data} go={go} id={route.id}/>}
+    {s==='settings'&&<Settings data={data} go={go}/>}
+    <nav className="nav"><div className="bar">
+      <button className={tab==='home'?'on':''} onClick={()=>go({s:'home'})}>{Icon.home}בית</button>
+      <button className={tab==='history'?'on':''} onClick={()=>go({s:'history'})}>{Icon.hist}היסטוריה</button>
+      <button className={tab==='new'?'on':''} onClick={()=>go({s:'new'})}>{Icon.plus}משחק</button>
+      <button className={tab==='nights'?'on':''} onClick={()=>go({s:'nights'})}>{Icon.moon}ערבים</button>
+      <button className={tab==='players'?'on':''} onClick={()=>go({s:'players'})}>{Icon.users}שחקנים</button>
+      <button className={tab==='stats'?'on':''} onClick={()=>go({s:'stats'})}>{Icon.stats}מספרים</button>
+    </div></nav>
+  </div>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
