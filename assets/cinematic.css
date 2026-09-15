@@ -1,0 +1,35 @@
+.introOverlay{background:#030a12;cursor:default}
+.introInner{max-width:none;isolation:isolate}
+.introInner::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,#267aa94d,transparent 55%),radial-gradient(ellipse at 85% 30%,#327ca633,transparent 50%);pointer-events:none}
+.introInner::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 140px #0009;pointer-events:none;z-index:3}
+.intro3d{z-index:1}
+.cinemaPhoto{position:absolute;inset:4% 0 24%;opacity:0;transition:opacity .28s ease;overflow:hidden}
+.cinemaPhoto img{width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(.97)}
+.introOverlay[data-phase="team"] .cinemaPhoto,.introOverlay[data-phase="out"] .cinemaPhoto{opacity:1}
+.introOverlay[data-phase="team"] .cinemaPhoto img{animation:teamCamera 3.8s ease-out forwards}
+.cinemaPhoto::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#030a12 0%,#030a12ba 15%,transparent 53%,#030a1233)}
+.cinemaHaze{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 10% 85%,#75d9ff20,transparent 50%),radial-gradient(ellipse at 90% 70%,#a3dcff18,transparent 50%);animation:hazeDrift 8s ease-in-out infinite alternate}
+.cinemaCaption{position:absolute;bottom:13%;left:24px;right:24px;text-align:center;z-index:4;opacity:0;transform:translateY(18px);transition:opacity .3s .15s,transform .35s .15s}
+.introOverlay[data-phase="team"] .cinemaCaption,.introOverlay[data-phase="out"] .cinemaCaption{opacity:1;transform:none}
+.cinemaCaption h1{font-size:clamp(28px,4vw,52px);font-weight:900;line-height:1.15;text-shadow:0 4px 30px #0008;letter-spacing:-1.5px}
+.cinemaCaption p{margin:14px 0 0;color:#d1e7f2;font-size:clamp(14px,2vw,19px);letter-spacing:.05em}
+.cinemaEyebrow{font-size:11px;letter-spacing:.34em;color:#8fdcff;margin-bottom:18px;direction:ltr}
+.cinemaControls{position:absolute;z-index:5;bottom:max(30px,env(safe-area-inset-bottom));left:28px;right:28px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cinemaControls button{border:1px solid #a5dbef66;border-radius:999px;padding:11px 20px;background:#06121caa;color:#e7f6ff;backdrop-filter:blur(12px);font-size:14px}
+.cinemaControls button:focus-visible{outline:3px solid #8fdcff;outline-offset:4px}
+.cinemaCount{color:#99b9ca;font-size:11px;letter-spacing:.12em;direction:ltr}
+.cinemaLead{position:absolute;top:15%;right:24px;left:24px;text-align:center;color:#c5e8fa;font-size:13px;letter-spacing:.12em;transition:opacity .4s}
+.introOverlay[data-phase="team"] .cinemaLead{opacity:0}
+.cinemaProgress{position:absolute;bottom:0;left:0;height:2px;background:#8edcff;animation:cinemaProgress 5.3s linear forwards;z-index:5;box-shadow:0 0 16px #8edcff}
+.cinemaReplay{margin-top:12px;color:var(--text2);font-size:12px;padding:8px 0;display:block}
+@keyframes teamCamera{from{transform:scale(.97)}to{transform:scale(1)}}
+@keyframes hazeDrift{from{transform:translateX(-4%) scale(1.1)}to{transform:translateX(4%) scale(1.2)}}
+@keyframes cinemaProgress{from{width:0}to{width:100%}}
+@media(max-aspect-ratio:1/1){
+  .cinemaPhoto{inset:10% 0 30%;}
+  .cinemaPhoto::after{background:linear-gradient(0deg,#030a1222,transparent 45%)}
+  .cinemaCaption{bottom:19%}
+  .cinemaCaption h1{font-size:clamp(26px,7vw,40px)}
+  .cinemaControls{left:20px;right:20px}
+}
+@media(max-height:480px){.cinemaPhoto{inset:0 0 22%}.cinemaCaption{bottom:16%}.cinemaCaption p,.cinemaEyebrow{display:none}.cinemaControls{bottom:12px}}

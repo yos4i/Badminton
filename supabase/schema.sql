@@ -1,6 +1,11 @@
 -- זה זמן בשביל!! — סכימת Supabase
 -- הריצו את כל הקובץ הזה פעם אחת ב-Supabase Dashboard → SQL Editor → New query → Run.
 -- שמות העמודות תואמים בדיוק לשמות השדות ב-JS (camelCase), כדי שהאפליקציה תעבוד בלי מיפוי נוסף.
+--
+-- כבר הרצתם את הקובץ הזה בעבר (טבלת matches כבר קיימת)? ה-create table למטה לא יוסיף
+-- עמודות לטבלה קיימת (v3 הוסיפה isTechnicalWin/technicalWinType) — הריצו רק את זה:
+--   alter table matches add column if not exists "isTechnicalWin" boolean not null default false;
+--   alter table matches add column if not exists "technicalWinType" text;
 
 create table if not exists nights (
   id text primary key,
@@ -35,6 +40,8 @@ create table if not exists matches (
   "teamAScore" integer not null,
   "teamBScore" integer not null,
   winner text not null,
+  "isTechnicalWin" boolean not null default false,
+  "technicalWinType" text,
   "playerIds" jsonb,
   seq integer not null default 0,
   "createdAt" timestamptz not null default now(),

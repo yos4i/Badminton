@@ -14,17 +14,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Rubik:ital,wght@0,500;1,500;1,700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0d1411; --surface:#141d18; --surface2:#1a2620; --line:#26362d; --line2:#31453a;
-  --text:#eef3ef; --text2:#9db3a7; --text3:#68806f;
-  --court:#3dbd8b; --court-dim:#2a8f68; --court-deep:#173a2b;
-  --accent:#3dbd8b; --accent-soft:rgba(61,189,139,.14);
+  --ink:#0b1210; --surface:#131c18; --surface2:#192420; --line:#233229; --line2:#2f4238;
+  --text:#f1f5f2; --text2:#a3b8ac; --text3:#6b8474;
+  --court:#3dbd8b; --court-dim:#2a8f68; --court-deep:#173a2b; --teal:#48c4c0;
+  --accent:#3dbd8b; --accent-soft:rgba(61,189,139,.14); --teal-soft:rgba(72,196,192,.14);
   --gold:#e5b45a; --loss:#e07a6a; --win:#3dbd8b;
   --r:18px; --r-sm:12px;
-  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --shadow:0 10px 30px rgba(0,0,0,.35); --shadow-sm:0 4px 14px rgba(0,0,0,.25);
   --safe-b:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;background:var(--ink);color:var(--text);
+  background-image:radial-gradient(1200px 500px at 50% -10%,rgba(61,189,139,.07),transparent 60%);
   font-family:'Heebo',system-ui,-apple-system,sans-serif;min-height:100%;}
 body{overscroll-behavior-y:none}
 #root{min-height:100vh;display:flex;flex-direction:column}
@@ -45,7 +46,7 @@ h1,h2,h3{margin:0}
 .brandTitle .shuttle{transform:rotate(-20deg)}
 .brandSub{color:var(--text2);font-size:13px;margin-top:6px;letter-spacing:.06em}
 .courtHero{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);
-  background:linear-gradient(160deg,#152019,#101a14)}
+  background:linear-gradient(160deg,#162219,#0f1913);box-shadow:var(--shadow-sm)}
 .courtHero svg.bg{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
 .courtHero .inner{position:relative;padding:22px 20px}
 
@@ -60,7 +61,10 @@ h1,h2,h3{margin:0}
 .nav svg{width:22px;height:22px}
 
 /* ---------- cards / general ---------- */
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03),var(--shadow-sm)}
+button.card,button.courtHero{transition:transform .12s ease,border-color .12s}
+button.card:active,button.courtHero:active,.histRow:active,.playerCard:active,.recCard:active{transform:scale(.985)}
 .card+.card,.stack>*+*{margin-top:12px}
 .eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--text3)}
 .eyebrow.green{color:var(--court)}
@@ -70,7 +74,7 @@ h1,h2,h3{margin:0}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:16px;
   border-radius:16px;padding:15px 18px;transition:transform .1s, filter .15s;user-select:none}
 .btn:active{transform:scale(.975)}
-.btn.primary{background:var(--court);color:#08120d}
+.btn.primary{background:linear-gradient(180deg,#48cc98,#35b283);color:#08120d;box-shadow:0 6px 18px rgba(61,189,139,.22)}
 .btn.ghost{background:var(--surface2);border:1px solid var(--line2);color:var(--text)}
 .btn.danger{background:rgba(224,122,106,.12);border:1px solid rgba(224,122,106,.4);color:var(--loss)}
 .btn.small{padding:9px 14px;font-size:13.5px;border-radius:12px}
@@ -83,7 +87,7 @@ h1,h2,h3{margin:0}
 .statLbl{font-size:11.5px;color:var(--text2);font-weight:600;margin-top:2px}
 .divider{height:1px;background:var(--line);margin:14px 0}
 .muted{color:var(--text2)}.tiny{font-size:12px}
-.sectionTitle{font-size:17px;font-weight:900;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+.sectionTitle{font-size:17px;font-weight:900;margin:24px 0 10px;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
 .linkAll{color:var(--court);font-weight:700;font-size:13px}
 
 /* ---------- avatars / names ---------- */
@@ -178,10 +182,75 @@ h1,h2,h3{margin:0}
 .confirmSave{ text-align:center }
 .trophyRow{display:flex;align-items:baseline;gap:10px}
 .hofVal{font-weight:900;color:var(--court);font-variant-numeric:tabular-nums}
+/* ---------- profiles hub ---------- */
+.playerGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.playerCard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 12px 14px;display:flex;flex-direction:column;align-items:center;
+  text-align:center;transition:transform .12s,border-color .12s;box-shadow:inset 0 1px 0 rgba(255,255,255,.03),var(--shadow-sm);position:relative;overflow:hidden}
+.playerCard::before{content:"";position:absolute;inset:0 0 auto 0;height:54px;background:linear-gradient(180deg,rgba(61,189,139,.09),transparent);pointer-events:none}
+.playerCard.inactive{opacity:.55}
+.pcStats{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);margin:10px 0 8px;font-variant-numeric:tabular-nums}
+.pcStats b{color:var(--text);font-weight:900;font-size:14px}
+.pcStats .sep{width:1px;height:12px;background:var(--line2)}
+.playerStrip{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none;margin:0 -4px}
+.playerStrip::-webkit-scrollbar{display:none}
+.stripItem{flex:none;width:82px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:14px;transition:background .12s}
+.stripItem:active{background:var(--surface2)}
+.stripName{font-size:12px;font-weight:800;max-width:78px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ---------- profile hero & tabs ---------- */
+.profileHero .inner{padding:24px 20px 20px}
+.heroTop{display:flex;align-items:center;gap:16px}
+.heroName{font-size:26px;letter-spacing:-.4px;line-height:1.1}
+.heroStats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+.heroStats div{text-align:center;display:flex;flex-direction:column;gap:2px}
+.heroStats b{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.heroStats span{font-size:11px;color:var(--text2);font-weight:600}
+.tabsBar{display:flex;gap:2px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--ink);z-index:5;padding-top:2px}
+.tabsBar button{flex:1;padding:12px 4px;font-weight:800;font-size:14px;color:var(--text3);position:relative;transition:color .15s}
+.tabsBar button.on{color:var(--text)}
+.tabsBar button.on::after{content:"";position:absolute;left:14%;right:14%;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--court);animation:growX .18s ease}
+@keyframes growX{from{transform:scaleX(.3)}to{transform:scaleX(1)}}
+.tabPane{animation:fadein .2s ease}
+.segTabs.compact button{padding:7px 4px;font-size:12.5px}
+.segTabs.season button.on{color:var(--teal);background:var(--surface)}
+.splitCard{text-align:center;width:100%}
+.splitCard .statBig{margin-top:8px}
+.hlRow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.hl{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center;min-width:0}
+.hl .tiny{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hlVal{font-weight:900;font-size:15px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+/* ---------- records ---------- */
+.recGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.recCard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 12px;text-align:start;display:flex;flex-direction:column;
+  transition:transform .12s;box-shadow:inset 0 1px 0 rgba(255,255,255,.03),var(--shadow-sm)}
+.recIcon{font-size:24px;line-height:1}
+.recVal{font-weight:900;font-size:19px;margin-top:4px;font-variant-numeric:tabular-nums;line-height:1.15}
+/* ---------- milestones ---------- */
+.pbar{height:8px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);overflow:hidden;margin-top:8px}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--court-dim),var(--court));border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.pbar.done i{background:linear-gradient(90deg,#c9963f,var(--gold))}
+.msCard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.msCard.done{border-color:rgba(229,180,90,.35);background:linear-gradient(160deg,rgba(229,180,90,.07),transparent 60%),var(--surface);animation:fadein .35s ease}
+.msMini+.msMini{margin-top:10px}
+.almost{font-size:11px;font-weight:800;color:var(--gold);letter-spacing:.06em}
+/* ---------- technical win ---------- */
+.tag.tech,.techTag{color:#e6c887;background:rgba(229,180,90,.12);border:1px solid rgba(229,180,90,.35)}
+.techTag{display:inline-block;font-size:12px;font-weight:800;padding:6px 12px;border-radius:999px}
+.techMini{color:#e6c887;font-weight:800}
+.techOpt{background:var(--surface2);border:1px solid var(--line2);border-radius:14px;padding:16px;font-weight:900;font-size:24px;text-align:center;direction:ltr;transition:border-color .12s,background .12s,transform .1s}
+.techOpt.team{font-size:14px;direction:rtl}
+.techOpt.on{border-color:var(--court);background:var(--accent-soft);color:var(--court);transform:scale(1.02)}
+/* ---------- season ---------- */
+.seasonCard{border-color:rgba(72,196,192,.3);background:linear-gradient(160deg,rgba(72,196,192,.07),transparent 55%),var(--surface)}
+.seasonStat{text-align:center;display:flex;flex-direction:column;gap:2px}
+.seasonStat b{font-size:20px;font-weight:900;font-variant-numeric:tabular-nums}
+.seasonStat span{font-size:11px;color:var(--text2);font-weight:600}
+.seasonRow{width:100%;padding:8px 0;border-bottom:1px solid var(--line);text-align:start}
+.seasonRow:last-child{border-bottom:none}
 /* scope tabs (הכל / יחידות / זוגות) */
 .segTabs{display:flex;background:var(--surface2);border:1px solid var(--line2);border-radius:14px;padding:4px;gap:4px}
 .segTabs button{flex:1;padding:9px 6px;border-radius:10px;font-weight:800;font-size:13.5px;color:var(--text2);transition:background .15s,color .15s}
 .segTabs button.on{background:var(--surface);color:var(--court);box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.segTabs button:active{transform:scale(.97)}
 /* shuffle */
 .plChip{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--surface);border:1px solid var(--line2);width:100%;text-align:start;transition:border-color .12s,background .12s}
 .plChip.on{border-color:var(--court);background:var(--accent-soft)}
@@ -230,6 +299,8 @@ h1,h2,h3{margin:0}
 .introOverlay[data-phase="team"] .introSkip,.introOverlay[data-phase="out"] .introSkip{opacity:1}
 @media(prefers-reduced-motion:reduce){.introOverlay{display:none}}
 </style>
+<link rel="stylesheet" href="assets/cinematic.css">
+<link rel="preload" as="image" href="assets/team-cinematic.png">
 </head>
 <body>
 <div id="root"></div>
@@ -238,6 +309,7 @@ h1,h2,h3{margin:0}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="assets/cinematic-scene.js"></script>
 <script type="text/babel" data-presets="env,react">
 const {useState,useEffect,useMemo,useRef,useCallback} = React;
 
@@ -260,7 +332,7 @@ function sbTable(name, idField='id'){
   };
 }
 const db = {
-  verno: 2, // v2: matchTime + generatedByShuffle (ר' normalizeMatch)
+  verno: 3, // v3: matchTime + generatedByShuffle + isTechnicalWin/technicalWinType (ר' normalizeMatch)
   players: sbTable('players'),
   matches: sbTable('matches'),
   nights: sbTable('nights'),
@@ -268,10 +340,14 @@ const db = {
   transaction: async(mode, ...args)=> args[args.length-1](), // Supabase אין תמיכת JS-side; שימוש רציף מספיק כאן
 };
 /* ברירות מחדל בטוחות לרשומות ישנות/מגיבויים ישנים */
+const TECH_TYPES=['6-0','7-1'];
 function normalizeMatch(m){
+  const tech=m.isTechnicalWin===true;
   return {...m,
     matchTime: (typeof m.matchTime==='string' && /^\d{2}:\d{2}$/.test(m.matchTime))? m.matchTime : null,
     generatedByShuffle: m.generatedByShuffle===true,
+    isTechnicalWin: tech,
+    technicalWinType: tech&&TECH_TYPES.includes(m.technicalWinType)? m.technicalWinType : null,
     seq: m.seq||0};
 }
 const uid = ()=> (crypto.randomUUID ? crypto.randomUUID() : 'id-'+Date.now()+'-'+Math.random().toString(36).slice(2));
@@ -285,7 +361,11 @@ const CFG = {
   MIN_PERFECT_NIGHT: 3,        // מינימום משחקים לערב מושלם
   MARATHON_OVER_TARGET: 4,     // כמה מעל היעד נחשב "מרתון" (11 -> 15+)
   BACKUP_REMINDER_DAYS: 30,
-  BACKUP_VERSION: 2,          // v2: matchTime + generatedByShuffle
+  BACKUP_VERSION: 3,          // v2: matchTime + generatedByShuffle · v3: ניצחון טכני
+  MIN_PARTNER_FOR_BEST: 3,     // מינימום משחקים יחד ל"השותף הטוב"
+  MIN_OPP_FOR_BEST: 3,         // מינימום מפגשים ל"המאזן הטוב מול יריב"
+  ALMOST_THERE: 0.9,           // 90%+ = "כמעט שם"
+  RECENT_YEARS_IN_TABS: 4,     // כמה עונות להציג בבורר
   SHUFFLE_ATTEMPTS: 30         // כמה ניסיונות להימנע מריצת חוזרת מיידית לפני שמוותרים
 };
 const APP_NAME = 'זה זמן בשביל!!';
@@ -332,6 +412,12 @@ function sortMatches(ms){
 const SCOPES=[{id:'overall',label:'הכל'},{id:'singles',label:'יחידות'},{id:'doubles',label:'זוגות'}];
 const filterMatchesByMode=(ms,scope)=> (!scope||scope==='overall')? ms : ms.filter(m=>m.mode===scope);
 const getPlayerStats=(pid,ms,scope)=> playerStats(pid,filterMatchesByMode(ms,scope));
+/* ---- SEASONS: עונה = שנה קלנדרית לפי matchDate. 'all' = כל הזמנים ---- */
+const seasonOf=m=> new Date(m.matchDate).getFullYear();
+const seasonsAvailable=ms=> [...new Set(ms.map(seasonOf))].sort((a,b)=>b-a);
+const filterMatchesBySeason=(ms,season)=> (!season||season==='all')? ms : ms.filter(m=>seasonOf(m)===+season);
+const getPlayerSeasonStats=(pid,ms,season,scope)=> playerStats(pid,filterMatchesByMode(filterMatchesBySeason(ms,season),scope));
+const getTechnicalWinCount=(pid,ms)=> ms.filter(m=>m.isTechnicalWin&&inMatch(m,pid)&&wonBy(m,pid)).length;
 const winnersOf = m => m.winner==='teamA'? m.teamAPlayerIds : m.teamBPlayerIds;
 const losersOf  = m => m.winner==='teamA'? m.teamBPlayerIds : m.teamAPlayerIds;
 const inMatch = (m,pid)=> m.teamAPlayerIds.includes(pid)||m.teamBPlayerIds.includes(pid);
@@ -354,7 +440,8 @@ function playerStats(pid, matches, mode){
   }
   let cur=0; for(let i=results.length-1;i>=0;i--){ if(results[i]==='W')cur++; else break; }
   let best=0,run=0; for(const r of results){ run = r==='W'? run+1:0; if(run>best)best=run; }
-  return {played:ms.length,wins,losses,winRate:pct(wins,ms.length),pf,pa,diff:pf-pa,
+  const techWins=ms.filter(m=>m.isTechnicalWin&&wonBy(m,pid)).length;
+  return {played:ms.length,wins,losses,winRate:pct(wins,ms.length),pf,pa,diff:pf-pa,techWins,
     curStreak:cur,bestStreak:best,last5:results.slice(-5),last10:results.slice(-10),matches:ms};
 }
 function headToHead(a,b,matches){
@@ -573,6 +660,139 @@ function shuffleDefaultPool(players,matches,settings){
   return act;
 }
 
+
+/* ================= PLAYER RECORDS (שיאים אישיים — נגזרים מההיסטוריה) ================= */
+/* מחשב במעבר אחד את כל "החומר הגלמי" של שחקן: רצפים, ערבים, שותפים, יריבים */
+function playerAggregate(pid,matches,nights){
+  const ms=sortMatches(matches.filter(m=>inMatch(m,pid)));
+  const A={ms,played:ms.length,wins:0,losses:0,pf:0,pa:0,techWins:0,
+    bestStreak:{n:0,end:null},bestSingles:{n:0,end:null},bestDoubles:{n:0,end:null},
+    biggest:null,closest:null,nights:{},partners:{},opps:{}};
+  let run=0,runS=0,runD=0;
+  for(const m of ms){
+    const w=wonBy(m,pid), f=scoreFor(m,pid), a=scoreAgainst(m,pid), mg=f-a;
+    w?A.wins++:A.losses++; A.pf+=f; A.pa+=a; if(w&&m.isTechnicalWin)A.techWins++;
+    run=w?run+1:0; if(run>A.bestStreak.n)A.bestStreak={n:run,end:m};
+    if(m.mode==='singles'){ runS=w?runS+1:0; if(runS>A.bestSingles.n)A.bestSingles={n:runS,end:m}; }
+    else { runD=w?runD+1:0; if(runD>A.bestDoubles.n)A.bestDoubles={n:runD,end:m}; }
+    if(w&&!m.isTechnicalWin){
+      if(!A.biggest||mg>A.biggest.mg)A.biggest={m,mg};
+      if(!A.closest||mg<A.closest.mg||(mg===A.closest.mg&&f+a>A.closest.m.teamAScore+A.closest.m.teamBScore))A.closest={m,mg};
+    }
+    if(m.matchNightId){ const n=A.nights[m.matchNightId]=A.nights[m.matchNightId]||{id:m.matchNightId,played:0,wins:0,pts:0,sWins:0,dWins:0,date:m.matchDate};
+      n.played++; n.pts+=f; if(w){n.wins++; m.mode==='singles'?n.sWins++:n.dWins++;} }
+    const side=sideOf(m,pid); const mates=(side==='teamA'?m.teamAPlayerIds:m.teamBPlayerIds).filter(x=>x!==pid);
+    const opps=(side==='teamA'?m.teamBPlayerIds:m.teamAPlayerIds);
+    for(const p of mates){ const r=A.partners[p]=A.partners[p]||{id:p,played:0,wins:0}; r.played++; if(w)r.wins++; }
+    for(const o of opps){ const r=A.opps[o]=A.opps[o]||{id:o,played:0,wins:0,pts:0,singles:0}; r.played++; r.pts+=f; if(w)r.wins++; if(m.mode==='singles')r.singles++; }
+  }
+  return A;
+}
+const maxBy=(arr,f)=> arr.reduce((b,x)=> (!b||f(x)>f(b))? x:b, null);
+/* הגדרות שיאים — כל שיא מחזיר null כשאין מספיק נתונים, וה-UI פשוט לא מציג אותו */
+const RECORD_DEFS=[
+  {id:'streak',icon:'🔥',title:'רצף הניצחונות הארוך',calc:(A,P)=> A.bestStreak.n>=2? {value:A.bestStreak.n+' ברצף',date:A.bestStreak.end.matchDate}:null},
+  {id:'streakS',icon:'🤺',title:'רצף יחידות הטוב',calc:(A)=> A.bestSingles.n>=2? {value:A.bestSingles.n+' ברצף',date:A.bestSingles.end.matchDate}:null},
+  {id:'streakD',icon:'🤝',title:'רצף זוגות הטוב',calc:(A)=> A.bestDoubles.n>=2? {value:A.bestDoubles.n+' ברצף',date:A.bestDoubles.end.matchDate}:null},
+  {id:'nightWins',icon:'👑',title:'הכי הרבה ניצחונות בערב',calc:(A,P,N)=>{ const n=maxBy(Object.values(A.nights),x=>x.wins); return n&&n.wins>=2? {value:n.wins+' ניצחונות',sub:nightTitle(N,n.id),date:n.date,nightId:n.id}:null; }},
+  {id:'nightPlayed',icon:'🏸',title:'הכי הרבה משחקים בערב',calc:(A,P,N)=>{ const n=maxBy(Object.values(A.nights),x=>x.played); return n&&n.played>=3? {value:n.played+' משחקים',sub:nightTitle(N,n.id),date:n.date,nightId:n.id}:null; }},
+  {id:'nightPts',icon:'🎯',title:'הכי הרבה נקודות בערב',calc:(A,P,N)=>{ const n=maxBy(Object.values(A.nights),x=>x.pts); return n&&n.pts>=20? {value:n.pts+' נקודות',sub:nightTitle(N,n.id),date:n.date,nightId:n.id}:null; }},
+  {id:'nightS',icon:'🥇',title:'הכי הרבה ניצחונות יחידות בערב',calc:(A,P,N)=>{ const n=maxBy(Object.values(A.nights),x=>x.sWins); return n&&n.sWins>=2? {value:n.sWins+' ניצחונות',sub:nightTitle(N,n.id),date:n.date,nightId:n.id}:null; }},
+  {id:'nightD',icon:'🥈',title:'הכי הרבה ניצחונות זוגות בערב',calc:(A,P,N)=>{ const n=maxBy(Object.values(A.nights),x=>x.dWins); return n&&n.dWins>=2? {value:n.dWins+' ניצחונות',sub:nightTitle(N,n.id),date:n.date,nightId:n.id}:null; }},
+  {id:'biggest',icon:'💥',title:'הניצחון הגדול',calc:(A,P)=> A.biggest? {value:scoreLine(A.biggest.m),sub:'נגד '+oppNames(A.biggest.m,P),date:A.biggest.m.matchDate,matchId:A.biggest.m.id}:null},
+  {id:'closest',icon:'🧊',title:'הניצחון הצמוד',calc:(A,P)=> A.closest&&A.closest.mg<=2? {value:scoreLine(A.closest.m),sub:'נגד '+oppNames(A.closest.m,P),date:A.closest.m.matchDate,matchId:A.closest.m.id}:null},
+  {id:'bestPartner',icon:'💚',title:'השותף הטוב',calc:(A,P)=>{ const c=Object.values(A.partners).filter(x=>x.played>=CFG.MIN_PARTNER_FOR_BEST); const r=maxBy(c,x=>pct(x.wins,x.played)*1000+x.played); return r? {value:byId(P,r.id).name,sub:r.wins+'–'+(r.played-r.wins)+' יחד · '+pct(r.wins,r.played)+'%',playerId:r.id}:null; }},
+  {id:'mostPartner',icon:'🫱',title:'השותף הקבוע',calc:(A,P)=>{ const r=maxBy(Object.values(A.partners),x=>x.played); return r&&r.played>=2? {value:byId(P,r.id).name,sub:r.played+' משחקים יחד',playerId:r.id}:null; }},
+  {id:'mostRival',icon:'⚔️',title:'היריב הקבוע',calc:(A,P)=>{ const r=maxBy(Object.values(A.opps).filter(x=>x.singles>0),x=>x.singles); return r&&r.singles>=2? {value:byId(P,r.id).name,sub:r.singles+' מפגשי יחידות',h2h:r.id}:null; }},
+  {id:'bestVs',icon:'😈',title:'המאזן הטוב מול יריב',calc:(A,P)=>{ const c=Object.values(A.opps).filter(x=>x.played>=CFG.MIN_OPP_FOR_BEST); const r=maxBy(c,x=>pct(x.wins,x.played)*1000+x.played); return r&&r.wins>r.played-r.wins? {value:byId(P,r.id).name,sub:r.wins+'–'+(r.played-r.wins)+' · '+pct(r.wins,r.played)+'%',playerId:r.id}:null; }},
+  {id:'ptsVs',icon:'🏹',title:'הכי הרבה נקודות מול יריב',calc:(A,P)=>{ const r=maxBy(Object.values(A.opps),x=>x.pts); return r&&r.pts>=30? {value:r.pts+' נקודות',sub:'מול '+byId(P,r.id).name,playerId:r.id}:null; }},
+  {id:'careerPts',icon:'📈',title:'נקודות בקריירה',calc:(A)=> A.pf>0? {value:A.pf.toLocaleString('he-IL')+' נקודות',sub:A.played+' משחקים'}:null},
+  {id:'tech',icon:'⚖️',title:'ניצחונות טכניים',calc:(A)=> A.techWins>0? {value:A.techWins}:null},
+];
+const nightTitle=(N,id)=>{ const n=N.find(x=>x.id===id); return n? (n.title||'ערב בדמינטון')+' · '+fmtDateShort(n.date):''; };
+const scoreLine=m=> Math.max(m.teamAScore,m.teamBScore)+'–'+Math.min(m.teamAScore,m.teamBScore);
+const oppNames=(m,P)=> losersOf(m).map(id=>byId(P,id).name).join(' + ');
+function getPlayerRecords(pid,matches,nights,players){
+  const A=playerAggregate(pid,matches,nights);
+  return RECORD_DEFS.map(d=>{ const r=d.calc(A,players,nights); return r? {id:d.id,icon:d.icon,title:d.title,...r}:null; }).filter(Boolean);
+}
+
+/* ================= MILESTONES (אבני דרך — יעדים ארוכי טווח, נגזרים מההיסטוריה) ================= */
+/* metric = שדה במצב המצטבר שמתעדכן משחק־משחק; תאריך ההשלמה = המשחק שבו הערך הגיע ליעד לראשונה (לפי כרונולוגיה, לא createdAt) */
+const MILESTONE_DEFS=[
+  ...[10,25,50,100,250,500].map(t=>({id:'career_m'+t,cat:'career',title:t+' משחקים',target:t,metric:'played'})),
+  ...[10,25,50,100,250].map(t=>({id:'career_w'+t,cat:'career',title:t+' ניצחונות',target:t,metric:'wins'})),
+  ...[100,500,1000,2500,5000].map(t=>({id:'career_p'+t,cat:'career',title:t.toLocaleString('he-IL')+' נקודות',target:t,metric:'pf'})),
+  ...[10,25,50,100].map(t=>({id:'s_m'+t,cat:'singles',title:t+' משחקי יחידות',target:t,metric:'sPlayed'})),
+  ...[10,25,50,100].map(t=>({id:'s_w'+t,cat:'singles',title:t+' ניצחונות ביחידות',target:t,metric:'sWins'})),
+  ...[10,25,50,100].map(t=>({id:'d_m'+t,cat:'doubles',title:t+' משחקי זוגות',target:t,metric:'dPlayed'})),
+  ...[10,25,50,100].map(t=>({id:'d_w'+t,cat:'doubles',title:t+' ניצחונות בזוגות',target:t,metric:'dWins'})),
+  {id:'d_pm10',cat:'doubles',title:'10 משחקים עם אותו שותף',target:10,metric:'partnerPlayedMax'},
+  {id:'d_pw10',cat:'doubles',title:'10 ניצחונות עם אותו שותף',target:10,metric:'partnerWinsMax'},
+  {id:'d_pm25',cat:'doubles',title:'25 משחקים עם אותו שותף',target:25,metric:'partnerPlayedMax'},
+  {id:'d_pw25',cat:'doubles',title:'25 ניצחונות עם אותו שותף',target:25,metric:'partnerWinsMax'},
+  {id:'sp_st5',cat:'special',title:'רצף של 5 ניצחונות',target:5,metric:'bestStreak'},
+  {id:'sp_st10',cat:'special',title:'רצף של 10 ניצחונות',target:10,metric:'bestStreak'},
+  {id:'sp_nw5',cat:'special',title:'5 ניצחונות בערב אחד',target:5,metric:'nightWinsMax'},
+  {id:'sp_nm10',cat:'special',title:'10 משחקים בערב אחד',target:10,metric:'nightPlayedMax'},
+  {id:'sp_np100',cat:'special',title:'100 נקודות בערב אחד',target:100,metric:'nightPtsMax'},
+  {id:'sp_t5',cat:'special',title:'5 ניצחונות טכניים',target:5,metric:'techWins'},
+  {id:'sp_t10',cat:'special',title:'10 ניצחונות טכניים',target:10,metric:'techWins'},
+  {id:'sp_o25',cat:'special',title:'25 מפגשים מול אותו יריב',target:25,metric:'oppPlayedMax'},
+  {id:'sp_ob10',cat:'special',title:'10 ניצחונות מול אותו יריב',target:10,metric:'oppWinsMax'},
+];
+/* יעדים עונתיים — נפרדים מהקריירה, מחושבים על משחקי השנה בלבד */
+const SEASON_MILESTONE_DEFS=[
+  {id:'se_m50',cat:'season',title:'50 משחקים ב־{y}',target:50,metric:'played'},
+  {id:'se_w20',cat:'season',title:'20 ניצחונות ב־{y}',target:20,metric:'wins'},
+  {id:'se_p500',cat:'season',title:'500 נקודות ב־{y}',target:500,metric:'pf'},
+  {id:'se_sw10',cat:'season',title:'10 ניצחונות יחידות ב־{y}',target:10,metric:'sWins'},
+  {id:'se_dw10',cat:'season',title:'10 ניצחונות זוגות ב־{y}',target:10,metric:'dWins'},
+  {id:'se_st5',cat:'season',title:'רצף של 5 ב־{y}',target:5,metric:'bestStreak'},
+];
+const MILESTONE_CATS=[{id:'career',label:'קריירה'},{id:'singles',label:'יחידות'},{id:'doubles',label:'זוגות'},{id:'special',label:'מיוחד'},{id:'season',label:'עונה'}];
+/* מעבר כרונולוגי אחד: אחרי כל משחק בודקים אילו יעדים נחצו לראשונה */
+function getPlayerMilestones(pid,matches,nights,{defs=MILESTONE_DEFS,season=null}={}){
+  const ms=sortMatches(matches.filter(m=>inMatch(m,pid)));
+  const S={played:0,wins:0,pf:0,sPlayed:0,sWins:0,dPlayed:0,dWins:0,bestStreak:0,techWins:0,
+    nightWinsMax:0,nightPlayedMax:0,nightPtsMax:0,partnerPlayedMax:0,partnerWinsMax:0,oppPlayedMax:0,oppWinsMax:0};
+  const done={}; let run=0; const nights_={},partners={},opps={};
+  for(const m of ms){
+    const w=wonBy(m,pid), f=scoreFor(m,pid);
+    S.played++; if(w)S.wins++; S.pf+=f;
+    if(m.mode==='singles'){S.sPlayed++; if(w)S.sWins++;} else {S.dPlayed++; if(w)S.dWins++;}
+    run=w?run+1:0; S.bestStreak=Math.max(S.bestStreak,run);
+    if(w&&m.isTechnicalWin)S.techWins++;
+    if(m.matchNightId){ const n=nights_[m.matchNightId]=nights_[m.matchNightId]||{p:0,w:0,pts:0}; n.p++; n.pts+=f; if(w)n.w++;
+      S.nightWinsMax=Math.max(S.nightWinsMax,n.w); S.nightPlayedMax=Math.max(S.nightPlayedMax,n.p); S.nightPtsMax=Math.max(S.nightPtsMax,n.pts); }
+    const side=sideOf(m,pid);
+    for(const p of (side==='teamA'?m.teamAPlayerIds:m.teamBPlayerIds)){ if(p===pid)continue; const r=partners[p]=partners[p]||{p:0,w:0}; r.p++; if(w)r.w++;
+      S.partnerPlayedMax=Math.max(S.partnerPlayedMax,r.p); S.partnerWinsMax=Math.max(S.partnerWinsMax,r.w); }
+    for(const o of (side==='teamA'?m.teamBPlayerIds:m.teamAPlayerIds)){ const r=opps[o]=opps[o]||{p:0,w:0}; r.p++; if(w)r.w++;
+      S.oppPlayedMax=Math.max(S.oppPlayedMax,r.p); S.oppWinsMax=Math.max(S.oppWinsMax,r.w); }
+    for(const d of defs){ if(!done[d.id]&&S[d.metric]>=d.target) done[d.id]={date:m.matchDate,matchId:m.id}; }
+  }
+  return defs.map(d=>{ const v=S[d.metric]; const pr=Math.min(1,v/d.target);
+    return {...d,title:season?d.title.replace('{y}',season):d.title,value:v,progress:pr,percent:Math.round(pr*1000)/10,
+      completed:!!done[d.id],completedAt:done[d.id]?.date||null,almost:!done[d.id]&&pr>=CFG.ALMOST_THERE}; });
+}
+const getMilestoneProgress=(ms)=> ms.filter(m=>!m.completed).sort((a,b)=>b.progress-a.progress||a.target-b.target);
+
+/* ================= SEASON SUMMARY ================= */
+function getSeasonSummary(season,matches,players){
+  const ms=filterMatchesBySeason(matches,season);
+  if(!ms.length)return null;
+  const stats=players.map(p=>({p,st:playerStats(p.id,ms)})).filter(x=>x.st.played>0);
+  const mostWins=maxBy(stats,x=>x.st.wins), mostActive=maxBy(stats,x=>x.st.played), streak=maxBy(stats,x=>x.st.bestStreak);
+  const sg=stats.map(x=>({p:x.p,st:playerStats(x.p.id,ms,'singles')})).filter(x=>x.st.played>=CFG.MIN_MATCHES_WINRATE);
+  const bestSingles=maxBy(sg,x=>x.st.winRate*1000+x.st.wins);
+  const duo=allDuos(ms).filter(d=>d.played>=CFG.MIN_DUO_MATCHES).sort((a,b)=>b.winRate-a.winRate||b.wins-a.wins)[0]||null;
+  const pts=ms.reduce((s,m)=>s+m.teamAScore+m.teamBScore,0);
+  const tech=ms.filter(m=>m.isTechnicalWin).length;
+  return {season,matches:ms.length,singles:ms.filter(m=>m.mode==='singles').length,doubles:ms.filter(m=>m.mode==='doubles').length,pts,tech,
+    players:stats.length,mostWins,mostActive,bestSingles,duo,streak};
+}
+
 /* ================= ACHIEVEMENTS ================= */
 const ACH_DEFS=[
   {id:'on_fire',icon:'🔥',name:'על אש',desc:'5 ניצחונות ברצף'},
@@ -731,6 +951,16 @@ function ScopeTabs({scope,onChange,hide=[]}){
   return <div className="segTabs">{SCOPES.filter(s=>!hide.includes(s.id)).map(s=>
     <button key={s.id} className={scope===s.id?'on':''} onClick={()=>onChange(s.id)}>{s.label}</button>)}</div>;
 }
+/* בורר עונה: כל הזמנים + השנים שקיימות בהיסטוריה (הקרובות קודם) */
+function SeasonTabs({season,onChange,matches,compact}){
+  const years=seasonsAvailable(matches).slice(0,CFG.RECENT_YEARS_IN_TABS);
+  if(years.length===0) return null;
+  return <div className={'segTabs season'+(compact?' compact':'')} style={{direction:'rtl'}}>
+    <button className={season==='all'?'on':''} onClick={()=>onChange('all')}>כל הזמנים</button>
+    {years.map(y=><button key={y} className={season===y?'on':''} onClick={()=>onChange(y)}>{y}</button>)}
+  </div>;
+}
+function ProgressBar({value,done}){ return <div className={'pbar'+(done?' done':'')}><i style={{width:Math.round(value*100)+'%'}}/></div>; }
 function TeamNames({ids,players}){ return ids.map(id=>byId(players,id).name).join(' + '); }
 
 function MatchCard({m,players,onClick}){
@@ -753,7 +983,7 @@ function MatchCard({m,players,onClick}){
     <div className="matchMeta">
       <span className="tag">{fmtDateTimeShort(m)}</span>
       <span className="tag">{m.mode==='singles'?'1 על 1':'2 על 2'}</span>
-      <span className="tag green">עד {m.targetScore}</span>
+      {m.isTechnicalWin? <span className="tag tech">טכני {m.technicalWinType}</span> : <span className="tag green">עד {m.targetScore}</span>}
     </div>
   </div>;
 }
@@ -831,7 +1061,7 @@ function PlayerPicker({data,exclude=[],onPick,onClose}){
 }
 
 /* ================= HOME ================= */
-function Home({data,go}){
+function Home({data,go,onReplay}){
   const {players,matches,nights,settings}=data;
   const activeNight = settings.activeNightId? nights.find(n=>n.id===settings.activeNightId&&!n.endedAt):null;
   const latest=matches[matches.length-1];
@@ -866,6 +1096,8 @@ function Home({data,go}){
       </div>
     </div>
 
+    <button className="cinemaReplay" onClick={onReplay}>▷ צפייה בפתיח</button>
+
     {matches.length===0&&<div style={{marginTop:14}}>
       <EmptyState icon="🏸" title="המגרש מחכה" sub="הזינו את המשחק הראשון — משם ההיסטוריה כבר תיכתב לבד"
         action={players.length<2?'הוספת שחקנים':'המשחק הראשון'} onAction={()=>go(players.length<2?{s:'players'}:{s:'new'})}/>
@@ -880,6 +1112,19 @@ function Home({data,go}){
         <FormDots seq={hot.st.last5}/>
       </button>
     </div>}
+
+    {players.filter(p=>p.active).length>0&&<>
+      <div className="sectionTitle rowBetween"><span>שחקנים</span>
+        <button className="linkAll" onClick={()=>go({s:'players'})}>כל הפרופילים</button></div>
+      <div className="playerStrip">
+        {players.filter(p=>p.active).map(p=>{ const st=playerStats(p.id,matches);
+          return <button key={p.id} className="stripItem" onClick={()=>go({s:'player',id:p.id})}>
+            <Avatar p={p} size={58}/>
+            <div className="stripName">{p.name}</div>
+            <div className="tiny muted">{st.played? st.winRate+'%':'—'}</div>
+          </button>; })}
+      </div>
+    </>}
 
     {latest&&<>
       <div className="sectionTitle rowBetween"><span>המשחק האחרון</span>
@@ -972,6 +1217,11 @@ function MatchWizard({data,go,editMatch,past,prefill}){
   const [winBy,setWinBy]=useState(editMatch?.winBy??settings.defaultWinBy??2);
   const [scoreA,setScoreA]=useState(editMatch?.teamAScore??0);
   const [scoreB,setScoreB]=useState(editMatch?.teamBScore??0);
+  // ניצחון טכני: {type:'6-0'|'7-1', winner:'teamA'|'teamB'} או null (תוצאה רגילה)
+  const [tech,setTech]=useState(editMatch?.isTechnicalWin? {type:editMatch.technicalWinType||'6-0',winner:editMatch.winner}:null);
+  const [techSheet,setTechSheet]=useState(null); // {type,winner} בזמן בחירה
+  const applyTech=t=>{ const [hi,lo]=t.type.split('-').map(Number); setScoreA(t.winner==='teamA'?hi:lo); setScoreB(t.winner==='teamA'?lo:hi); setTech(t); setTechSheet(null); setErr(''); };
+  const clearTech=()=>{ setTech(null); setScoreA(0); setScoreB(0); };
   const [date,setDate]=useState(editMatch? dayInput(editMatch.matchDate) : dayInput(nowISO()));
   // שעת המשחק: במשחק עבר אופציונלית (ריק = לא ידוע), בעריכה ניתנת לשינוי, במשחק חי נקבעת בשמירה
   const [time,setTime]=useState(editMatch? (editMatch.matchTime||'') : '');
@@ -990,8 +1240,7 @@ function MatchWizard({data,go,editMatch,past,prefill}){
   const clearSlot=(team,i)=>setSlots(s=>{const n={A:[...s.A],B:[...s.B]}; n[team][i]=null; return n;});
 
   const save=async()=>{
-    const v=validateScore(scoreA,scoreB,effTarget,winBy,settings.maxScore);
-    if(!v.ok){setErr(v.msg);return;}
+    if(!tech){ const v=validateScore(scoreA,scoreB,effTarget,winBy,settings.maxScore); if(!v.ok){setErr(v.msg);return;} }
     if(!complete){setErr('חסרים שחקנים במגרש');return;}
     if(!date){setErr('חסר תאריך למשחק');return;}
     const rec={
@@ -1000,6 +1249,7 @@ function MatchWizard({data,go,editMatch,past,prefill}){
       matchDate:new Date(date+'T12:00:00').toISOString(),
       matchTime: (editMatch||past)? (time||null) : nowTime(),
       generatedByShuffle: editMatch? !!editMatch.generatedByShuffle : fromShuffle,
+      isTechnicalWin: !!tech, technicalWinType: tech? tech.type : null,
       mode, targetScore:effTarget, winBy, maxScore:settings.maxScore||null,
       teamAPlayerIds:slots.A.slice(0,need), teamBPlayerIds:slots.B.slice(0,need),
       teamAScore:+scoreA, teamBScore:+scoreB,
@@ -1023,6 +1273,7 @@ function MatchWizard({data,go,editMatch,past,prefill}){
       <div className="card confirmSave" style={{padding:'34px 20px'}}>
         <div className="eyebrow green">עוד אחד לספרי ההיסטוריה</div>
         <div style={{fontSize:20,fontWeight:900,margin:'10px 0 20px'}}>המשחק נשמר 🏸</div>
+        {saved.isTechnicalWin&&<div className="techTag" style={{margin:'-10px auto 16px'}}>ניצחון טכני · {saved.technicalWinType}</div>}
         <div className="matchScoreRow">
           <div className="teamCol">
             <div style={{display:'flex'}}>{A.map((p,i)=><Avatar key={p.id} p={p} size={56} style={i>0?{marginInlineStart:-12}:null}/>)}</div>
@@ -1037,7 +1288,7 @@ function MatchWizard({data,go,editMatch,past,prefill}){
           </div>
         </div>
         <div className="stack" style={{marginTop:26}}>
-          <button className="btn primary" onClick={()=>{setSaved(null);setScoreA(0);setScoreB(0);setStep('court');setSlots({A:[null,null],B:[null,null]});setErr('');}}>משחק נוסף</button>
+          <button className="btn primary" onClick={()=>{setSaved(null);setScoreA(0);setScoreB(0);setTech(null);setStep('court');setSlots({A:[null,null],B:[null,null]});setErr('');}}>משחק נוסף</button>
           <button className="btn ghost" onClick={()=>go({s:'home'})}>חזרה הביתה</button>
         </div>
       </div>
@@ -1140,10 +1391,10 @@ function MatchWizard({data,go,editMatch,past,prefill}){
           </div>
           <div style={{fontWeight:800,fontSize:14,marginBottom:8}}>{team.map(p=>p.name).join(' + ')}</div>
           <div className="scorePad">
-            <button className="scoreBtn" onClick={()=>setVal(v=>Math.max(0,+v-1))}>−</button>
+            <button className="scoreBtn" onClick={()=>{setTech(null);setVal(v=>Math.max(0,+v-1));}}>−</button>
             <input className="scoreVal" type="number" inputMode="numeric" value={val}
-              onFocus={e=>e.target.select()} onChange={e=>setVal(e.target.value===''?'':Math.max(0,parseInt(e.target.value)||0))}/>
-            <button className="scoreBtn" onClick={()=>setVal(v=>+v+1)}>+</button>
+              onFocus={e=>e.target.select()} onChange={e=>{setTech(null);setVal(e.target.value===''?'':Math.max(0,parseInt(e.target.value)||0));}}/>
+            <button className="scoreBtn" onClick={()=>{setTech(null);setVal(v=>+v+1);}}>+</button>
           </div>
         </div>);
       return <div className="stack">
@@ -1171,11 +1422,31 @@ function MatchWizard({data,go,editMatch,past,prefill}){
           </div>
         </>}
         <div className="card" style={{padding:'22px 14px'}}>
-          <div className="eyebrow green" style={{textAlign:'center',marginBottom:16}}>התוצאה הסופית</div>
+          <div className="eyebrow green" style={{textAlign:'center',marginBottom:16}}>{tech?'ניצחון טכני':'התוצאה הסופית'}</div>
+          {tech&&<div style={{textAlign:'center',marginBottom:14}}>
+            <span className="techTag">⚖️ טכני {tech.type} · {(tech.winner==='teamA'?A:B).map(p=>p.name).join(' + ')}</span>
+            <button className="linkAll" style={{display:'block',margin:'8px auto 0'}} onClick={clearTech}>ביטול — חזרה לתוצאה רגילה</button>
+          </div>}
           <Pad val={scoreA} setVal={setScoreA} team={A}/>
           <div className="netDivider"/>
           <Pad val={scoreB} setVal={setScoreB} team={B}/>
+          {!tech&&<button className="btn ghost small" style={{margin:'18px auto 0',display:'flex'}} onClick={()=>setTechSheet({type:'6-0',winner:null})}>⚖️ ניצחון טכני</button>}
         </div>
+        {techSheet&&<Sheet title="ניצחון טכני" onClose={()=>setTechSheet(null)}>
+          <div className="eyebrow" style={{marginBottom:10}}>תוצאה</div>
+          <div className="grid2">
+            {TECH_TYPES.map(t=><button key={t} className={'techOpt'+(techSheet.type===t?' on':'')} onClick={()=>setTechSheet(s=>({...s,type:t}))}>{t.replace('-','–')}</button>)}
+          </div>
+          <div className="eyebrow" style={{margin:'18px 0 10px'}}>מי מקבל את הניצחון</div>
+          <div className="grid2">
+            {[['teamA',A],['teamB',B]].map(([side,team])=><button key={side} className={'techOpt team'+(techSheet.winner===side?' on':'')} onClick={()=>setTechSheet(s=>({...s,winner:side}))}>
+              <div style={{display:'flex',justifyContent:'center'}}>{team.map((p,i)=><Avatar key={p.id} p={p} size={44} style={i>0?{marginInlineStart:-10}:null}/>)}</div>
+              <div style={{fontWeight:800,fontSize:14,marginTop:6}}>{team.map(p=>p.name).join(' + ')}</div>
+            </button>)}
+          </div>
+          <button className="btn primary" style={{marginTop:18}} disabled={!techSheet.winner} onClick={()=>applyTech(techSheet)}>אישור ניצחון טכני</button>
+          <div className="tiny muted" style={{marginTop:10,textAlign:'center'}}>נספר כמשחק, ניצחון/הפסד ונקודות כרגיל — ומסומן בנפרד כטכני.</div>
+        </Sheet>}
         {err&&<div className="card" style={{borderColor:'rgba(224,122,106,.5)',color:'var(--loss)',fontWeight:700,fontSize:14}}>{err}</div>}
         <button className="btn primary" onClick={save}>{editMatch?'שמירת שינויים':'שמירת המשחק'}</button>
       </div>; })()}
@@ -1310,22 +1581,22 @@ function Players({data,go}){
   const [adding,setAdding]=useState(false);
   const [showInactive,setShowInactive]=useState(false);
   const list=data.players.filter(p=>showInactive||p.active).sort((a,b)=>a.name.localeCompare(b.name,'he'));
+  const statsById=useMemo(()=>Object.fromEntries(data.players.map(p=>[p.id,playerStats(p.id,data.matches)])),[data.players,data.matches]);
   return <div className="screen">
     <div className="headerBar"><div className="screenTitle">שחקנים</div>
       <button className="btn primary small" onClick={()=>setAdding(true)}>+ שחקן</button></div>
-    {list.length===0&&<EmptyState icon="👥" title="עוד אין שחקנים" sub="כל אחד מקבל פרופיל, כינוי והיסטוריה משלו" action="+ שחקן ראשון" onAction={()=>setAdding(true)}/>}
-    <div className="stack">
-      {list.map(p=>{ const st=playerStats(p.id,data.matches);
-        return <button key={p.id} className="histRow" onClick={()=>go({s:'player',id:p.id})}>
-          <Avatar p={p} size={50}/>
-          <div className="info" style={{flex:1,minWidth:0,textAlign:'start'}}>
-            <NameBlock p={p}/>
-            <div className="tiny muted" style={{marginTop:2}}>
-              {st.played? st.wins+'–'+st.losses+' · '+st.winRate+'%' : 'עוד לא שיחק'}
-              {!p.active&&' · לא פעיל'}
-            </div>
-          </div>
-          {st.played>0&&<FormDots seq={st.last5} size={17}/>}
+    {list.length===0&&<EmptyState icon="👥" title="עוד אין שחקנים" sub="כל אחד מקבל פרופיל, כינוי, שיאים ואבני דרך משלו" action="+ שחקן ראשון" onAction={()=>setAdding(true)}/>}
+    <div className="playerGrid">
+      {list.map(p=>{ const st=statsById[p.id];
+        return <button key={p.id} className={'playerCard'+(!p.active?' inactive':'')} onClick={()=>go({s:'player',id:p.id})}>
+          <Avatar p={p} size={74}/>
+          <div className="pname" style={{fontSize:16,marginTop:10,maxWidth:'100%',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{p.name}</div>
+          {p.nickname? <div className="nick" style={{fontSize:12.5}}>{p.nickname}</div> : <div className="nick" style={{opacity:.35,fontSize:12.5}}>ללא כינוי</div>}
+          {st.played>0? <>
+            <div className="pcStats"><span><b>{st.played}</b> משחקים</span><span className="sep"/><span><b>{st.winRate}%</b> ניצחון</span></div>
+            <FormDots seq={st.last5} size={18}/>
+          </> : <div className="tiny muted" style={{marginTop:10}}>עוד לא עלה למגרש</div>}
+          {!p.active&&<div className="tag" style={{marginTop:8}}>לא פעיל</div>}
         </button>; })}
     </div>
     {data.players.some(p=>!p.active)&&
@@ -1383,132 +1654,234 @@ function WinRateOverTime({pid,matches}){
 function StatBox({v,l}){ return <div className="card" style={{textAlign:'center',padding:'14px 8px'}}>
   <div className="statBig">{v}</div><div className="statLbl">{l}</div></div>; }
 
-function PlayerProfile({data,go,id}){
+function PlayerProfile({data,go,id,initialTab}){
   const p=byId(data.players,id);
   const [editing,setEditing]=useState(false);
   const [confirm,setConfirm]=useState(null);
+  const [tab,setTab]=useState(initialTab||'overview');      // overview | records | milestones | history
   const [scope,setScope]=useState('overall');
-  const all=playerStats(id,data.matches);                 // תמיד כללי — לכותרת, להישגים ולהחלטת מחיקה
-  const scoped=filterMatchesByMode(data.matches,scope);   // המשחקים בתחום הנבחר
-  const st=getPlayerStats(id,data.matches,scope);
-  const sg=playerStats(id,data.matches,'singles');
-  const dbl=playerStats(id,data.matches,'doubles');
-  const ach=playerAchievements(id,data.matches,data.nights);
-  const oppRecs=opponentRecords(id,data.matches).filter(o=>o.played>=CFG.MIN_H2H_FOR_NEMESIS);
+  const [season,setSeason]=useState('all');
+  const [msCat,setMsCat]=useState('career');
+
+  // כל הנגזרות ממוינות פעם אחת לפי הפילטרים — עריכה/מחיקה של משחק מעדכנת הכל (data.matches משתנה)
+  const all=useMemo(()=>playerStats(id,data.matches),[id,data.matches]);                       // קריירה מלאה
+  const seasonMs=useMemo(()=>filterMatchesBySeason(data.matches,season),[data.matches,season]);
+  const scoped=useMemo(()=>filterMatchesByMode(seasonMs,scope),[seasonMs,scope]);
+  const st=useMemo(()=>playerStats(id,scoped),[id,scoped]);
+  const sg=useMemo(()=>playerStats(id,seasonMs,'singles'),[id,seasonMs]);
+  const dbl=useMemo(()=>playerStats(id,seasonMs,'doubles'),[id,seasonMs]);
+  const ach=useMemo(()=>playerAchievements(id,data.matches,data.nights),[id,data.matches,data.nights]);
+  const records=useMemo(()=>getPlayerRecords(id,seasonMs,data.nights,data.players),[id,seasonMs,data.nights,data.players]);
+  const milestones=useMemo(()=>getPlayerMilestones(id,data.matches,data.nights),[id,data.matches,data.nights]);
+  const seasonYear= season==='all'? new Date().getFullYear() : +season;
+  const seasonMilestones=useMemo(()=>getPlayerMilestones(id,filterMatchesBySeason(data.matches,seasonYear),data.nights,{defs:SEASON_MILESTONE_DEFS,season:seasonYear}),[id,data.matches,data.nights,seasonYear]);
+  const nextMs=getMilestoneProgress(milestones).slice(0,3);
+  const oppRecs=useMemo(()=>opponentRecords(id,seasonMs).filter(o=>o.played>=CFG.MIN_H2H_FOR_NEMESIS),[id,seasonMs]);
   const nemesis=[...oppRecs].sort((a,b)=>pct(a.wins,a.played)-pct(b.wins,b.played))[0];
   const fav=[...oppRecs].sort((a,b)=>pct(b.wins,b.played)-pct(a.wins,a.played))[0];
-  const duos=allDuos(data.matches).filter(d=>d.ids.includes(id)&&d.played>=CFG.MIN_DUO_MATCHES).sort((a,b)=>b.winRate-a.winRate);
-  const rivals=opponentRecords(id,data.matches).sort((a,b)=>b.played-a.played).slice(0,4);
+  const duos=useMemo(()=>allDuos(seasonMs).filter(d=>d.ids.includes(id)&&d.played>=CFG.MIN_DUO_MATCHES).sort((a,b)=>b.winRate-a.winRate),[id,seasonMs]);
+  const rivals=useMemo(()=>opponentRecords(id,seasonMs).sort((a,b)=>b.played-a.played).slice(0,4),[id,seasonMs]);
   const earnedAch=ach.filter(a=>a.earned);
+  const highlights=[records.find(r=>r.id==='streak'),records.find(r=>r.id==='biggest'),records.find(r=>r.id==='bestPartner')||records.find(r=>r.id==='mostPartner')].filter(Boolean);
 
   const deactivate=async()=>{ await db.players.update(id,{active: p.active?0:1}); await data.reload(); setConfirm(null); };
   const del=async()=>{ await db.players.delete(id); await data.reload(); go({s:'players'}); };
   const hasHistory=all.played>0;
+  const seasonLabel= season==='all'? 'כל הזמנים' : 'עונת '+season;
+  const recGo=r=> r.matchId? go({s:'match',id:r.matchId}) : r.nightId? go({s:'night',id:r.nightId}) : r.h2h? go({s:'h2h',a:id,b:r.h2h}) : r.playerId? go({s:'player',id:r.playerId}) : null;
+
+  const TABS=[['overview','סקירה'],['records','שיאים'],['milestones','אבני דרך'],['history','היסטוריה']];
 
   return <div className="screen">
     <div className="headerBar"><button className="backBtn" onClick={()=>go({s:'players'})}>→</button>
       <div className="screenTitle"></div>
       <button className="btn ghost small" onClick={()=>setEditing(true)}>עריכה</button></div>
 
-    <div className="courtHero"><CourtLines/><div className="inner" style={{textAlign:'center',padding:'26px 20px'}}>
-      <div style={{display:'flex',justifyContent:'center'}}><Avatar p={p} size={110}/></div>
-      <div className="pname" style={{fontSize:24,marginTop:12}}>{p.name}</div>
-      {p.nickname&&<div className="nick" style={{fontSize:16,marginTop:2}}>{p.nickname}</div>}
-      {!p.active&&<div className="tag" style={{display:'inline-block',marginTop:8}}>לא פעיל</div>}
-      {all.played>0&&<div style={{marginTop:12,display:'flex',justifyContent:'center'}}><FormDots seq={all.last5}/></div>}
+    {/* HERO — עמוד קריירה של ספורטאי */}
+    <div className="courtHero profileHero"><CourtLines/><div className="inner">
+      <div className="heroTop">
+        <Avatar p={p} size={118} style={{borderWidth:3,borderColor:'var(--court)',boxShadow:'0 10px 30px rgba(0,0,0,.45)'}}/>
+        <div style={{minWidth:0,flex:1}}>
+          <div className="pname heroName">{p.name}</div>
+          {p.nickname&&<div className="nick" style={{fontSize:15,marginTop:3}}>{p.nickname}</div>}
+          {!p.active&&<div className="tag" style={{display:'inline-block',marginTop:8}}>לא פעיל</div>}
+          {all.played>0&&<div style={{marginTop:10}}><FormDots seq={all.last5} size={19}/></div>}
+        </div>
+      </div>
+      {hasHistory&&<div className="heroStats">
+        <div><b>{all.played}</b><span>משחקים</span></div>
+        <div><b style={{color:'var(--win)'}}>{all.wins}</b><span>ניצחונות</span></div>
+        <div><b style={{color:'var(--loss)'}}>{all.losses}</b><span>הפסדים</span></div>
+        <div><b>{all.winRate}%</b><span>ניצחון</span></div>
+      </div>}
     </div></div>
 
-    {!hasHistory&&<div style={{marginTop:12}}><EmptyState icon="🏸" title="עוד אין משחקים" sub="ברגע שישחק — הכל יתמלא כאן לבד"/></div>}
+    {!hasHistory&&<div style={{marginTop:12}}><EmptyState icon="🏸" title="הקריירה עוד לא התחילה" sub="ברגע שיעלה למגרש — הסטטיסטיקה, השיאים ואבני הדרך יתמלאו לבד"/></div>}
 
     {hasHistory&&<>
-      <div style={{marginTop:14}}><ScopeTabs scope={scope} onChange={setScope}/></div>
-      {st.played===0&&<div style={{marginTop:12}}><EmptyState icon={scope==='singles'?'🤺':'🤝'} title={scope==='singles'?'עוד לא שיחק יחידות':'עוד לא שיחק זוגות'}/></div>}
-      {st.played>0&&<>
-      <div className="grid3" style={{marginTop:12}}>
-        <StatBox v={st.played} l="משחקים"/>
-        <StatBox v={st.wins+'–'+st.losses} l="מאזן"/>
-        <StatBox v={st.winRate+'%'} l="אחוז ניצחון"/>
+      <div className="tabsBar" style={{marginTop:14}}>
+        {TABS.map(([t,l])=><button key={t} className={tab===t?'on':''} onClick={()=>setTab(t)}>{l}</button>)}
       </div>
-      <div className="grid3" style={{marginTop:10}}>
-        <StatBox v={st.curStreak} l="רצף נוכחי"/>
-        <StatBox v={st.bestStreak} l="רצף שיא"/>
-        <StatBox v={(st.diff>0?'+':'')+st.diff} l="הפרש נקודות"/>
-      </div>
-      <div className="grid2" style={{marginTop:10}}>
-        <StatBox v={st.pf} l="נקודות זכות"/>
-        <StatBox v={st.pa} l="נקודות ספיגה"/>
-      </div>
+      {tab!=='milestones'&&<div style={{marginTop:12}}><SeasonTabs season={season} onChange={setSeason} matches={data.matches} compact/></div>}
 
-      {scope==='overall'&&(sg.played>0||dbl.played>0)&&<div className="grid2" style={{marginTop:10}}>
-        <div className="card" style={{textAlign:'center'}}>
-          <div className="eyebrow" style={{marginBottom:8}}>יחידות</div>
-          {sg.played? <><div className="statBig">{sg.winRate}%</div>
-            <div className="statLbl">{sg.wins}–{sg.losses} · {sg.played} משחקים</div></> : <div className="tiny muted">—</div>}
+      {/* ---------- OVERVIEW ---------- */}
+      {tab==='overview'&&<div key={'ov'+season+scope} className="tabPane">
+        <div style={{marginTop:10}}><ScopeTabs scope={scope} onChange={setScope}/></div>
+        {st.played===0&&<div style={{marginTop:12}}><EmptyState icon={season!=='all'?'📅':scope==='singles'?'🤺':'🤝'} title={season!=='all'&&scope==='overall'?'אין משחקים בעונה הזו':scope==='singles'?'עוד לא שיחק יחידות':'עוד לא שיחק זוגות'}/></div>}
+        {st.played>0&&<>
+          <div className="eyebrow" style={{margin:'16px 2px 8px'}}>{seasonLabel}{scope!=='overall'?' · '+SCOPES.find(x=>x.id===scope).label:''}</div>
+          <div className="grid3">
+            <StatBox v={st.played} l="משחקים"/>
+            <StatBox v={<span><span style={{color:'var(--win)'}}>{st.wins}</span>–<span style={{color:'var(--loss)'}}>{st.losses}</span></span>} l="מאזן"/>
+            <StatBox v={st.winRate+'%'} l="אחוז ניצחון"/>
+          </div>
+          <div className="grid3" style={{marginTop:10}}>
+            <StatBox v={st.curStreak} l="רצף נוכחי"/>
+            <StatBox v={st.bestStreak} l="רצף שיא"/>
+            <StatBox v={(st.diff>0?'+':'')+st.diff} l="הפרש נקודות"/>
+          </div>
+          <div className="grid3" style={{marginTop:10}}>
+            <StatBox v={st.pf} l="נקודות זכות"/>
+            <StatBox v={st.pa} l="נקודות ספיגה"/>
+            <StatBox v={st.techWins} l="ניצחונות טכניים"/>
+          </div>
+
+          {scope==='overall'&&(sg.played>0||dbl.played>0)&&<div className="grid2" style={{marginTop:10}}>
+            <button className="card splitCard" onClick={()=>setScope('singles')}>
+              <div className="eyebrow">🤺 יחידות</div>
+              {sg.played? <><div className="statBig">{sg.wins}–{sg.losses}</div><div className="statLbl">{sg.winRate}% · {sg.played} משחקים</div></> : <div className="tiny muted" style={{marginTop:8}}>עוד לא שיחק יחידות</div>}
+            </button>
+            <button className="card splitCard" onClick={()=>setScope('doubles')}>
+              <div className="eyebrow">🤝 זוגות</div>
+              {dbl.played? <><div className="statBig">{dbl.wins}–{dbl.losses}</div><div className="statLbl">{dbl.winRate}% · {dbl.played} משחקים</div></> : <div className="tiny muted" style={{marginTop:8}}>עוד לא שיחק זוגות</div>}
+            </button>
+          </div>}
+
+          {st.last10.length>=3&&<div className="card" style={{marginTop:10}}>
+            <div className="eyebrow" style={{marginBottom:10}}>הפורמה — 10 האחרונים</div>
+            <FormDots seq={st.last10}/>
+            <div className="tiny muted" style={{marginTop:8}}>
+              5 אחרונים: {pct(st.last5.filter(r=>r==='W').length,st.last5.length)}% · 10 אחרונים: {pct(st.last10.filter(r=>r==='W').length,st.last10.length)}%
+            </div>
+          </div>}
+
+          {highlights.length>0&&<div className="card" style={{marginTop:10}}>
+            <div className="rowBetween"><div className="eyebrow green">CAREER HIGHLIGHTS · {season==='all'?'קריירה':season}</div>
+              <button className="linkAll" onClick={()=>setTab('records')}>כל השיאים</button></div>
+            <div className="hlRow">{highlights.map(r=><button key={r.id} className="hl" onClick={()=>recGo(r)}>
+              <div className="tiny muted">{r.icon} {r.title}</div><div className="hlVal">{r.value}</div></button>)}</div>
+          </div>}
+
+          {nextMs.length>0&&<div className="card" style={{marginTop:10}}>
+            <div className="rowBetween"><div className="eyebrow green">NEXT MILESTONES</div>
+              <button className="linkAll" onClick={()=>setTab('milestones')}>כל אבני הדרך</button></div>
+            <div className="stack" style={{marginTop:8}}>{nextMs.map(m=><div key={m.id} className="msMini">
+              <div className="rowBetween"><span style={{fontWeight:800,fontSize:14}}>{m.title}</span>
+                <span className="tiny muted" style={{direction:'ltr'}}>{m.value} / {m.target} · {m.percent}%</span></div>
+              <ProgressBar value={m.progress}/>
+              {m.almost&&<div className="almost">כמעט שם ✨</div>}
+            </div>)}</div>
+          </div>}
+
+          {scope!=='doubles'&&(nemesis||fav)&&<div className="grid2" style={{marginTop:10}}>
+            {nemesis&&pct(nemesis.wins,nemesis.played)<50&&<button className="card" style={{textAlign:'center'}} onClick={()=>go({s:'h2h',a:id,b:nemesis.opp})}>
+              <div className="eyebrow">💀 נמסיס</div>
+              <div style={{fontWeight:900,marginTop:8}}>{byId(data.players,nemesis.opp).name}</div>
+              <div className="tiny muted">{nemesis.wins}–{nemesis.losses}</div>
+            </button>}
+            {fav&&pct(fav.wins,fav.played)>50&&<button className="card" style={{textAlign:'center'}} onClick={()=>go({s:'h2h',a:id,b:fav.opp})}>
+              <div className="eyebrow">😈 היריב האהוב</div>
+              <div style={{fontWeight:900,marginTop:8}}>{byId(data.players,fav.opp).name}</div>
+              <div className="tiny muted">{fav.wins}–{fav.losses}</div>
+            </button>}
+          </div>}
+
+          <div style={{marginTop:10}} className="stack">
+            <MonthlyBars pid={id} matches={scoped}/>
+            <WinRateOverTime pid={id} matches={scoped}/>
+          </div>
+
+          {scope!=='doubles'&&rivals.length>0&&<><div className="sectionTitle">ראש בראש</div>
+            <div className="stack">{rivals.map(r=>{ const o=byId(data.players,r.opp);
+              return <button key={r.opp} className="histRow" onClick={()=>go({s:'h2h',a:id,b:r.opp})}>
+                <Avatar p={o} size={42}/>
+                <div className="histNames">{o.name}<div className="tiny muted">{r.played} מפגשים</div></div>
+                <div className="histScore" style={{color:r.wins>=r.losses?'var(--win)':'var(--loss)'}}>{r.wins}–{r.losses}</div>
+              </button>; })}</div></>}
+
+          {scope!=='singles'&&duos.length>0&&<><div className="sectionTitle">שותפויות</div>
+            <div className="stack">{duos.map(d=>{ const mate=byId(data.players,d.ids.find(x=>x!==id));
+              return <button key={d.ids.join()} className="histRow" onClick={()=>go({s:'player',id:mate.id})}>
+                <Avatar p={mate} size={42}/>
+                <div className="histNames">עם {mate.name}<div className="tiny muted">{d.played} משחקים יחד</div></div>
+                <div className="histScore">{d.wins}–{d.losses} · {Math.round(d.winRate)}%</div>
+              </button>; })}</div></>}
+        </>}
+      </div>}
+
+      {/* ---------- RECORDS ---------- */}
+      {tab==='records'&&<div key={'rec'+season} className="tabPane">
+        <div className="eyebrow" style={{margin:'14px 2px 8px'}}>שיאים אישיים · {seasonLabel}</div>
+        {records.length===0&&<EmptyState icon="🏅" title={season==='all'?'עוד אין שיאים':'אין שיאים בעונה הזו'} sub="עוד כמה משחקים והלוח יתחיל להתמלא"/>}
+        <div className="recGrid">
+          {records.map(r=><button key={r.id} className="recCard" onClick={()=>recGo(r)} style={{cursor:(r.matchId||r.nightId||r.h2h||r.playerId)?'pointer':'default'}}>
+            <div className="recIcon">{r.icon}</div>
+            <div className="eyebrow" style={{marginTop:6}}>{r.title}</div>
+            <div className="recVal">{r.value}</div>
+            {r.sub&&<div className="tiny muted" style={{marginTop:2}}>{r.sub}</div>}
+            {r.date&&<div className="tiny" style={{color:'var(--court)',marginTop:4}}>{fmtDateShort(r.date)} {new Date(r.date).getFullYear()}</div>}
+          </button>)}
         </div>
-        <div className="card" style={{textAlign:'center'}}>
-          <div className="eyebrow" style={{marginBottom:8}}>זוגות</div>
-          {dbl.played? <><div className="statBig">{dbl.winRate}%</div>
-            <div className="statLbl">{dbl.wins}–{dbl.losses} · {dbl.played} משחקים</div></> : <div className="tiny muted">—</div>}
+      </div>}
+
+      {/* ---------- MILESTONES ---------- */}
+      {tab==='milestones'&&(()=>{ const list= msCat==='season'? seasonMilestones : milestones.filter(m=>m.cat===msCat);
+        const doneN=list.filter(m=>m.completed).length;
+        return <div key={'ms'+msCat} className="tabPane">
+        <div className="chipRow" style={{marginTop:14}}>
+          {MILESTONE_CATS.map(c=><button key={c.id} className={'chip'+(msCat===c.id?' on':'')} onClick={()=>setMsCat(c.id)}>{c.label}{c.id==='season'?' '+seasonYear:''}</button>)}
         </div>
-      </div>}
-
-      {st.last10.length>=3&&<div className="card" style={{marginTop:10}}>
-        <div className="eyebrow" style={{marginBottom:10}}>10 האחרונים</div>
-        <FormDots seq={st.last10}/>
-        <div className="tiny muted" style={{marginTop:8}}>
-          5 אחרונים: {pct(st.last5.filter(r=>r==='W').length,st.last5.length)}% · 10 אחרונים: {pct(st.last10.filter(r=>r==='W').length,st.last10.length)}%
+        <div className="rowBetween" style={{margin:'14px 2px 8px'}}>
+          <div className="eyebrow">{msCat==='season'?'יעדי עונת '+seasonYear+' — נפרדים מהקריירה':MILESTONE_CATS.find(c=>c.id===msCat).label}</div>
+          <div className="tiny muted">{doneN}/{list.length} הושלמו</div>
         </div>
-      </div>}
+        <div className="stack">
+          {[...list.filter(m=>!m.completed),...list.filter(m=>m.completed)].map(m=><div key={m.id} className={'msCard'+(m.completed?' done':'')}>
+            <div className="rowBetween">
+              <div style={{fontWeight:900,fontSize:15}}>{m.completed?'✓ ':''}{m.title}</div>
+              <div className="tiny" style={{direction:'ltr',color:m.completed?'var(--court)':'var(--text2)',fontVariantNumeric:'tabular-nums'}}>{m.completed? m.target : m.value+' / '+m.target}</div>
+            </div>
+            <ProgressBar value={m.progress} done={m.completed}/>
+            <div className="rowBetween" style={{marginTop:6}}>
+              <div className="tiny muted">{m.completed? 'הושלם · '+fmtDate(m.completedAt) : m.percent+'%'}</div>
+              {m.almost&&<div className="almost">כמעט שם ✨</div>}
+            </div>
+          </div>)}
+        </div>
+        {msCat==='special'&&<>
+          <div className="sectionTitle">הישגים <span className="tiny muted" style={{fontWeight:600}}>({earnedAch.length}/{ach.length})</span></div>
+          <div className="stack">
+            {ach.filter(a=>a.earned).map(a=><div key={a.id} className="badge">
+              <div className="ic">{a.icon}</div>
+              <div><div style={{fontWeight:800,fontSize:14}}>{a.name}</div><div className="tiny muted">{a.desc}</div>
+                <div className="tiny" style={{color:'var(--court)',marginTop:2}}>הושג · {fmtDateShort(a.date)}</div></div>
+            </div>)}
+            {ach.filter(a=>!a.earned).map(a=><div key={a.id} className="badge locked">
+              <div className="ic">{a.icon}</div>
+              <div><div style={{fontWeight:800,fontSize:14}}>{a.name}</div><div className="tiny muted">{a.desc}</div></div>
+            </div>)}
+          </div>
+        </>}
+      </div>; })()}
 
-      </>}
-
-      {scope!=='doubles'&&(nemesis||fav)&&<div className="grid2" style={{marginTop:10}}>
-        {nemesis&&pct(nemesis.wins,nemesis.played)<50&&<button className="card" style={{textAlign:'center'}} onClick={()=>go({s:'h2h',a:id,b:nemesis.opp})}>
-          <div className="eyebrow">💀 נמסיס</div>
-          <div style={{fontWeight:900,marginTop:8}}>{byId(data.players,nemesis.opp).name}</div>
-          <div className="tiny muted">{nemesis.wins}–{nemesis.losses}</div>
-        </button>}
-        {fav&&pct(fav.wins,fav.played)>50&&<button className="card" style={{textAlign:'center'}} onClick={()=>go({s:'h2h',a:id,b:fav.opp})}>
-          <div className="eyebrow">😈 היריב האהוב</div>
-          <div style={{fontWeight:900,marginTop:8}}>{byId(data.players,fav.opp).name}</div>
-          <div className="tiny muted">{fav.wins}–{fav.losses}</div>
-        </button>}
-      </div>}
-
-      {st.played>0&&<div style={{marginTop:10}} className="stack">
-        <MonthlyBars pid={id} matches={scoped}/>
-        <WinRateOverTime pid={id} matches={scoped}/>
-      </div>}
-
-      {scope!=='doubles'&&rivals.length>0&&<><div className="sectionTitle">ראש בראש</div>
-        <div className="stack">{rivals.map(r=>{ const o=byId(data.players,r.opp);
-          return <button key={r.opp} className="histRow" onClick={()=>go({s:'h2h',a:id,b:r.opp})}>
-            <Avatar p={o} size={42}/>
-            <div className="histNames">{o.name}</div>
-            <div className="histScore" style={{color:r.wins>=r.losses?'var(--win)':'var(--loss)'}}>{r.wins}–{r.losses}</div>
-          </button>; })}</div></>}
-
-      {scope!=='singles'&&duos.length>0&&<><div className="sectionTitle">שותפויות</div>
-        <div className="stack">{duos.map(d=>{ const mate=byId(data.players,d.ids.find(x=>x!==id));
-          return <div key={d.ids.join()} className="histRow">
-            <Avatar p={mate} size={42}/>
-            <div className="histNames">עם {mate.name}<div className="tiny muted">{d.played} משחקים יחד</div></div>
-            <div className="histScore">{d.wins}–{d.losses} · {Math.round(d.winRate)}%</div>
-          </div>; })}</div></>}
-
-      <div className="sectionTitle">הישגים <span className="tiny muted" style={{fontWeight:600}}>({earnedAch.length}/{ach.length})</span></div>
-      <div className="stack">
-        {ach.filter(a=>a.earned).map(a=><div key={a.id} className="badge">
-          <div className="ic">{a.icon}</div>
-          <div><div style={{fontWeight:800,fontSize:14}}>{a.name}</div>
-            <div className="tiny muted">{a.desc}</div>
-            <div className="tiny" style={{color:'var(--court)',marginTop:2}}>הושג · {fmtDateShort(a.date)}</div></div>
-        </div>)}
-        {ach.filter(a=>!a.earned).map(a=><div key={a.id} className="badge locked">
-          <div className="ic">{a.icon}</div>
-          <div><div style={{fontWeight:800,fontSize:14}}>{a.name}</div><div className="tiny muted">{a.desc}</div></div>
-        </div>)}
-      </div>
+      {/* ---------- HISTORY ---------- */}
+      {tab==='history'&&(()=>{ const list=[...st.matches].reverse();
+        return <div key={'h'+season+scope} className="tabPane">
+        <div style={{marginTop:10}}><ScopeTabs scope={scope} onChange={setScope}/></div>
+        <div className="tiny muted" style={{margin:'12px 2px 6px'}}>{list.length} משחקים · {seasonLabel}</div>
+        {list.length===0&&<EmptyState icon="📖" title="אין משחקים כאן" sub="נסו עונה או סוג משחק אחר"/>}
+        <div className="stack">{list.map(m=><HistRow key={m.id} m={m} players={data.players} onClick={()=>go({s:'match',id:m.id})}/>)}</div>
+      </div>; })()}
     </>}
 
     <div className="stack" style={{marginTop:22}}>
@@ -1578,7 +1951,7 @@ function HistRow({m,players,onClick}){
       <span style={{color:m.winner==='teamA'?'var(--win)':'inherit'}}><TeamNames ids={m.teamAPlayerIds} players={players}/></span>
       <span className="muted"> — </span>
       <span style={{color:m.winner==='teamB'?'var(--win)':'inherit'}}><TeamNames ids={m.teamBPlayerIds} players={players}/></span>
-      <div className="tiny muted" style={{marginTop:2}}>{m.mode==='singles'?'1 על 1':'2 על 2'} · עד {m.targetScore}</div>
+      <div className="tiny muted" style={{marginTop:2}}>{m.mode==='singles'?'1 על 1':'2 על 2'} · {m.isTechnicalWin? <span className="techMini">טכני</span> : 'עד '+m.targetScore}</div>
     </div>
     <div style={{textAlign:'center'}}>
       <div className="histScore">{m.teamAScore}–{m.teamBScore}</div>
@@ -1590,9 +1963,11 @@ function History({data,go}){
   const [fPlayer,setFPlayer]=useState('');
   const [fMode,setFMode]=useState('');
   const [fNight,setFNight]=useState('');
+  const [fTech,setFTech]=useState(false);
   const [q,setQ]=useState('');
   const [showF,setShowF]=useState(false);
   let ms=[...data.matches].reverse();
+  if(fTech)ms=ms.filter(m=>m.isTechnicalWin);
   if(fPlayer)ms=ms.filter(m=>inMatch(m,fPlayer));
   if(fMode)ms=ms.filter(m=>m.mode===fMode);
   if(fNight)ms=ms.filter(m=>m.matchNightId===fNight);
@@ -1600,7 +1975,7 @@ function History({data,go}){
   const groups={};
   ms.forEach(m=>{ const k=monthKey(m.matchDate); (groups[k]=groups[k]||[]).push(m); });
   const keys=Object.keys(groups).sort().reverse();
-  const filtered=fPlayer||fMode||fNight||q;
+  const filtered=fPlayer||fMode||fNight||q||fTech;
   return <div className="screen">
     <div className="headerBar"><div className="screenTitle">היסטוריה</div>
       <button className="btn ghost small" onClick={()=>go({s:'past'})}>+ משחק עבר</button></div>
@@ -1613,6 +1988,7 @@ function History({data,go}){
         {fPlayer&&<button className="chip on" onClick={()=>setFPlayer('')}>{byId(data.players,fPlayer).name} ✕</button>}
         {fMode&&<button className="chip on" onClick={()=>setFMode('')}>{fMode==='singles'?'1 על 1':'2 על 2'} ✕</button>}
         {fNight&&<button className="chip on" onClick={()=>setFNight('')}>ערב ✕</button>}
+        {fTech&&<button className="chip on" onClick={()=>setFTech(false)}>טכני ✕</button>}
       </div>
       {showF&&<div className="card" style={{marginBottom:8}}>
         <div className="eyebrow" style={{marginBottom:6}}>שחקן</div>
@@ -1623,6 +1999,7 @@ function History({data,go}){
           <button className={'chip'+(fMode===''?' on':'')} onClick={()=>setFMode('')}>הכל</button>
           <button className={'chip'+(fMode==='singles'?' on':'')} onClick={()=>setFMode('singles')}>1 על 1</button>
           <button className={'chip'+(fMode==='doubles'?' on':'')} onClick={()=>setFMode('doubles')}>2 על 2</button>
+          <button className={'chip'+(fTech?' on':'')} onClick={()=>setFTech(v=>!v)}>⚖️ טכניים</button>
         </div>
         {data.nights.length>0&&<><div className="eyebrow" style={{margin:'10px 0 6px'}}>ערב</div>
           <select value={fNight} onChange={e=>setFNight(e.target.value)}><option value="">הכל</option>
@@ -1659,7 +2036,7 @@ function MatchDetail({data,go,id}){
     <div className="card" style={{marginTop:12}}>
       <div className="tiny muted stack" style={{lineHeight:1.7}}>
         <div>📅 {fmtDate(m.matchDate)}{m.matchTime&&<span> · 🕐 {m.matchTime}</span>}</div>
-        <div>🎯 עד {m.targetScore} · ניצחון בפער {m.winBy}{m.maxScore?' · תקרה '+m.maxScore:''}</div>
+        {m.isTechnicalWin? <div>⚖️ ניצחון טכני {m.technicalWinType}</div> : <div>🎯 עד {m.targetScore} · ניצחון בפער {m.winBy}{m.maxScore?' · תקרה '+m.maxScore:''}</div>}
         {night&&<button className="linkAll" style={{textAlign:'start',padding:0}} onClick={()=>go({s:'night',id:night.id})}>🌙 {night.title||'ערב בדמינטון'} · {fmtDateShort(night.date)}</button>}
         {ctx&&ctx.n>1&&<div>⚔️ המפגש ה־{ctx.n} של {ctx.a.name} ו{ctx.b.name} ביחידות · מאזן אחרי המשחק: {ctx.aW}–{ctx.bW}</div>}
       </div>
@@ -1687,25 +2064,47 @@ function LeaderList({rows,fmt}){
     </div>)}</div>;
 }
 function Stats({data,go}){
-  const {players,matches}=data;
+  const {players}=data;
   const [scope,setScope]=useState('overall');
-  const sm=filterMatchesByMode(matches,scope);
-  const stats=players.map(p=>({p,st:playerStats(p.id,sm)})).filter(x=>x.st.played>0);
+  const [season,setSeason]=useState('all');
+  const matches=useMemo(()=>filterMatchesBySeason(data.matches,season),[data.matches,season]);
+  const sm=useMemo(()=>filterMatchesByMode(matches,scope),[matches,scope]);
+  const stats=useMemo(()=>players.map(p=>({p,st:playerStats(p.id,sm)})).filter(x=>x.st.played>0),[players,sm]);
   const duos=scope==='singles'?[]:allDuos(matches).filter(d=>d.played>=CFG.MIN_DUO_MATCHES).sort((a,b)=>b.winRate-a.winRate||b.wins-a.wins);
   const mostRiv=scope==='doubles'?null:mostPlayedRivalry(players,matches);
   const closeRiv=scope==='doubles'?null:closestRivalry(players,matches);
   const totalPts=matches.reduce((s,m)=>s+m.teamAScore+m.teamBScore,0);
-  if(matches.length===0)return <div className="screen">
+  const summary=useMemo(()=> season==='all'? null : getSeasonSummary(season,data.matches,players),[season,data.matches,players]);
+  if(data.matches.length===0)return <div className="screen">
     <div className="screenTitle" style={{marginBottom:16}}>סטטיסטיקות</div>
     <EmptyState icon="📊" title="עוד אין נתונים" sub="שחקו כמה משחקים והמספרים יתחילו לספר סיפור" action="משחק ראשון" onAction={()=>go({s:'new'})}/></div>;
   return <div className="screen">
-    <div className="screenTitle" style={{marginBottom:16}}>סטטיסטיקות</div>
-    <div className="grid3">
+    <div className="screenTitle" style={{marginBottom:12}}>סטטיסטיקות</div>
+    <div style={{marginBottom:12}}><SeasonTabs season={season} onChange={setSeason} matches={data.matches}/></div>
+    {matches.length===0&&<EmptyState icon="📅" title={'אין משחקים ב־'+season} sub="העונה עוד לא נפתחה — או שהיא כבר בהיסטוריה"/>}
+    {summary&&<div className="card seasonCard">
+      <div className="eyebrow green">עונת {season}</div>
+      <div className="grid3" style={{marginTop:10}}>
+        <div className="seasonStat"><b>{summary.matches}</b><span>משחקים</span></div>
+        <div className="seasonStat"><b>{summary.singles} / {summary.doubles}</b><span>יחידות / זוגות</span></div>
+        <div className="seasonStat"><b>{summary.pts.toLocaleString('he-IL')}</b><span>נקודות</span></div>
+      </div>
+      <div className="stack" style={{marginTop:12}}>
+        {summary.mostWins&&<button className="rowBetween seasonRow" onClick={()=>go({s:'player',id:summary.mostWins.p.id})}><span className="tiny muted">🏆 הכי הרבה ניצחונות</span><span className="hofVal">{summary.mostWins.p.name} · {summary.mostWins.st.wins}</span></button>}
+        {summary.mostActive&&<button className="rowBetween seasonRow" onClick={()=>go({s:'player',id:summary.mostActive.p.id})}><span className="tiny muted">⚡ הכי פעיל</span><span className="hofVal">{summary.mostActive.p.name} · {summary.mostActive.st.played}</span></button>}
+        {summary.bestSingles&&<button className="rowBetween seasonRow" onClick={()=>go({s:'player',id:summary.bestSingles.p.id})}><span className="tiny muted">🤺 המאזן הטוב ביחידות</span><span className="hofVal">{summary.bestSingles.p.name} · {summary.bestSingles.st.wins}–{summary.bestSingles.st.losses}</span></button>}
+        {summary.duo&&<div className="rowBetween seasonRow"><span className="tiny muted">🤝 הצמד הטוב</span><span className="hofVal">{summary.duo.ids.map(x=>byId(players,x).name).join(' + ')} · {Math.round(summary.duo.winRate)}%</span></div>}
+        {summary.streak&&summary.streak.st.bestStreak>1&&<button className="rowBetween seasonRow" onClick={()=>go({s:'player',id:summary.streak.p.id})}><span className="tiny muted">🔥 הרצף הארוך</span><span className="hofVal">{summary.streak.p.name} · {summary.streak.st.bestStreak}</span></button>}
+        {summary.tech>0&&<div className="rowBetween seasonRow"><span className="tiny muted">⚖️ ניצחונות טכניים</span><span className="hofVal">{summary.tech}</span></div>}
+      </div>
+    </div>}
+    {matches.length>0&&<>
+    <div className="grid3" style={{marginTop:summary?12:0}}>
       <StatBox v={matches.length} l="משחקים"/>
       <StatBox v={matches.filter(m=>m.mode==='singles').length+' / '+matches.filter(m=>m.mode==='doubles').length} l="יחידות / זוגות"/>
       <StatBox v={totalPts} l="נקודות שוחקו"/>
     </div>
-    <button className="btn ghost" style={{width:'100%',marginTop:12}} onClick={()=>go({s:'hof',scope})}>🏆 היכל התהילה</button>
+    <button className="btn ghost" style={{width:'100%',marginTop:12}} onClick={()=>go({s:'hof',scope,season})}>🏆 היכל התהילה</button>
 
     <div style={{marginTop:16}}><ScopeTabs scope={scope} onChange={setScope}/></div>
     {stats.length===0&&<div style={{marginTop:12}}><EmptyState icon={scope==='singles'?'🤺':'🤝'} title={scope==='singles'?'עוד אין משחקי יחידות':'עוד אין משחקי זוגות'}/></div>}
@@ -1744,13 +2143,15 @@ function Stats({data,go}){
           <div style={{fontWeight:800,marginTop:6}}>{closeRiv.a.name} נגד {closeRiv.b.name}</div></div>
         <div className="hofVal">{closeRiv.h.aWins}–{closeRiv.h.bWins}</div></button>}
     </div></>}
+    </>}
   </div>;
 }
 
-function HallOfFame({data,go,initialScope}){
+function HallOfFame({data,go,initialScope,initialSeason}){
   const {players}=data;
   const [scope,setScope]=useState(initialScope||'overall');
-  const matches=filterMatchesByMode(data.matches,scope);
+  const [season,setSeason]=useState(initialSeason||'all');
+  const matches=useMemo(()=>filterMatchesByMode(filterMatchesBySeason(data.matches,season),scope),[data.matches,season,scope]);
   const stats=players.map(p=>({p,st:playerStats(p.id,matches)})).filter(x=>x.st.played>0);
   const top=(sorter)=> [...stats].sort(sorter)[0];
   const wins=top((a,b)=>b.st.wins-a.st.wins);
@@ -1771,6 +2172,7 @@ function HallOfFame({data,go,initialScope}){
   return <div className="screen">
     <div className="headerBar"><button className="backBtn" onClick={()=>go({s:'stats'})}>→</button>
       <div className="screenTitle">🏆 היכל התהילה</div></div>
+    <div style={{marginBottom:10}}><SeasonTabs season={season} onChange={setSeason} matches={data.matches}/></div>
     <div style={{marginBottom:12}}><ScopeTabs scope={scope} onChange={setScope}/></div>
     {stats.length===0? <EmptyState icon="🏆" title="ההיכל עוד ריק" sub={scope==='overall'?'שיאים נולדים מתוך משחקים':'עוד אין משחקים בקטגוריה הזו'}/> :
     <div className="card">
@@ -1933,7 +2335,7 @@ function Settings({data,go}){
   };
   const exportCSV=()=>{
     const esc=s=>'"'+String(s).replace(/"/g,'""')+'"';
-    const rows=[['Date','Time','Type','Team A','Team B','Score A','Score B','Winner','Target','Night'].join(',')];
+    const rows=[['Date','Time','Type','Team A','Team B','Score A','Score B','Winner','Target','Night','Technical Win','Technical Type'].join(',')];
     for(const m of data.matches){
       const night=m.matchNightId? (data.nights.find(n=>n.id===m.matchNightId)?.title||'ערב'):'';
       rows.push([dayInput(m.matchDate),m.matchTime||'',m.mode,
@@ -1941,7 +2343,7 @@ function Settings({data,go}){
         esc(m.teamBPlayerIds.map(id=>byId(players,id).name).join(' + ')),
         m.teamAScore,m.teamBScore,
         esc(winnersOf(m).map(id=>byId(players,id).name).join(' + ')),
-        m.targetScore,esc(night)].join(','));
+        m.targetScore,esc(night),m.isTechnicalWin?'Yes':'No',m.technicalWinType||''].join(','));
     }
     const blob=new Blob(['\ufeff'+rows.join('\n')],{type:'text/csv;charset=utf-8'});
     const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='zeh-zman-matches.csv'; a.click();
@@ -2044,6 +2446,7 @@ async function seedDemo(){
     M('2026-07-10',[ori.id],[yos.id],14,12,'singles',11),
     M('2026-07-17',[ori.id,naor.id],[yos.id,david.id],18,21,'doubles',21),
     M('2026-07-24',[ori.id],[david.id],11,2,'singles',11),
+    {...M('2026-07-31',[naor.id],[yos.id],6,0,'singles',11),isTechnicalWin:true,technicalWinType:'6-0'},
     M('2026-08-07',[ori.id],[yos.id],11,8,'singles',11,1,night.id),
     M('2026-08-07',[naor.id],[ori.id],10,12,'singles',11,2,night.id),
     M('2026-08-07',[ori.id,yos.id],[naor.id,david.id],21,19,'doubles',21,3,night.id),
@@ -2051,186 +2454,45 @@ async function seedDemo(){
   ]);
 }
 
-/* ================= INTRO 3D SCENE (Three.js) ================= */
-function initIntroScene(container){
-  const width=container.clientWidth||360, height=container.clientHeight||600;
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(45,width/height,0.1,100);
-  camera.position.set(0,0.5,7);
-  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-  renderer.setSize(width,height);
-  container.appendChild(renderer.domElement);
-
-  scene.add(new THREE.AmbientLight(0x8fae9d,0.65));
-  const key=new THREE.DirectionalLight(0xffffff,1.15); key.position.set(3,5,4); scene.add(key);
-  const rim=new THREE.PointLight(0x3dbd8b,2.2,20); rim.position.set(-3,1.5,-2); scene.add(rim);
-  const flash=new THREE.PointLight(0xffffff,0,14,2); scene.add(flash);
-
-  const FORWARD=new THREE.Vector3(0,0,1);
-  const IMPACT=new THREE.Vector3(0,0.02,0.15);
-
-  const racket=new THREE.Group();
-  racket.add(new THREE.Mesh(new THREE.TorusGeometry(0.62,0.05,12,40), new THREE.MeshStandardMaterial({color:0xd7ddd8,metalness:0.4,roughness:0.3})));
-  const stringPts=[];
-  for(let i=-4;i<=4;i++){ const x=i*0.135; stringPts.push(new THREE.Vector3(x,-0.58,0),new THREE.Vector3(x,0.58,0)); }
-  for(let i=-4;i<=4;i++){ const y=i*0.135; stringPts.push(new THREE.Vector3(-0.58,y,0),new THREE.Vector3(0.58,y,0)); }
-  racket.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(stringPts), new THREE.LineBasicMaterial({color:0x7c9488,transparent:true,opacity:0.55})));
-  const handle=new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.07,1.3,10), new THREE.MeshStandardMaterial({color:0x9a7444,roughness:0.6}));
-  handle.position.y=-1.25; racket.add(handle);
-  const racketStart=new THREE.Vector3(1.95,-0.3,-0.85);
-  racket.position.copy(racketStart); racket.rotation.set(0.3,0.9,1.15);
-  scene.add(racket);
-
-  const shuttle=new THREE.Group();
-  shuttle.add(new THREE.Mesh(new THREE.SphereGeometry(0.13,16,16), new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5})));
-  const skirt=new THREE.Mesh(new THREE.ConeGeometry(0.28,0.5,14,1,true), new THREE.MeshStandardMaterial({color:0xf3f3ee,side:THREE.DoubleSide,roughness:0.7,transparent:true,opacity:0.92}));
-  skirt.rotation.x=Math.PI/2; skirt.position.z=-0.05; shuttle.add(skirt);
-  const shuttleStart=new THREE.Vector3(-2.05,0.5,-0.35);
-  shuttle.position.copy(shuttleStart);
-  const approachDir=IMPACT.clone().sub(shuttleStart).normalize();
-  shuttle.quaternion.setFromUnitVectors(FORWARD,approachDir);
-  const wobbleAxis=new THREE.Vector3(0,1,0.3).normalize();
-  scene.add(shuttle);
-
-  const smashDir=new THREE.Vector3(0.4,-0.95,-0.6).normalize();
-  const smashQuat=new THREE.Quaternion().setFromUnitVectors(FORWARD,smashDir);
-  const FLIGHT_SPEED=7.5;
-
-  const trailLen=9;
-  const trail=Array.from({length:trailLen}).map(()=>{
-    const m=new THREE.Mesh(new THREE.SphereGeometry(0.09,8,8), new THREE.MeshBasicMaterial({color:0xcdf3e2,transparent:true,opacity:0}));
-    scene.add(m); return m;
-  });
-  const trailHistory=[];
-
-  const burstMat=new THREE.MeshBasicMaterial({color:0x9be8c9,transparent:true});
-  const burstGeo=new THREE.SphereGeometry(0.035,6,6);
-  const burst=Array.from({length:22}).map(()=>{ const m=new THREE.Mesh(burstGeo,burstMat.clone()); m.visible=false; scene.add(m); return m; });
-
-  let raf=null, start=null, impacted=false, disposed=false, hitStopEnd=0;
-  const DUR=1.25, HITSTOP=0.09, FLIGHT=0.85, TOTAL=DUR+HITSTOP+FLIGHT+0.15;
-  const camBaseZ0=7, camBaseZ1=5.3;
-  const easeOutCubic=p=>1-Math.pow(1-p,3);
-
-  function tick(ts){
-    if(disposed)return;
-    if(start===null)start=ts;
-    const t=(ts-start)/1000;
-
-    if(!impacted){
-      const p=Math.min(t/DUR,1), e=easeOutCubic(p);
-      racket.position.lerpVectors(racketStart,IMPACT,e);
-      racket.rotation.y=0.9-e*2.7; racket.rotation.z=1.15-e*1.85;
-      shuttle.position.lerpVectors(shuttleStart,IMPACT,e);
-      const wob=new THREE.Quaternion().setFromAxisAngle(wobbleAxis,Math.sin(t*10)*0.06);
-      shuttle.quaternion.setFromUnitVectors(FORWARD,approachDir).multiply(wob);
-      camera.position.x=Math.sin(t*0.6)*0.08;
-      camera.position.z=camBaseZ0-e*(camBaseZ0-camBaseZ1);
-      camera.lookAt(IMPACT);
-      if(t>=DUR){
-        impacted=true; hitStopEnd=t+HITSTOP;
-        flash.intensity=8.5; flash.position.copy(IMPACT);
-        shuttle.position.copy(IMPACT);
-        shuttle.quaternion.copy(smashQuat);
-        burst.forEach((m,i)=>{
-          m.visible=true; m.position.copy(IMPACT); m.material.opacity=1;
-          const ang=(i/burst.length)*Math.PI*2, sp=1.3+Math.random()*1.3;
-          m.userData.vel=new THREE.Vector3(Math.cos(ang)*sp,(Math.random()-0.15)*sp*1.1,Math.sin(ang)*sp*0.6-0.6);
-        });
-      }
-    } else {
-      const pt=t-DUR;
-      flash.intensity=Math.max(0,8.5*(1-pt/0.3));
-      const inHitStop=t<hitStopEnd;
-      if(!inHitStop){
-        const flightT=t-hitStopEnd;
-        shuttle.position.copy(IMPACT).addScaledVector(smashDir,flightT*FLIGHT_SPEED);
-        shuttle.scale.setScalar(Math.max(0.35,1-flightT*0.55));
-        trailHistory.unshift(shuttle.position.clone());
-        if(trailHistory.length>trailLen)trailHistory.pop();
-        trail.forEach((m,i)=>{
-          const pos=trailHistory[i];
-          if(pos){ m.visible=true; m.position.copy(pos);
-            const f=1-i/trailLen; m.material.opacity=f*0.5*Math.max(0,1-flightT*0.9); m.scale.setScalar(f); }
-          else m.visible=false;
-        });
-        racket.rotation.y-=0.05*(1-Math.min(flightT/0.3,1)); racket.rotation.z-=0.03*(1-Math.min(flightT/0.3,1));
-      }
-      burst.forEach(m=>{
-        if(!m.visible||inHitStop)return;
-        m.position.addScaledVector(m.userData.vel,0.02);
-        m.userData.vel.y-=0.03;
-        m.material.opacity=Math.max(0,1-pt/0.55);
-        if(m.material.opacity<=0)m.visible=false;
-      });
-      const kick=inHitStop?0:Math.max(0,1-(t-hitStopEnd)/0.22)*0.1;
-      camera.position.x=Math.sin(t*0.6)*0.08-kick;
-      camera.position.z=camBaseZ1+kick*0.6;
-      camera.lookAt(IMPACT);
-    }
-    renderer.render(scene,camera);
-    if(t<TOTAL) raf=requestAnimationFrame(tick);
-  }
-  raf=requestAnimationFrame(tick);
-
-  const onResize=()=>{
-    const w=container.clientWidth,h=container.clientHeight; if(!w||!h)return;
-    camera.aspect=w/h; camera.updateProjectionMatrix(); renderer.setSize(w,h);
-  };
-  window.addEventListener('resize',onResize);
-
-  return ()=>{
-    disposed=true;
-    if(raf)cancelAnimationFrame(raf);
-    window.removeEventListener('resize',onResize);
-    renderer.dispose();
-    if(renderer.domElement.parentNode)renderer.domElement.parentNode.removeChild(renderer.domElement);
-  };
-}
-
 /* ================= INTRO SPLASH ================= */
-function Intro({players,ready,onDone}){
+function Intro({onDone}){
   const stageRef=useRef();
-  const reduced=useRef(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches).current;
-  const [phase,setPhase]=useState('smash'); // smash -> team -> out
-
-  useEffect(()=>{ if(reduced) onDone(); },[]);
-
+  const skipRef=useRef();
+  const doneRef=useRef(onDone);
+  doneRef.current=onDone;
+  const reduced=useRef(window.matchMedia('(prefers-reduced-motion: reduce)').matches).current;
+  const [phase,setPhase]=useState('smash');
   useEffect(()=>{
-    if(reduced||!window.THREE||!stageRef.current)return;
-    return initIntroScene(stageRef.current);
-  },[]);
-
+    if(reduced){doneRef.current();return;}
+    skipRef.current?.focus();
+    const key=e=>{if(e.key==='Escape')doneRef.current();};
+    window.addEventListener('keydown',key);
+    const team=setTimeout(()=>setPhase('team'),1500);
+    const out=setTimeout(()=>setPhase('out'),5300);
+    const finish=setTimeout(()=>doneRef.current(),5850);
+    return ()=>{window.removeEventListener('keydown',key);[team,out,finish].forEach(clearTimeout);};
+  },[reduced]);
   useEffect(()=>{
-    if(reduced)return;
-    if(phase==='smash'){ const t=setTimeout(()=>setPhase('team'),2350); return ()=>clearTimeout(t); }
-  },[phase,reduced]);
-
-  useEffect(()=>{
-    if(reduced||phase!=='team')return;
-    const t=setTimeout(()=>setPhase('out'), ready?1900:5000);
-    return ()=>clearTimeout(t);
-  },[phase,ready,reduced]);
-
-  useEffect(()=>{
-    if(reduced)return;
-    if(phase==='out'){ const t=setTimeout(onDone,550); return ()=>clearTimeout(t); }
-  },[phase,reduced]);
-
+    if(reduced||!window.THREE||!stageRef.current||phase!=='smash')return;
+    try{return initIntroScene(stageRef.current);}catch(error){console.warn('Intro rendering unavailable',error);setPhase('team');}
+  },[reduced,phase]);
   if(reduced)return null;
-  const team = ready? players.filter(p=>p.active).slice(0,8) : [];
-  return <div className={'introOverlay'+(phase==='out'?' out':'')} data-phase={phase} onClick={onDone}>
+  return <div className={'introOverlay'+(phase==='out'?' out':'')} data-phase={phase} role="dialog" aria-modal="true" aria-label="פתיח בדמינטון">
     <div className="introInner">
-      <div className="intro3d" ref={stageRef}/>
-      <div className="introBrand"><h1 className="brandTitle">{APP_NAME} <Shuttle size={26}/></h1></div>
-      {phase!=='smash'&&team.length>0&&<div className="introTeam">
-        {team.map((p,i)=><div className="introPlayer" key={p.id} style={{animationDelay:(i*0.12)+'s'}}>
-          <Avatar p={p} size={64}/>
-          <div className="introPname">{p.name}</div>
-        </div>)}
-      </div>}
-      <div className="introSkip">הקישו כדי לדלג</div>
+      <div className="cinemaPhoto"><img src="assets/team-cinematic.png" alt="ארבעת שחקני הקבוצה עם מחבטים באולם מואר בכחול" fetchPriority="high"/></div>
+      <div className="intro3d" ref={stageRef} aria-hidden="true"/>
+      <div className="cinemaHaze" aria-hidden="true"/>
+      <div className="cinemaLead">רגע אחד. חבטה אחת.</div>
+      <div className="cinemaCaption">
+        <div className="cinemaEyebrow">FOUR PLAYERS. ONE COURT.</div>
+        <h1>{APP_NAME}</h1>
+        <p>ארבעה שחקנים. מגרש אחד. זה הזמן שלנו.</p>
+      </div>
+      <div className="cinemaControls">
+        <button ref={skipRef} onClick={()=>doneRef.current()}>{phase==='smash'?'דילוג על הפתיח ←':'למגרש ←'}</button>
+        <span className="cinemaCount">{phase==='smash'?'01 / THE SMASH':'02 / THE TEAM'}</span>
+      </div>
+      <div className="cinemaProgress" aria-hidden="true"/>
     </div>
   </div>;
 }
@@ -2241,7 +2503,7 @@ function App(){
   const [route,setRoute]=useState({s:'home'});
   const [intro,setIntro]=useState(true);
   const go=r=>{ setRoute(r); window.scrollTo(0,0); };
-  if(intro) return <Intro players={data.players} ready={data.ready} onDone={()=>setIntro(false)}/>;
+  if(intro) return <Intro onDone={()=>setIntro(false)}/>;
   if(!data.ready)return <div className="app" style={{alignItems:'center',justifyContent:'center'}}>
     <div style={{textAlign:'center'}}><Shuttle size={44}/><div className="muted tiny" style={{marginTop:10}}>טוען את המגרש…</div></div></div>;
   const s=route.s;
@@ -2249,16 +2511,16 @@ function App(){
     : ['players','player'].includes(s)?'players' : ['stats','hof','h2h'].includes(s)?'stats'
     : ['history','match'].includes(s)?'history' : ['nights','night'].includes(s)?'nights' : '';
   return <div className="app">
-    {s==='home'&&<Home data={data} go={go}/>}
+    {s==='home'&&<Home data={data} go={go} onReplay={()=>setIntro(true)}/>}
     {s==='new'&&<MatchWizard key={route.prefill?'pre':'new'} data={data} go={go} prefill={route.prefill}/>}
     {s==='shuffle'&&<Shuffle data={data} go={go}/>}
     {s==='past'&&<MatchWizard data={data} go={go} past/>}
     {s==='edit'&&<MatchWizard data={data} go={go} editMatch={data.matches.find(m=>m.id===route.id)}/>}
     {s==='players'&&<Players data={data} go={go}/>}
-    {s==='player'&&<PlayerProfile data={data} go={go} id={route.id}/>}
+    {s==='player'&&<PlayerProfile key={route.id} data={data} go={go} id={route.id} initialTab={route.tab}/>}
     {s==='h2h'&&<H2H data={data} go={go} a={route.a} b={route.b}/>}
     {s==='stats'&&<Stats data={data} go={go}/>}
-    {s==='hof'&&<HallOfFame data={data} go={go} initialScope={route.scope}/>}
+    {s==='hof'&&<HallOfFame data={data} go={go} initialScope={route.scope} initialSeason={route.season}/>}
     {s==='history'&&<History data={data} go={go}/>}
     {s==='match'&&<MatchDetail data={data} go={go} id={route.id}/>}
     {s==='nights'&&<Nights data={data} go={go}/>}
